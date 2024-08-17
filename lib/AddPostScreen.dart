@@ -203,7 +203,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
     http.Response response = await http.post(Uri.parse(url), body: {
       'category_id':'${widget.CategoryId}',
     });
+
+
+
     Map<String, dynamic> data = json.decode(response.body );
+    logger.i("$url\n ${response.statusCode} \n${data}");
     status = data["success"];
     print('data${data}');
 

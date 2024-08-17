@@ -56,9 +56,9 @@ class _BlogListWidgetState extends State<BlogListWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    if(widget.blog.VideoLink!='')
+    if(widget.blog.videoLink!='')
     {
-       videoId = YoutubePlayer.convertUrlToId("${widget.blog.VideoLink}")!;
+       videoId = YoutubePlayer.convertUrlToId("${widget.blog.videoLink}")!;
       _controller = YoutubePlayerController(
         initialVideoId: '${videoId}',
         flags: YoutubePlayerFlags(
@@ -68,7 +68,6 @@ class _BlogListWidgetState extends State<BlogListWidget> {
       );
 
     }
-
     // Your widget implementation for displaying a single blog item
     return  GestureDetector(
       onTap: () {
@@ -76,7 +75,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => BlogDetailScreen(
-              widget.blog.BlogPostId,
+              widget.blog.blogPostId??"",
               '${widget.selected_category}',
               '${widget.selected_sub_category}',false,
             ),
@@ -84,17 +83,19 @@ class _BlogListWidgetState extends State<BlogListWidget> {
         );
       },
       child: Card(
+
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
         elevation: 4,
         margin: EdgeInsets.all(16),
         child: Container(
+
           margin: EdgeInsets.all(10.0),
           padding: EdgeInsets.all(12.0),
           child: Column(
             children: [
-              if (widget.blog.VideoLink != '') ...[
+              if (widget.blog.videoLink != '') ...[
                  Stack(
                   children: [
                     Image.network(
@@ -116,7 +117,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                 ),*/
                 // Add your video rendering here...
               ] else ...[
-                if (widget.blog.PostDisplayPhoto != '') ...[
+                if (widget.blog.postDisplayPhoto != '') ...[
                   showShimmer
                       ? Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
@@ -128,7 +129,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ),
                   )
                       : CachedNetworkImage(
-                    imageUrl: Config.Image_Path + 'blog/' + widget.blog.PostDisplayPhoto,
+                    imageUrl: Config.Image_Path + 'blog/${ widget.blog.postDisplayPhoto}',
                     placeholder: (context, url) => Image.asset(
                       "assets/images/loader.gif",
                       width: 80,
@@ -158,7 +159,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                 ],
               ):
               Html(
-                data: widget.blog.Heading,
+                data: widget.blog.heading,
                 style: {
                   "body": Style(
                     padding: EdgeInsets.zero,
@@ -188,7 +189,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                   children: [
 
                     Text(
-                      widget.blog.SubCategoryName,
+                      widget.blog.subCategoryName??"",
                       style: TextStyle(
                         color: Colors.blue,
                       ),
@@ -222,11 +223,29 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ),
                     SizedBox(width: 5.0),
                     Text(
-                      widget.blog.TimeAgo,
+                      widget.blog.timeAgo??'',
                       style: TextStyle(
                         color: Colors.grey,
                       ),
                     ),
+
+                    const SizedBox(width: 20,),
+
+                    Expanded(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.grey.shade600,
+                            radius: 14,
+                            child: Text(widget.blog.postByName![0].toUpperCase(),style:TextStyle(fontSize: 12,color: Colors.white),),
+                          ),
+                          const SizedBox(width: 5,),
+                          Expanded(child: Text(widget.blog.postByName??"",maxLines: 1,overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
+                          )),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  logger: ^2.4.0
 
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1

@@ -650,6 +650,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       'user_id':'${deviceId}',
       'page':'${blog_page}'
     });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');

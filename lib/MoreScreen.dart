@@ -88,6 +88,8 @@ class _MoreScreenState extends State<MoreScreen> {
 
     http.Response response = await http.post(Uri.parse(url), body: {
     });
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     print('data${data}');
     status = data["success"];

@@ -149,6 +149,9 @@ class _PostScreenState extends State<PostScreen> {
       'user_id':'${deviceId}',
 
     });
+
+    logger.i("$url\n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('datadata${data}');

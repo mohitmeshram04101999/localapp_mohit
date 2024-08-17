@@ -55,9 +55,9 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    if(widget.blog.VideoLink!='')
+    if(widget.blog.videoLink!='')
     {
-      String  videoId = YoutubePlayer.convertUrlToId("${widget.blog.VideoLink}")!;
+      String  videoId = YoutubePlayer.convertUrlToId("${widget.blog.videoLink}")!;
       _controller = YoutubePlayerController(
         initialVideoId: '${videoId}',
         flags: YoutubePlayerFlags(
@@ -75,7 +75,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => BlogDetailScreen(
-              widget.blog.BlogPostId,
+              widget.blog.blogPostId??"0",
               '${widget.selected_category}',
               '${widget.selected_sub_category}',true,
             ),
@@ -93,14 +93,14 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
           padding: EdgeInsets.all(12.0),
           child: Column(
             children: [
-              if (widget.blog.VideoLink != '') ...[
+              if (widget.blog.videoLink!= '') ...[
                 YoutubePlayer(
                   controller: _controller,
                   aspectRatio: 16 / 9,
                 ),
                 // Add your video rendering here...
               ] else ...[
-                if (widget.blog.PostDisplayPhoto != '') ...[
+                if (widget.blog.postDisplayPhoto != '') ...[
                   showShimmer
                       ? Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
@@ -112,7 +112,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                     ),
                   )
                       : CachedNetworkImage(
-                    imageUrl: Config.Image_Path + 'blog/' + widget.blog.PostDisplayPhoto,
+                    imageUrl: Config.Image_Path + 'blog/${widget.blog.postDisplayPhoto??""}',
                     placeholder: (context, url) => Image.asset(
                       "assets/images/loader.gif",
                       width: 80,
@@ -144,7 +144,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                 ],
               ):
               Html(
-                data: widget.blog.Heading!=''?widget.blog.Heading:widget.blog.Text,
+                data: widget.blog.heading!=''?widget.blog.heading:widget.blog.text,
                 style: {
                   "body": Style(
                     padding: EdgeInsets.zero,
@@ -174,7 +174,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                   children: [
 
                     Text(
-                      widget.blog.CategoryName+" . "+widget.blog.SubCategoryName,
+                     " widget.blog.CategoryName"+" . ${widget.blog.subCategoryName??""}",
 
                       style: TextStyle(
                         color: Colors.blue,
@@ -209,31 +209,31 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                     ),
                     SizedBox(width: 5.0),
                     Text(
-                      widget.blog.TimeAgo,
+                      widget.blog.timeAgo??"",
                       style: TextStyle(
                         color: Colors.grey,
                       ),
                     ),
                     Spacer(),
-                    if(widget.blog.Status=='Pending Approval')...[
+                    if(widget.blog.status=='Pending Approval')...[
                       Image.asset(
                         'assets/images/PendingApproval.png',
                         height: 16.0,
                       )
                     ]
-                    else if(widget.blog.Status=='Expired')...[
+                    else if(widget.blog.status=='Expired')...[
                       Image.asset(
                         'assets/images/Expired.png',
                         height: 16.0,
                       )
                     ]
-                    else if(widget.blog.Status=='Approved')...[
+                    else if(widget.blog.status=='Approved')...[
                         Image.asset(
                           'assets/images/Approved.png',
                           height: 16.0,
                         )
                       ]
-                      else if(widget.blog.Status=='Rejected')...[
+                      else if(widget.blog.status=='Rejected')...[
                           Image.asset(
                             'assets/images/Rejected.png',
                             height: 16.0,
@@ -242,10 +242,10 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                   ],
                 ),
               ),
-              if(widget.blog.RejectionComment!='')...[
+              if(widget.blog.rejectionComment!='')...[
     Container(
     padding: const EdgeInsets.all(8),
-    child:Text('Rejection Reason: ${widget.blog.RejectionComment}',
+    child:Text('Rejection Reason: ${widget.blog.rejectionComment}',
     style: TextStyle(
     color: Colors.red,
       fontSize: 13,

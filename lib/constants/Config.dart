@@ -1,3 +1,5 @@
+import 'package:logger/logger.dart';
+
 class Config
 {
   static String Main_Link = "https://shubhapp.com/local_app/api/";
@@ -27,3 +29,5 @@ class Config
 
 
 }
+
+Logger logger = Logger();

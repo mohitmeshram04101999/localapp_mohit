@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/CategoryScreen.dart';
+import 'package:localapp/component/logiin%20dailog.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
 import 'package:localapp/models/SubCategory.dart';
@@ -79,6 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List city_data = [];
   List<City_list> city_string = [];
+
+  var apun_Ka_Dat;
 
 
 
@@ -226,7 +229,19 @@ class _HomeScreenState extends State<HomeScreen> {
       var url = Config.get_home;
       blog_page=0;
 
-       http.Response response = await http.post(Uri.parse(url), body: {
+      var _d =  {
+        'category_id':'${selected_category}',
+        'subcategory_id':'$selected_sub_category',
+        'blog_page':'${blog_page}',
+        'user_id':'${deviceId}',
+        'city_id':'1'
+      };
+
+
+      print("sendable Data ${_d}");
+
+       http.Response response = await http.post(Uri.parse(url),
+           body: {
         'category_id':'${selected_category}',
         'subcategory_id':'$selected_sub_category',
         'blog_page':'${blog_page}',
@@ -234,6 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
         'city_id':'1'
       }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body );
+
+      logger.i("$url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+
+
+
       status = data["success"];
 
       // Check if the request was successful (status code 200)
@@ -242,6 +262,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (status == "0") {
           categorylist_data = data['data']['category'] as List;
+
+          apun_Ka_Dat = data;
+
           categorylist_string = categorylist_data.map<Category_list>(
                   (json) => Category_list.fromJson(json)).toList();
           if(selected_category==0)
@@ -287,6 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
           else{
             Future.delayed(Duration(seconds: 2), () {
               Navigator.of(context).pop();
+
             });
           }
 
@@ -306,7 +330,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
         });
         print('Request failed with status: ${response.statusCode}.');
+
+
       }
+
+
+
 
   }
 
@@ -351,6 +380,15 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
+
+
+    apnaDailog() async
+    {
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        content:Text("$apun_Ka_Dat")
+      ));
+    }
+
   getMoreHome() async{
     print('get_home_called${blog_page}');
 
@@ -366,6 +404,9 @@ class _HomeScreenState extends State<HomeScreen> {
       'user_id':'${deviceId}',
       'city_id':'1'
     });
+
+    logger.i("$url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
 
@@ -457,6 +498,9 @@ class _HomeScreenState extends State<HomeScreen> {
     http.Response response = await http.post(Uri.parse(url), body: {
       'category_id':'${selected_category}',
     });
+
+    logger.i("$url ${response.statusCode}\n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
 
@@ -483,6 +527,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     http.Response response = await http.post(Uri.parse(url), body: {
      });
+    logger.i("$url \n${response.statusCode} \n${jsonDecode(response.body)}");
+
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');
@@ -616,6 +663,8 @@ class _HomeScreenState extends State<HomeScreen> {
           "ad_id":'${ad_id}'
         });
 
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
 
 
 
@@ -627,6 +676,9 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return  Scaffold(
+
+
+
 
           backgroundColor: Colors.white,
         /*appBar:AppBar(
@@ -846,6 +898,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ListView(
                         controller: _scrollController,
                         children: [
+
+                          ElevatedButton(onPressed: (){
+                            openLogInDialog(context);
+                          }, child: Text("dfa")),
+
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1029,7 +1086,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (index == blog_string.length) {
                                     if (load_more == true) return _buildLoadingIndicator();
                                   } else {
-                                    return BlogListWidget(blog_string[index], '${selected_category}', '${selected_sub_category}');
+                                    return BlogListWidget(blog_string[index], '${selected_category}', '${selected_category}');
                                   }
                                 },
                               ),
@@ -1066,6 +1123,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
           ),
+
+
+        //Orignal Button
         floatingActionButton:allow_post=='Y'?
         GestureDetector(onTap: (){
 
@@ -1314,6 +1374,11 @@ class CustomPopup extends StatelessWidget {
           "user_id": '${deviceId}',
           "ad_id":'${ad_id}'
         });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
+
+    print(" respons 5 ${response.body}");
 
 
 

@@ -197,6 +197,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
       'post_id':'${widget.BlogPostId}',
       'user_id':'${deviceId}'
     });
+
+    logger.i("$url ${response.statusCode}\n ${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');

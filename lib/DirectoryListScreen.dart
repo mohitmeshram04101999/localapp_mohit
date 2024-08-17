@@ -133,6 +133,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       'city_id':'1',
       'area_id':'${widget.AreaId}'
     });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
 
@@ -188,6 +191,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
       'blog_page':'${blog_page}',
       'city_id':'1'
     });
+
+    logger.i("$url\n${response.statusCode}\n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
 
@@ -280,6 +286,9 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
     http.Response response = await http.post(Uri.parse(url), body: {
       'category_id':'${selected_category}',
     });
+
+    logger.i("$url ${response.statusCode}\n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
 
@@ -306,6 +315,7 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
 
     http.Response response = await http.post(Uri.parse(url), body: {
     });
+    logger.i("$url \n${response.statusCode} \n${jsonDecode(response.body)}");
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');
@@ -732,6 +742,8 @@ class _DirectoryScreenState extends State<DirectoryScreen> {
           "user_id": '${deviceId}',
           "ad_id":'${ad_id}'
         });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
 
 
 

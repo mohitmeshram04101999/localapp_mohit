@@ -85,6 +85,9 @@ class _CityDetailScreenState extends State<CityDetailScreen> {
       'user_id':'${deviceId}',
       'page':'${page}'
     });
+
+    logger.i("$url \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');
@@ -158,6 +161,7 @@ class _CityDetailScreenState extends State<CityDetailScreen> {
           "user_id": '${deviceId}',
           "ad_id":'${ad_id}'
         });
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
 
 
 
