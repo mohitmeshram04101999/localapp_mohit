@@ -401,9 +401,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
           },
         ),
         iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-        textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.black), // Change text color to black
-        ),
+        // textTheme: TextTheme(
+        //   headline6: TextStyle(color: Colors.black), // Change text color to black
+        // ),
 
         centerTitle: true,
 // Back arrow

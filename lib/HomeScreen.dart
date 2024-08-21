@@ -597,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Text("Yes"),
                           style: ElevatedButton.styleFrom(
-                              primary: Colors.red.shade800),
+                              backgroundColor: Colors.red.shade800),
                         ),
                       ),
                       SizedBox(width: 15),
@@ -610,7 +610,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child:
                             Text("No", style: TextStyle(color: Colors.black)),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
+                              backgroundColor: Colors.white,
                             ),
                           ))
                     ],
@@ -740,9 +740,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-        textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.black), // Change text color to black
-        ),
+        // textTheme: TextTheme(
+        //   headline6: TextStyle(color: Colors.black), // Change text color to black
+        // ),
 
         centerTitle: true,
         title:hide_appbar==false?  Row(

@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   logger: ^2.4.0
 
+
 dependency_overrides:
   firebase_core_platform_interface: 4.5.1
 
@@ -63,6 +64,8 @@ dependency_overrides:
   permission_handler:
   html_editor_enhanced:
   image_picker: 1.0.3
+  flutter_riverpod: ^2.3.3
+
 
 
 dev_dependencies:

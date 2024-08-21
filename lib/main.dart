@@ -114,7 +114,8 @@ Future<bool> showPopup(RemoteMessage message) async {
                         },
                         child: Text("Ok"),
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800),
+                            backgroundColor: Colors.red.shade800
+                        ),
                       ),
                     ),
 

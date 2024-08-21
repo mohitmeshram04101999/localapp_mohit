@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localapp/CategoryScreen.dart';
+import 'package:localapp/component/testScren.dart';
 
 import 'HomeScreen.dart';
 
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => CategoryScreen(),
+            // builder: (context) => TestScreen(),
           ));
 
 

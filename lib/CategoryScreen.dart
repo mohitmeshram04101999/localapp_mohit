@@ -134,7 +134,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     print('datadata${data}');
 
     Navigator.of(context).pop();
-    
+
     if (status == "0") {
 
 
@@ -163,7 +163,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     return  Scaffold(
 
-        backgroundColor: Colors.white,
+      //Tag From BackGround
+      backgroundColor: Colors.white,
       appBar:PreferredSize(
           preferredSize: Size.fromHeight(5.0), // here the desired height
           child: AppBar(
@@ -200,9 +201,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         children: [
 
 
+                          ElevatedButton(onPressed: (){openLogInDialog(context);}, child: Text("asdf")),
+
                           SizedBox(height: 120),
                           for(int i=0;i<user_category_string.length;i++)...[
 
+                            //card That Showing That Page
                             GestureDetector(
                               onTap: ()
                               {
@@ -214,6 +218,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 child:
                                 Center(
                                   child:  Container(
+                                  
                                     child:   showShimmer?
                                     Shimmer.fromColors(
                                       baseColor: Colors.grey[300]!,

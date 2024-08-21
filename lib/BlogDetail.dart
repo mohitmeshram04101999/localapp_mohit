@@ -397,9 +397,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-            textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.black), // Change text color to black
-            ),
+            // textTheme: TextTheme(
+            //   headline6: TextStyle(color: Colors.black), // Change text color to black
+            // ),
 
             centerTitle: true,
             title: Row(
@@ -920,7 +920,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(30.0),
                                         ),
-                                        primary: Colors.black, // Set the background color to black
+                                        backgroundColor: Colors.black, // Set the background color to black
                                       ),
                                       child:
                                       Padding(
