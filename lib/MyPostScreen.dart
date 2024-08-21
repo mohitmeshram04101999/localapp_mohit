@@ -187,8 +187,13 @@ class _MyPostScreenState extends State<MyPostScreen> {
         'PostById':'$deviceId',
         'user_id':'$deviceId'
 
-      }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
+      }) .timeout(Duration(seconds: 20));
+
+
+      // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body );
+      logger.i("${url} \n${response.statusCode} \n${data}");
+
       status = data["success"];
       print('blog_page$blog_page');
       // Check if the request was successful (status code 200)
@@ -287,8 +292,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
       'user_id':'$deviceId'
 
     });
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
+    logger.i("$url\n ${response.statusCode} \n${data}");
+
 
 
     if (status == "0") {
@@ -393,9 +401,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
           },
         ),
         iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-        textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.black), // Change text color to black
-        ),
+        // textTheme: TextTheme(
+        //   headline6: TextStyle(color: Colors.black), // Change text color to black
+        // ),
 
         centerTitle: true,
 // Back arrow

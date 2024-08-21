@@ -292,7 +292,9 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
 
     http.Response response = await http.post(Uri.parse(url), body: {
     });
+
     Map<String, dynamic> data = json.decode(response.body );
+    logger.i("$url\n ${response.statusCode} \n${data}");
     print('data${data}');
     status = data["success"];
     print('setup${data["data"]}');
@@ -335,8 +337,12 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
         'blog_page':'${blog_page}',
         'PostById':'$deviceId',
         'user_id':'$deviceId'
-      }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
+      }) .timeout(Duration(seconds: 20));
+
+
+      // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body );
+      logger.i("$url\n ${response.statusCode} \n${data}");
       status = data["success"];
       print('statusstatus$status');
       // Check if the request was successful (status code 200)
@@ -461,7 +467,11 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
 
     http.Response response_upload = await http.post(Uri.parse(url_update_upload), body: {
       'PostById':'$deviceId'
-    }); // Set timeout to 30 seconds
+    });
+
+    logger.i("${url_update_upload } \n${response_upload.statusCode} \n${jsonDecode(response_upload?.body??"")}");
+
+// Set timeout to 30 seconds
 
     print('deviceId${deviceId}');
     print('widget.image1${widget.image_1}');
@@ -500,7 +510,10 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
     await http.Response.fromStream(await request.send());
 
 
+
+
     Map<String, dynamic> datauser = json.decode(response.body);
+    logger.i("$uri\n ${response.statusCode} \n${datauser}");
     print("response"+response.body);
     setState(()  {
       if(datauser['success']=='0')
@@ -608,9 +621,9 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
           },
         ),
         iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-        textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.black), // Change text color to black
-        ),
+        // textTheme: TextTheme(
+        //   headline6: TextStyle(color: Colors.black), // Change text color to black
+        // ),
 
         centerTitle: true,
 // Back arrow

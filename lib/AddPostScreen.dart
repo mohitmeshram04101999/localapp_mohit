@@ -203,7 +203,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
     http.Response response = await http.post(Uri.parse(url), body: {
       'category_id':'${widget.CategoryId}',
     });
+
+
+
     Map<String, dynamic> data = json.decode(response.body );
+    logger.i("$url\n ${response.statusCode} \n${data}");
     status = data["success"];
     print('data${data}');
 
@@ -249,9 +253,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
           elevation: 0.0, // Remove the bottom border
 
           iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-          textTheme: TextTheme(
-            headline6: TextStyle(color: Colors.black), // Change text color to black
-          ),
+          // textTheme: TextTheme(
+          //   headline6: TextStyle(color: Colors.black), // Change text color to black
+          // ),
 
           centerTitle: true,
 // Back arrow

@@ -208,6 +208,9 @@ class _DirectoryDetailScreenState extends State<DirectoryDetailScreen> {
       'contact_id':'${widget.ContactId}',
       'user_id':'${deviceId}'
     });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');
@@ -294,9 +297,9 @@ class _DirectoryDetailScreenState extends State<DirectoryDetailScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-            textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.black), // Change text color to black
-            ),
+            // textTheme: TextTheme(
+            //   headline6: TextStyle(color: Colors.black), // Change text color to black
+            // ),
 
             centerTitle: true,
 // Back arrow
@@ -826,7 +829,7 @@ class _DirectoryDetailScreenState extends State<DirectoryDetailScreen> {
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(30.0),
                                         ),
-                                        primary: Colors.black, // Set the background color to black
+                                        backgroundColor: Colors.black, // Set the background color to black
                                       ),
                                       child:
                                       Padding(

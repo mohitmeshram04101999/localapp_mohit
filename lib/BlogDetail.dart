@@ -207,7 +207,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
       'post_id':'${widget.BlogPostId}',
       'user_id':'${deviceId}'
     });
+
+    
+
     Map<String, dynamic> data = json.decode(response.body );
+    logger.i("$url\n ${response.statusCode} \n${data}");
     status = data["success"];
     print('status${status}');
 
@@ -326,6 +330,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           "ad_id":'${ad_id}'
         });
 
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
 
 
 
@@ -340,6 +346,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
       'BlogPostId':'${widget.BlogPostId}',
       'user_id':'${deviceId}'
     });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     if (status == "0") {
@@ -388,9 +397,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-            textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.black), // Change text color to black
-            ),
+            // textTheme: TextTheme(
+            //   headline6: TextStyle(color: Colors.black), // Change text color to black
+            // ),
 
             centerTitle: true,
             title: Row(
@@ -911,7 +920,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(30.0),
                                         ),
-                                        primary: Colors.black, // Set the background color to black
+                                        backgroundColor: Colors.black, // Set the background color to black
                                       ),
                                       child:
                                       Padding(

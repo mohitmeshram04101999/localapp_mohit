@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:localapp/MoreScreen.dart';
+import 'package:localapp/component/customFeild.dart';
+import 'package:localapp/component/logiin%20dailog.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -122,8 +124,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     http.Response response = await http.post(Uri.parse(url), body: {
      'user_id':deviceId
-
      });
+
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
+
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('datadata${data}');
@@ -158,7 +163,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
     return  Scaffold(
 
-        backgroundColor: Colors.white,
+      //Tag From BackGround
+      backgroundColor: Colors.white,
       appBar:PreferredSize(
           preferredSize: Size.fromHeight(5.0), // here the desired height
           child: AppBar(
@@ -171,7 +177,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         body:
         WillPopScope(
           onWillPop: () async {
-
             exit(0);
            },
           child:RefreshIndicator(
@@ -185,6 +190,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   width: double.infinity,
                   alignment: Alignment.center,
                 ),
+
+
                 Container(
                   child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -192,9 +199,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+
+                          ElevatedButton(onPressed: (){openLogInDialog(context);}, child: Text("asdf")),
+
                           SizedBox(height: 120),
                           for(int i=0;i<user_category_string.length;i++)...[
 
+                            //card That Showing That Page
                             GestureDetector(
                               onTap: ()
                               {
@@ -206,6 +218,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 child:
                                 Center(
                                   child:  Container(
+                                  
                                     child:   showShimmer?
                                     Shimmer.fromColors(
                                       baseColor: Colors.grey[300]!,

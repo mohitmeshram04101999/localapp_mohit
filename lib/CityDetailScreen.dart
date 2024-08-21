@@ -85,6 +85,9 @@ class _CityDetailScreenState extends State<CityDetailScreen> {
       'user_id':'${deviceId}',
       'page':'${page}'
     });
+
+    logger.i("$url \n${response.statusCode} \n${jsonDecode(response.body)}");
+
     Map<String, dynamic> data = json.decode(response.body );
     status = data["success"];
     print('status${status}');
@@ -158,6 +161,7 @@ class _CityDetailScreenState extends State<CityDetailScreen> {
           "user_id": '${deviceId}',
           "ad_id":'${ad_id}'
         });
+    logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
 
 
 
@@ -177,9 +181,9 @@ class _CityDetailScreenState extends State<CityDetailScreen> {
             elevation: 0.0, // Remove the bottom border
 
             iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
-            textTheme: TextTheme(
-              headline6: TextStyle(color: Colors.black), // Change text color to black
-            ),
+            // textTheme: TextTheme(
+            //   headline6: TextStyle(color: Colors.black), // Change text color to black
+            // ),
 
             centerTitle: true,
 // Back arrow

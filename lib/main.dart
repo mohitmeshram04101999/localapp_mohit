@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -113,7 +114,8 @@ Future<bool> showPopup(RemoteMessage message) async {
                         },
                         child: Text("Ok"),
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800),
+                            backgroundColor: Colors.red.shade800
+                        ),
                       ),
                     ),
 
@@ -218,15 +220,19 @@ class _main_appState extends State<main_app> {
       "token":token
     });
 
+    logger.i("$url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       print("New FCM Token: $newToken");
       print('deviceId${deviceId}');
 
-      var url = Config.get_home;
       http.Response response = await http.post(Uri.parse(url), body: {
         'user_id':'${deviceId}',
         "token":newToken
       });
+
+      logger.i("$url \n${response?.statusCode} \n${jsonDecode(response?.body??"")}");
+
     });
 
   }
