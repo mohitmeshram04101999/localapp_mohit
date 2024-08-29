@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localapp/MyPostScreen.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'AddPost1Screen.dart';
 import 'CategoryScreen.dart';
@@ -466,15 +467,19 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
     print('deviceId${deviceId}');
 
     http.Response response_upload = await http.post(Uri.parse(url_update_upload), body: {
-      'PostById':'$deviceId'
+      'PostById':'$deviceId',
     });
 
-    logger.i("${url_update_upload } \n${response_upload.statusCode} \n${jsonDecode(response_upload?.body??"")}");
+    Logger().e("responce frome post api ${response_upload.statusCode} \n ${response_upload.body}");
+
+    // logger.i("${url_update_upload } \n${response_upload.statusCode} \n${jsonDecode(response_upload?.body??"")}");
 
 // Set timeout to 30 seconds
 
     print('deviceId${deviceId}');
     print('widget.image1${widget.image_1}');
+
+    Logger().e("Sending Post");
 
     var uri = Uri.parse(Config.post_upload);
     var request = http.MultipartRequest('POST', uri);
@@ -485,11 +490,13 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
     request.fields['category_id'] = '${widget.CategoryId}';
     request.fields['ContactDetail'] = '${_textEditingController.text}';
     request.fields['PostById'] = '${deviceId}';
+    request.fields['Area'] = '${addressController.text.trim()}';
     if(widget.image_1!='')
       {
         request.files.add(await http.MultipartFile.fromPath('image_1', widget.image_1));
       }
 
+    Logger().e("Sending Post");
 
     for (int i = 0; i < widget.images.length; i++) {
         File imageFile = File(widget.images[i].path);
@@ -506,8 +513,11 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
     }
 
 
+    Logger().e("Sending Post");
       http.Response response =
     await http.Response.fromStream(await request.send());
+
+    Logger().e("responce frome post api ${response.statusCode} \n ${response.body}");
 
 
 
@@ -595,7 +605,7 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
 
   }
 
-
+  TextEditingController addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -616,7 +626,7 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
               );
             }
             else{
-              Navigator.pop(context);
+              // Navigator.pop(context);
             }
           },
         ),
@@ -934,35 +944,29 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
                                               : 'Enter facebook user name.',
                                           style: TextStyle(color: Colors.black, fontSize: 17),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 10),
-                                          padding: EdgeInsets.symmetric(horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.grey),
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          child: TextField(
-                                            controller: _textEditingController,
-                                            maxLength: selectedOption == 'On WhatsApp'
-                                                ?10  : selectedOption == 'On Call'?10
-                                                :500,
-                                            keyboardType: selectedOption == 'On Email'
-                                                ? TextInputType.emailAddress
-                                                : selectedOption == 'On Facebook Messenger'
-                                                ?TextInputType.text
-                                                : TextInputType.phone,
-                                            decoration: InputDecoration(
-                                              counterText: "",
 
-                                              hintText: selectedOption == 'On WhatsApp'
-                                                  ? 'WhatsApp number'
-                                                  : selectedOption == 'On Call'
-                                                  ? 'Calling number'
-                                                  : selectedOption == 'On Email'
-                                                  ? 'Email Address'
-                                                  : 'Facebook user name',
-                                              border: InputBorder.none,
-                                            ),
+                                        const SizedBox(height: 10,),
+                                        TextField(
+                                          controller: _textEditingController,
+                                          maxLength: selectedOption == 'On WhatsApp'
+                                              ?10  : selectedOption == 'On Call'?10
+                                              :500,
+                                          keyboardType: selectedOption == 'On Email'
+                                              ? TextInputType.emailAddress
+                                              : selectedOption == 'On Facebook Messenger'
+                                              ?TextInputType.text
+                                              : TextInputType.phone,
+                                          decoration: InputDecoration(
+                                            counterText: "",
+
+                                            hintText: selectedOption == 'On WhatsApp'
+                                                ? 'WhatsApp number'
+                                                : selectedOption == 'On Call'
+                                                ? 'Calling number'
+                                                : selectedOption == 'On Email'
+                                                ? 'Email Address'
+                                                : 'Facebook user name',
+                                            border: InputBorder.none,
                                           ),
                                         ),
                                         if (selectedOption == 'On Facebook Messenger')
@@ -984,6 +988,17 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
                                               ),
                                             ),
                                           ),
+
+
+                                        const SizedBox(height: 20,),
+
+                                        TextFormField(
+                                          controller: addressController,
+                                          decoration: const InputDecoration(
+                                            hintText: "Address"
+                                          ),
+                                        ),
+
                                       ],
                                     ),
                                   ),
@@ -1008,7 +1023,7 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Visibility(
                                       visible: isVisibleDiv,
                                       child:   Card(

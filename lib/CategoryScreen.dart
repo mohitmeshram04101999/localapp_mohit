@@ -4,33 +4,30 @@ import 'dart:io';
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/customFeild.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:localapp/CityDetailScreen.dart';
 import 'package:localapp/models/UserCategory.dart';
 
 import 'CityScreen.dart';
 import 'HomeScreen.dart';
 import 'JobScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'MyPostScreen.dart';
-import 'PostScreen.dart';
 import 'constants/Config.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 
-class CategoryScreen extends StatefulWidget {
+class CategoryScreen extends ConsumerStatefulWidget {
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   int selectedIdx = -1;
   bool showShimmer = true; // Track whether to show shimmer or data
   final Duration shimmerDuration = Duration(seconds: 2);
@@ -71,6 +68,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   void initState() {
+
+    ref.read(profileProvider.notifier).getUser(context);
+
     Timer(shimmerDuration, () {
       if (mounted) {
         setState(() {
@@ -201,7 +201,24 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         children: [
 
 
-                          ElevatedButton(onPressed: (){openLogInDialog(context);}, child: Text("asdf")),
+                          //This is for checking any change in profile update;
+                          Consumer(builder: (a,ref,c){
+                            var profile = ref.watch(profileProvider);
+                            if(profile!=null)
+                              {
+                                return Column(
+                                  children: [
+                                    Text(profile.name??""),
+                                    Text(profile.mobileNumber1??""),
+                                    ElevatedButton(onPressed: (){
+                                      openLogInDialog(context);
+                                    }, child: Text("Update"))
+                                  ],
+                                );
+                              }
+
+                            return Text("asdf");
+                          }),
 
                           SizedBox(height: 120),
                           for(int i=0;i<user_category_string.length;i++)...[
@@ -218,7 +235,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 child:
                                 Center(
                                   child:  Container(
-                                  
                                     child:   showShimmer?
                                     Shimmer.fromColors(
                                       baseColor: Colors.grey[300]!,

@@ -22,6 +22,8 @@ class MyBlogListWidget extends StatefulWidget {
 
 
 class _MyBlogListWidgetState extends State<MyBlogListWidget> {
+
+
   bool showShimmer = true; // Track whether to show shimmer or data
   final Duration shimmerDuration = Duration(seconds: 2);
   late YoutubePlayerController _controller=YoutubePlayerController(
@@ -143,15 +145,17 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                   )
                 ],
               ):
-              Html(
-                data: widget.blog.heading!=''?widget.blog.heading:widget.blog.text,
-                style: {
-                  "body": Style(
-                    padding: EdgeInsets.zero,
-                    margin: EdgeInsets.all(0),
-                  ),
-                },
-              ),
+
+                  Text("${widget.blog.text}"),
+              // Html(
+              //   data: widget.blog.heading!=''?widget.blog.heading:widget.blog.text,
+              //   style: {
+              //     "body": Style(
+              //       padding: EdgeInsets.zero,
+              //       margin: EdgeInsets.all(0),
+              //     ),
+              //   },
+              // ),
 
               showShimmer?
               Column(
@@ -174,9 +178,9 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                   children: [
 
                     Text(
-                     " widget.blog.CategoryName"+" . ${widget.blog.subCategoryName??""}",
+                     "${widget.blog.subCategoryName??""}",
 
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.blue,
                       ),
                     ),

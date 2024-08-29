@@ -24,7 +24,7 @@ class _CustomFieldState extends State<CustomField> {
     return SizedBox(
       height: 40,
       child: TextFormField(
-
+        controller: widget.controller,
         validator: widget.validator,
 
 

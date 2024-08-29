@@ -95,17 +95,20 @@ class Blog_list {
         text: json["Text"],
         isActive: json["IsActive"],
         displaySequence: json["DisplaySequence"],
-        startDate: json["StartDate"] == null
+        startDate: json["StartDate"] == null || json["StartDate"] == ""
             ? null
             : DateTime.parse(json["StartDate"]),
-        endDate:
-            json["EndDate"] == null ? null : DateTime.parse(json["EndDate"]),
-        createdDateTime: json["CreatedDateTime"] == null
+        endDate: json["EndDate"] == null || json["EndDate"] == ""
             ? null
-            : DateTime.parse(json["CreatedDateTime"]),
-        updatedDateTime: json["UpdatedDateTime"] == null
-            ? null
-            : DateTime.parse(json["UpdatedDateTime"]),
+            : DateTime.parse(json["EndDate"]),
+        createdDateTime:
+            json["CreatedDateTime"] == null || json["CreatedDateTime"] == ""
+                ? null
+                : DateTime.parse(json["CreatedDateTime"]),
+        updatedDateTime:
+            json["UpdatedDateTime"] == null && json["UpdatedDateTime"] == ""
+                ? null
+                : DateTime.parse(json["UpdatedDateTime"]),
         totalClicks: json["TotalClicks"],
         shareText: json["ShareText"],
         shareLink: json["ShareLink"],

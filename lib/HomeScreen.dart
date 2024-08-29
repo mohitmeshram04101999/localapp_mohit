@@ -250,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body );
 
-      logger.i("$url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+      logger.i("that ois $url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
 
 
 
@@ -899,9 +899,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         controller: _scrollController,
                         children: [
 
-                          ElevatedButton(onPressed: (){
-                            openLogInDialog(context);
-                          }, child: Text("dfa")),
+
 
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -1087,6 +1085,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (load_more == true) return _buildLoadingIndicator();
                                   } else {
                                     return BlogListWidget(blog_string[index], '${selected_category}', '${selected_category}');
+                                    // return Card(margin: EdgeInsets.all(10),color: Colors.grey,
+                                    //     child: Text("${blog_string[index].toJson()["PostByName"]}")
+                                    // );
                                   }
                                 },
                               ),
