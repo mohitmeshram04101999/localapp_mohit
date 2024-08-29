@@ -231,21 +231,23 @@ class _BlogListWidgetState extends State<BlogListWidget> {
 
                     const SizedBox(width: 20,),
 
-                    Expanded(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey.shade600,
-                            radius: 14,
-                            child: Text(widget.blog.postByName![0].toUpperCase(),style:TextStyle(fontSize: 12,color: Colors.white),),
-                          ),
-                          const SizedBox(width: 5,),
-                          Expanded(child: Text(widget.blog.postByName??"",maxLines: 1,overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
-                          )),
-                        ],
-                      ),
-                    )
+
+                    if(widget.blog.postByName!="")
+                      Expanded(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade600,
+                              radius: 14,
+                              child: Text(widget.blog.postByName![0].toUpperCase(),style:TextStyle(fontSize: 12,color: Colors.white),),
+                            ),
+                            const SizedBox(width: 5,),
+                            Expanded(child: Text(widget.blog.postByName??"",maxLines: 1,overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
+                            )),
+                          ],
+                        ),
+                      )
                   ],
                 ),
               ),

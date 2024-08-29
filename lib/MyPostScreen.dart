@@ -8,6 +8,7 @@ import 'package:localapp/CategoryScreen.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
 import 'package:localapp/models/SubCategory.dart';
+import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -168,84 +169,93 @@ class _MyPostScreenState extends State<MyPostScreen> {
   Future<void> getApi(BuildContext context) async {
     showLoaderDialog(context);
 
-    try {
-      blog_data = [];
-      blog_string = [];
-      local_ad_data = [];
-      local_ad_string = [];
-      sub_categorylist_data = [];
-      sub_categorylist_string = [];
-
-      var url = Config.get_my_post;
-      blog_page=0;
-      String? deviceId = await PlatformDeviceId.getDeviceId;
-
-      print('deviceId${deviceId}');
-
-      http.Response response = await http.post(Uri.parse(url), body: {
-        'blog_page':'${blog_page}',
-        'PostById':'$deviceId',
-        'user_id':'$deviceId'
-
-      }) .timeout(Duration(seconds: 20));
 
 
-      // Set timeout to 30 seconds
-      Map<String, dynamic> data = json.decode(response.body );
-      logger.i("${url} \n${response.statusCode} \n${data}");
+    blog_data = [];
+    blog_string = [];
+    local_ad_data = [];
+    local_ad_string = [];
+    sub_categorylist_data = [];
+    sub_categorylist_string = [];
 
-      status = data["success"];
-      print('blog_page$blog_page');
-      // Check if the request was successful (status code 200)
-      if (response.statusCode == 200) {
-        Future.delayed(Duration(seconds: 3), () {
-          Navigator.of(context).pop();
+    var url = Config.get_my_post;
+    blog_page=0;
+    String? deviceId = await PlatformDeviceId.getDeviceId;
 
+
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'blog_page':'${blog_page}',
+      'PostById':'$deviceId',
+      'user_id':'$deviceId'
+
+    }) .timeout(Duration(seconds: 20));
+
+
+    // Set timeout to 30 seconds
+    Map<String, dynamic> data = json.decode(response.body );
+
+    status = data["success"];
+
+    Logger().i("${url}\n  {'blog_page':'${blog_page}','PostById':'$deviceId','user_id':'$deviceId'} ");
+
+
+    Logger().e("Get My Post Api ${response.statusCode}\n${response.body}");
+    Logger().e("${DateTime.now().toIso8601String()}");
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+
+      });
+
+      if (status == "0") {
+
+        setState(() {
+          blog_data = data['data']['blog'] as List;
+
+          blog_string= blog_data.map<Blog_list>((json) => Blog_list.fromJson(json)).toList();
+          total_page=data['data']['total_page']==null?0:data['data']['total_page'];
+          Uploading=data['uploading'] as String;
+          category_string_length=blog_string.length;
+          if(Uploading=='1')
+          {
+
+            isVisibleDiv=true;
+          }
+          else{
+            isVisibleDiv=false;
+            Logger().e("7");
+          }
         });
-
-        if (status == "0") {
-          print(data['data']);
-          setState(() {
-            blog_data = data['data']['blog'] as List;
-            blog_string= blog_data.map<Blog_list>((json) => Blog_list.fromJson(json)).toList();
-            total_page=data['data']['total_page']==null?0:data['data']['total_page'];
-            Uploading=data['uploading'] as String;
-            print('uploading${data['uploading']}');
-            category_string_length=blog_string.length;
-            if(Uploading=='1')
-              {
-                isVisibleDiv=true;
-              }
-            else{
-              isVisibleDiv=false;
-
-            }
-          });
-          print('total_page${total_page}');
-
-
-        }
-        else{
-          category_string_length=0;
-        }
-
+        print('total_page${total_page}');
 
 
       }
-      else {
-        Future.delayed(Duration(seconds: 3), () {
-          Navigator.of(context).pop();
+      else{
+        category_string_length=0;
+      }
 
-        });
-        }
 
-    } catch (e) {
-      print('Request failed with error: $e');
-      // Show retry popup
-      Navigator.of(context).pop();
 
-      RetryPopup();
     }
+    else {
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+
+      });
+    }
+
+    // try {
+    //
+    //
+    // } catch (e) {
+    //   print('Request failed with error: $e');
+    //   // Show retry popup
+    //   Navigator.of(context).pop();
+    //
+    //   RetryPopup();
+    // }
   }
 
   RetryPopup()
@@ -259,7 +269,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           content: Text('Failed to fetch data. Retry?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Retry'),
+              child: const Text('Retry'),
               onPressed: () {
                 getApi(context); // Retry fetching data
                 //Navigator.of(context).pop(); // Close dialog
@@ -267,7 +277,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close dialog
               },

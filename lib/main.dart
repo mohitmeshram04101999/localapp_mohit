@@ -15,6 +15,7 @@ import 'BlogDetail.dart';
 import 'constants/Config.dart';
 import 'constants/prefs_file.dart';
 import 'package:image/image.dart' as img;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -22,8 +23,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true);
-
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
 
   FirebaseMessaging.onBackgroundMessage(showbackgroundNotification);
 
@@ -44,19 +45,17 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
- SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark));
-  runApp(const main_app());
-
+  runApp(const ProviderScope(child: main_app()));
 }
 
 Future<void> showbackgroundNotification(RemoteMessage message) async {
-
   print('clicking notification${message.notification!.title}');
   if (message.data.isNotEmpty) {
     final blogId = message.data['blog_id'];
-    if(blogId!=''){
+    if (blogId != '') {
       navigatorKey.currentState?.push(
         MaterialPageRoute(
           builder: (context) => BlogDetailScreen(
@@ -67,26 +66,27 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
           ),
         ),
       );
-
     }
 
     print('Blog ID: $blogId'); // Log the blog_id for debugging
   } else {
     print('No data payload received');
-  }  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails('yourid', 'yourname',
-      channelDescription: 'yourdescription',
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "@mipmap/ic_launcher", //<-- Add this parameter
-      ticker: 'ticker');
+  }
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails('yourid', 'yourname',
+          channelDescription: 'yourdescription',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: "@mipmap/ic_launcher", //<-- Add this parameter
+          ticker: 'ticker');
   const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(
-      0, message.notification!.title, message.notification!.body, platformChannelSpecifics,
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(0, message.notification!.title,
+      message.notification!.body, platformChannelSpecifics,
       payload: 'item x');
   //showPopup(message);
 }
+
 Future<bool> showPopup(RemoteMessage message) async {
   return await showDialog(
       context: navigatorKey.currentContext!,
@@ -97,14 +97,18 @@ Future<bool> showPopup(RemoteMessage message) async {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(message.notification!.title!,
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 28),
+                Text(
+                  message.notification!.title!,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                 ),
                 Divider(),
-                Text(message.notification!.body!,
-                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                Text(
+                  message.notification!.body!,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                SizedBox(height: 80,),
+                SizedBox(
+                  height: 80,
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -114,14 +118,11 @@ Future<bool> showPopup(RemoteMessage message) async {
                         },
                         child: Text("Ok"),
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red.shade800
-                        ),
+                            backgroundColor: Colors.red.shade800),
                       ),
                     ),
-
                   ],
                 )
-
               ],
             ),
           ),
@@ -129,8 +130,9 @@ Future<bool> showPopup(RemoteMessage message) async {
       });
 }
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 class main_app extends StatefulWidget {
   const main_app({Key? key}) : super(key: key);
 
@@ -140,7 +142,6 @@ class main_app extends StatefulWidget {
 
 class _main_appState extends State<main_app> {
   Prefs prefs = new Prefs();
-
 
   String? version = '';
   String? storeVersion = '';
@@ -170,7 +171,7 @@ class _main_appState extends State<main_app> {
     }
 
     AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       'channel_1',
       'channel name',
       channelDescription: 'your channel description',
@@ -198,59 +199,51 @@ class _main_appState extends State<main_app> {
   void initState() {
     getToken();
     super.initState();
-
-
   }
 
   late String token;
   getToken() async {
     token = (await FirebaseMessaging.instance.getToken())!;
     print('fcm_token${token}');
-   // prefs.set_fcm_token(token);
+    // prefs.set_fcm_token(token);
 
-    String user_id=await prefs.ismember_id();
+    String user_id = await prefs.ismember_id();
     print('token_home${token}');
     String? deviceId = await PlatformDeviceId.getDeviceId;
 
     print('deviceId${deviceId}');
 
     var url = Config.get_home;
-    http.Response response = await http.post(Uri.parse(url), body: {
-      'user_id':'${deviceId}',
-      "token":token
-    });
-
-    logger.i("$url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+    http.Response response = await http
+        .post(Uri.parse(url), body: {'user_id': '${deviceId}', "token": token});
 
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       print("New FCM Token: $newToken");
       print('deviceId${deviceId}');
 
-      http.Response response = await http.post(Uri.parse(url), body: {
-        'user_id':'${deviceId}',
-        "token":newToken
-      });
+      http.Response response = await http.post(Uri.parse(url),
+          body: {'user_id': '${deviceId}', "token": newToken});
 
-      logger.i("$url \n${response?.statusCode} \n${jsonDecode(response?.body??"")}");
-
+      logger.i(
+          "$url \n${response?.statusCode} \n${jsonDecode(response?.body ?? "")}");
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
-    return
-
-      MaterialApp(
+    return MaterialApp(
         title: 'Local App',
-          navigatorKey: navigatorKey, // Set the navigator key
+        navigatorKey: navigatorKey, // Set the navigator key
 
-          theme: ThemeData(
-
+        theme: ThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+            contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: Colors.grey)),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: Colors.grey)),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: Colors.grey)),
+          ),
           primarySwatch: Colors.blue,
         ),
-        home: SplashScreen()
-    );
+        home: SplashScreen());
   }
-
 }
-
