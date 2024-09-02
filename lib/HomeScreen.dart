@@ -238,8 +238,6 @@ class _HomeScreenState extends State<HomeScreen> {
       };
 
 
-      print("sendable Data ${_d}");
-
        http.Response response = await http.post(Uri.parse(url),
            body: {
         'category_id':'${selected_category}',
@@ -250,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body );
 
-      logger.i("that ois $url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
+      // logger.i("that ois $url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
 
 
 
@@ -265,6 +263,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
           apun_Ka_Dat = data;
 
+          //
+          logger.i("categorylist_data\n$categorylist_data");
           categorylist_string = categorylist_data.map<Category_list>(
                   (json) => Category_list.fromJson(json)).toList();
           if(selected_category==0)
@@ -272,19 +272,34 @@ class _HomeScreenState extends State<HomeScreen> {
             selected_category=int.parse(categorylist_string[0].CategoryId);
           }
           sub_categorylist_data = data['data']['sub_category'] as List;
+
+
+          //
+          logger.i("sub_categorylist_data\n$sub_categorylist_data");
           sub_categorylist_string = sub_categorylist_data.map<SubCategory_list>(
                   (json) => SubCategory_list.fromJson(json)).toList();
 
+
           local_ad_data = data['data']['local_ad'] as List;
+
+          //
+          logger.i("local_ad_data\n$local_ad_data");
           local_ad_string = local_ad_data.map<LocalAd_list>(
                   (json) => LocalAd_list.fromJson(json)).toList();
 
           blog_data = data['data']['blog'] as List;
+          //
+          logger.i("blog_data\n$blog_data");
           blog_string= blog_data.map<Blog_list>(
                   (json) => Blog_list.fromJson(json)).toList();
+
+
           notification_ad_data= data['data']['local_ad_notification'] as List;
+          //
+          logger.i("notification_ad_string\n$notification_ad_string");
           notification_ad_string = notification_ad_data.map<LocalAd_list>(
                   (json) => LocalAd_list.fromJson(json)).toList();
+
           total_page=data['data']['total_page']==null?0:data['data']['total_page'];
           print('total_page${total_page}');
           allow_post=data['data']['allow_post']==null?0:data['data']['allow_post'];
@@ -296,8 +311,6 @@ class _HomeScreenState extends State<HomeScreen> {
           category_name=data['data']['category_name']==null?'':data['data']['category_name'];
 
           app_version=data['data']['last_app_version']==null?'1':data['data']['last_app_version'];
-          print('app_version${app_version}');
-          print('category_label${category_label}');
 
             if(app_version!=current_app_version)
             {
@@ -739,6 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
+
         iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
         // textTheme: TextTheme(
         //   headline6: TextStyle(color: Colors.black), // Change text color to black
@@ -747,7 +761,6 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         title:hide_appbar==false?  Row(
             children: [
-
               Text('${category_name}', style:TextStyle(color: Colors.black)),
             ],
           ):
@@ -1055,6 +1068,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }).toList(),
                                 ),
                               ],
+
                               if(local_ad_string.length>1)...[
                                 SizedBox(height: 10),
                                 Row(
@@ -1250,6 +1264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 30),
                   for(int i=0;i<sub_categorylist_string.length;i++)...[
                     Container(height: 40,
+                      color: Colors.red,
                       child:   Row(
                         children: [
                           InkWell(
@@ -1334,6 +1349,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 }
+
+
+
+
+
+//  ///
 void showCustomPopup(BuildContext context,image,WhatsappNumber,WhatsappText,Url,AdId) {
   showDialog(
     context: context,

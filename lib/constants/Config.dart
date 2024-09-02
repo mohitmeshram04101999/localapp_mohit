@@ -5,7 +5,7 @@ class Config
   // static String Main_Link = "https://shubhapp.com/local_app/api/";
   static String Main_Link = "https://localapp.satyakabir.in/api/";
   // static String Image_Path = "https://shubhapp.com/local_app/uploads/";
-  static String Image_Path = "https://localapp.satyakabir.in/local_app/uploads/";
+  static String Image_Path = "https://localapp.satyakabir.in/uploads/";
   static String signup = Main_Link+"signup";
   static String get_home = Main_Link+"get_home";
   static String get_city = Main_Link+"get_city";

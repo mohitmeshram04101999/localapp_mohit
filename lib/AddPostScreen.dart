@@ -349,6 +349,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             decoration: InputDecoration(
                               hintText: '${DescriptionPlaceholder}',
                               border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
                                 hintMaxLines: 4
                             ),
                             style: TextStyle(fontSize: 18.0),

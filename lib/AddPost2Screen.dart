@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localapp/MyPostScreen.dart';
+import 'package:localapp/component/customTextFeild.dart';
+import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'AddPost1Screen.dart';
@@ -22,8 +24,10 @@ import 'package:platform_device_id/platform_device_id.dart';
 
 import 'constants/prefs_file.dart';
 import 'models/BlogList.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddPost2Screen extends StatefulWidget {
+
+class AddPost2Screen extends ConsumerStatefulWidget {
   String CategoryId,Desc;
   List<File> images = [];
   String image_1;
@@ -228,7 +232,7 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 }
-class _AddPost2ScreenState extends State<AddPost2Screen> {
+class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
   bool showShimmer = true; // Track whether to show shimmer or data
   final Duration shimmerDuration = Duration(seconds: 2);
   String DescriptionPlaceholder='';
@@ -385,18 +389,32 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
   String recent_name = await prefs.getpost_name();
   String recent_selected=await prefs.getpost_desc();
   String recent_contact=await prefs.getpost_contact();
-  setState(() {
-    if(recent_name!='')
-    {
-      name_con.text='${recent_name}';
-    }
+  setState(() async {
+    var user = ref.read(profileProvider);
+    if(user!=null)
+      {
+        name_con.text = user.name??"unknown";
+      }
+    else
+      {
+        ref.read(profileProvider.notifier).getUser(context);
+        var _user = ref.read(profileProvider);
+        name_con.text = user?.name??"unknown";
+
+      }
+
+
+    // if(recent_name!='')
+    // {
+    //   name_con.text='${recent_name}';
+    // }
     if(recent_selected!='')
     {
       selectedOption=recent_selected;
     }
     if(recent_contact!='')
     {
-      _textEditingController.text='${recent_contact}';
+      _textEditingController.text=ref.read(profileProvider)?.mobileNumber1??"";
     }
 
   });
@@ -813,19 +831,19 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
                               padding: EdgeInsets.only(left: 20.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start, // Distribute space evenly between images
-                                children: [
+                                children: const [
                                   Text('Your Name or Business Name',
                                       style:TextStyle(color: Colors.black,fontSize: 17)),
 
                                 ],
                               ),
                             ),
-                            SizedBox(height: 5,),
+                            const SizedBox(height: 5,),
                             Container(
-                              padding: EdgeInsets.only(left: 20.0),
+                              padding: const EdgeInsets.only(left: 20.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start, // Distribute space evenly between images
-                                children: [
+                                children:const  [
                                   Text('This will be displayed against your post.',
                                       style:TextStyle(color: Colors.grey,fontSize: 12)),
 
@@ -833,26 +851,16 @@ class _AddPost2ScreenState extends State<AddPost2Screen> {
                               ),
                             ),
 
+
+                            //name
+                            CustomField(controller: name_con, hintText: "Mention your name here"),
+
+                            const SizedBox(height: 50,),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10), // Left padding
-                              child: TextField(
-                                controller: name_con,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15), // Padding for hint text
-                                  hintText: 'Mention your name here', // Placeholder text
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey), // Grey border
-                                    borderRadius: BorderRadius.circular(5), // Rounded corners
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 50,),
-                            Container(
-                              padding: EdgeInsets.only(left: 20.0),
+                              padding: const EdgeInsets.only(left: 20.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start, // Distribute space evenly between images
-                                children: [
+                                children: const [
                                   Text('How do you want people to contact you?',
                                       style:TextStyle(color: Colors.black,fontSize: 17)),
 
