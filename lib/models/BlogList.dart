@@ -42,6 +42,8 @@ class Blog_list {
   String? rejectionComment;
   String? subCategoryName;
   String? timeAgo;
+  String? categoryName;
+  String? area;
 
   Blog_list({
     this.blogPostId,
@@ -77,6 +79,8 @@ class Blog_list {
     this.rejectionComment,
     this.subCategoryName,
     this.timeAgo,
+    this.categoryName,
+    this.area,
   });
 
   factory Blog_list.fromJson(Map<String, dynamic> json) => Blog_list(
@@ -93,6 +97,7 @@ class Blog_list {
         videoLink: json["VideoLink"],
         heading: json["Heading"],
         text: json["Text"],
+        area: json["Area"],
         isActive: json["IsActive"],
         displaySequence: json["DisplaySequence"],
         startDate: json["StartDate"] == null || json["StartDate"] == ""
@@ -123,6 +128,7 @@ class Blog_list {
         rejectionComment: json["RejectionComment"],
         subCategoryName: json["SubCategoryName"],
         timeAgo: json["TimeAgo"],
+        categoryName: json["CategoryName"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -161,5 +167,7 @@ class Blog_list {
         "RejectionComment": rejectionComment,
         "SubCategoryName": subCategoryName,
         "TimeAgo": timeAgo,
+    "Area": area,
+    "CategoryName":categoryName
       };
 }

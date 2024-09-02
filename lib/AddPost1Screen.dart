@@ -204,12 +204,12 @@ class _AddPost1ScreenState extends State<AddPost1Screen> {
         backgroundColor: Colors.white, // Change app bar color to white
         elevation: 0.0, // Remove the bottom border
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        iconTheme: IconThemeData(color: Colors.black), // Change icon color to black
+        iconTheme: const IconThemeData(color: Colors.black), // Change icon color to black
         // textTheme: TextTheme(
         //   headline6: TextStyle(color: Colors.black), // Change text color to black
         // ),
@@ -217,7 +217,7 @@ class _AddPost1ScreenState extends State<AddPost1Screen> {
         centerTitle: true,
 // Back arrow
         title: Row(
-          children: [
+          children: const [
             // Add spacing between the image and text
             Text('Add Images',
                 style:TextStyle(color: Colors.black,)),
@@ -239,10 +239,10 @@ class _AddPost1ScreenState extends State<AddPost1Screen> {
                   color:Colors.black,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                padding: EdgeInsets.all(10.0),
-                margin: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
+                margin: const EdgeInsets.all(10.0),
 
-                child: Center(
+                child: const Center(
                   child:  Text(
                     'Next',
                     style: TextStyle(

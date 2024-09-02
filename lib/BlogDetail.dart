@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:localapp/MyPostScreen.dart';
 import 'package:localapp/VideoPlayer.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'VideoPlayerScreen.dart';
@@ -234,6 +235,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               (json) => LocalAd_list.fromJson(json)).toList();
 
       blog_data = data['data']['blog'] as List;
+      Logger().i("blog_data\n$blog_data");
       blog_string = blog_data.map<Blog_Detail_list>(
               (json) => Blog_Detail_list.fromJson(json)).toList();
 
@@ -260,6 +262,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         WhatsappNumber=blog_string[0].WhatsappNumber==null?'':blog_string[0].WhatsappNumber;
         WhatsappText=blog_string[0].WhatsappText==null?'':blog_string[0].WhatsappText;
         EndDate=blog_string[0].EndDate==null?'':blog_string[0].EndDate;
+        TotalClicks=blog_string[0].TotalClicks==null?'':blog_string[0].TotalClicks;
         TotalClicks=blog_string[0].TotalClicks==null?'':blog_string[0].TotalClicks;
 
         if(VideoLink!='')
@@ -384,6 +387,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
     }
 
   }
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -438,10 +443,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Container(
                           color: Colors.white,
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +467,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         fit: BoxFit.cover,
                                         width: double.infinity,
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.play_circle_fill,
                                         color: Colors.white,
                                         size: 72.0,
@@ -515,7 +520,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
 
                               ],
-                              SizedBox(height: 10.0),
+                              const SizedBox(height: 10.0),
                               Center(
                                 child:    Row(
                                   children: [
@@ -573,7 +578,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         baseColor: Colors.grey[300]!,
                                         highlightColor: Colors.grey[100]!,
                                         child: Container(
-                                          width: double.infinity,
+                                          width: double.maxFinite,
                                           height: 80,
                                           color: Colors.white,
                                         ),
@@ -813,6 +818,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 ),
                               ),
                               */
+
+
+
                               if(PostByName!='')...[
 
 
@@ -853,6 +861,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 ),
                               ),
                               ],
+                              Text(("sadfa")),
 
                               SizedBox(height: 10.0),
                               showShimmer
@@ -886,6 +895,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               )
                                   :
                               Container(
+
                                 padding: const EdgeInsets.only(left:10),
                                 child:  Html(
                                   data:'${HText}',
@@ -899,6 +909,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
                                 ),
                               ),
+
+
                               if(ShareText!='')...[
                                 Row(
                                   children: [
@@ -1119,6 +1131,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ],
                             ),
                           ),
+
+
+
                           if(EndDate!='01 Jan 1970')...[
 
 

@@ -137,11 +137,11 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
     if (status == "0") {
 
-
       user_category_data = data['data']['category'] as List;
       user_category_string = user_category_data.map<User_Category_list>(
               (json) => User_Category_list.fromJson(json)).toList();
 
+      print("pass");
 
       setState(() {
         bg_image=data['data']['bg_image'];
@@ -228,8 +228,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                               onTap: ()
                               {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen(user_category_string[i].CategoryId)));
-
-                              },
+                                },
                               child: Padding(
                                 padding: EdgeInsets.all(10.0),
                                 child:
