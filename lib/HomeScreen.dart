@@ -10,6 +10,7 @@ import 'package:localapp/component/logiin%20dailog.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
 import 'package:localapp/models/SubCategory.dart';
+import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -245,8 +246,21 @@ class _HomeScreenState extends State<HomeScreen> {
         'blog_page':'${blog_page}',
          'user_id':'${deviceId}',
         'city_id':'1'
-      }) .timeout(Duration(seconds: 20)); // Set timeout to 30 seconds
-      Map<String, dynamic> data = json.decode(response.body );
+      }) .timeout(Duration(seconds: 20));
+
+       var d =  {
+         'category_id':'${selected_category}',
+         'subcategory_id':'$selected_sub_category',
+         'blog_page':'${blog_page}',
+         'user_id':'${deviceId}',
+         'city_id':'1'
+       };
+
+
+
+       Logger().e("THis Is new $url\n ${response.statusCode} \n${response.body}\n$d");
+       // Set timeout to 30 seconds
+      Map<String, dynamic> data = json.decode(response.body);
 
       // logger.i("that ois $url \n${response?.statusCode} \n${jsonDecode(response.body??"")}");
 

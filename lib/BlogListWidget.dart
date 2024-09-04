@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:localapp/constants/month.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'BlogDetail.dart';
@@ -189,18 +190,28 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ),
 
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(0),
                 child: Row(
                   children: [
+                    Icon(Icons.location_pin),
                     Text(
-                      'Area ${widget.blog.area ?? ""}',
+                      ' ${widget.blog.area ?? "unknown"}',
                       style: const TextStyle(
-                        color: Colors.blue,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15
                       ),
                     ),
                   ],
                 ),
               ),
+
+              Row(children: [
+                const Icon(Icons.visibility),
+                Text('  ${widget.blog.totalClicks??"0"}')
+              ],),
+
+
               showShimmer
                   ? Column(
                       children: [
@@ -232,6 +243,10 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                               color: Colors.grey,
                             ),
                           ),
+                          
+                          
+
+                          //
                           const SizedBox(
                             width: 20,
                           ),
@@ -266,6 +281,14 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                         ],
                       ),
                     ),
+              
+              
+              Row(
+                children: [
+                  Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.day]??""} ${widget.blog.endDate?.year??""}",
+                  style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 15),),
+                ],
+              )
             ],
           ),
         ),

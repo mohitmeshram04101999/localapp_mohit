@@ -1,0 +1,652 @@
+// children: [
+                            //
+                            //   KeyboardListener(
+                            //     focusNode: FocusNode(),
+                            //     onKeyEvent: (e) {
+                            //       if (e.logicalKey ==
+                            //               LogicalKeyboardKey.controlLeft ||
+                            //           e.logicalKey ==
+                            //               LogicalKeyboardKey.controlRight) {
+                            //         setState(() {
+                            //           _isCtrlPressed = e is KeyDownEvent;
+                            //           // _isScrollEvent = e is KeyUpEvent;
+                            //         });
+                            //       }
+                            //     },
+                            //     child: Listener(
+                            //       onPointerSignal: (pointerSignal) {
+                            //         if (pointerSignal
+                            //                 is PointerScrollEvent &&
+                            //             _isCtrlPressed) {
+                            //           setState(() {
+                            //             _isScrollEvent = true;
+                            //             _scale +=
+                            //                 pointerSignal.scrollDelta.dy > 0
+                            //                     ? -0.1
+                            //                     : 0.1;
+                            //             _scale = _scale.clamp(0.5,
+                            //                 1000.0); // Limit zoom range
+                            //             // setZoomLevel(_scale * 1.2);
+                            //             firstPdfController.zoomLevel =
+                            //                 _scale;
+                            //           });
+                            //           // _firstPdfViewerKey.currentContext!.owner
+                            //         }
+                            //       },
+                            //       child: SizedBox(
+                            //         height: height,
+                            //         width: width,
+                            //         child: Stack(children: [
+                            //           SfPdfViewer.network(
+                            //             ref
+                            //                 .watch(currentPdfProvider)!
+                            //                 .pdfUrl
+                            //                 .toString(),
+                            //             key: _firstPdfViewerKey,
+                            //             controller: firstPdfController,
+                            //             onTap: (details) {
+                            //               ref
+                            //                   .read(
+                            //                       isFirstPdfActive.notifier)
+                            //                   .state = true;
+                            //               ref
+                            //                   .read(isSecondPdfActive
+                            //                       .notifier)
+                            //                   .state = false;
+                            //               ref
+                            //                   .read(
+                            //                       isThirdPdfActive.notifier)
+                            //                   .state = false;
+                            //               ref
+                            //                   .read(isFourthPdfActive
+                            //                       .notifier)
+                            //                   .state = false;
+                            //             },
+                            //             canShowTextSelectionMenu: false,
+                            //             interactionMode: _isCtrlPressed ||
+                            //                     ref
+                            //                         .watch(isPanActive
+                            //                             .notifier)
+                            //                         .state
+                            //                 ? PdfInteractionMode.pan
+                            //                 : PdfInteractionMode.selection,
+                            //             maxZoomLevel: 5000,
+                            //             // pageLayoutMode:
+                            //             //     PdfPageLayoutMode.single,
+                            //             scrollDirection:
+                            //                 PdfScrollDirection.vertical,
+                            //             currentSearchTextHighlightColor:
+                            //                 Colors.red.withOpacity(0.5),
+                            //             otherSearchTextHighlightColor:
+                            //                 Colors.green.withOpacity(0.5),
+                            //             onTextSelectionChanged: (details) {
+                            //               searchTextController.text =
+                            //                   details.selectedText ?? '';
+                            //             },
+                            //             onZoomLevelChanged: (details) {},
+                            //           ),
+                            //           // if (_isCtrlPressed) ...{
+                            //           //   Positioned(
+                            //           //     top: 10,
+                            //           //     left: 10,
+                            //           //     child: Container(
+                            //           //       decoration: BoxDecoration(
+                            //           //         color: Colors.grey[900],
+                            //           //         borderRadius:
+                            //           //             BorderRadius.circular(150),
+                            //           //       ),
+                            //           //       child: Text(
+                            //           //         'Zoom: ${_scale.toStringAsFixed(2)}',
+                            //           //         style: const TextStyle(
+                            //           //             color: Colors.white),
+                            //           //       ),
+                            //           //     ),
+                            //           //   ),
+                            //           // },
+                            //           if (_isScrollEvent &&
+                            //               _isCtrlPressed) ...{
+                            //             GestureDetector(
+                            //               onTapDown: (details) {
+                            //                 setState(() {
+                            //                   _isScrollEvent = false;
+                            //                 });
+                            //               },
+                            //               child: Container(
+                            //                   color: Colors.transparent
+                            //                       .withOpacity(0)),
+                            //             )
+                            //           },
+                            //           if (ref.watch(isFirstPdfActive)) ...{
+                            //             Container(
+                            //               width: 70,
+                            //               height: 30,
+                            //               decoration: BoxDecoration(
+                            //                 color: Colors.green,
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(150),
+                            //               ),
+                            //               margin: const EdgeInsets.all(8.0),
+                            //               child: Padding(
+                            //                 padding: EdgeInsets.symmetric(
+                            //                     horizontal: 8.0,
+                            //                     vertical: 2.0),
+                            //                 child: Center(
+                            //                   child: Text(
+                            //                     "Active",
+                            //                     style: TextStyle(
+                            //                         color: Colors.white,
+                            //                         fontSize: 15,
+                            //                         fontWeight:
+                            //                             FontWeight.bold),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             )
+                            //           }
+                            //         ]),
+                            //       ),
+                            //     ),
+                            //   ),
+                            //   if (ref.watch(splitPdfProvider) != null) ...{
+                            //     KeyboardListener(
+                            //         focusNode: FocusNode(),
+                            //         onKeyEvent: (e) {
+                            //           if (e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlLeft ||
+                            //               e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlRight) {
+                            //             setState(() {
+                            //               _isCtrlPressed =
+                            //                   e is KeyDownEvent;
+                            //               _isScrollEvent = e is KeyUpEvent;
+                            //             });
+                            //           }
+                            //         },
+                            //         child: Listener(
+                            //             onPointerSignal: (pointerSignal) {
+                            //               if (pointerSignal
+                            //                       is PointerScrollEvent &&
+                            //                   _isCtrlPressed) {
+                            //                 setState(() {
+                            //                   _isScrollEvent = true;
+                            //                   _scale += pointerSignal
+                            //                               .scrollDelta.dy >
+                            //                           0
+                            //                       ? -0.1
+                            //                       : 0.1;
+                            //                   _scale = _scale.clamp(1,
+                            //                       1000.0); // Limit zoom range
+                            //                   // setZoomLevel(_scale * 1.2);
+                            //                   splitPdfController.zoomLevel =
+                            //                       _scale;
+                            //                 });
+                            //                 // _firstPdfViewerKey.currentContext!.owner
+                            //               }
+                            //             },
+                            //             child: SizedBox(
+                            //               height: height,
+                            //               width: width,
+                            //               child: Stack(
+                            //                 children: [
+                            //                   SfPdfViewer.network(
+                            //                     ref
+                            //                         .watch(
+                            //                             splitPdfProvider)!
+                            //                         .pdfUrl
+                            //                         .toString(),
+                            //                     key: _secondPdfViewerKey,
+                            //                     controller:
+                            //                         splitPdfController,
+                            //                     onTap: (details) {
+                            //                       ref
+                            //                           .read(isFirstPdfActive
+                            //                               .notifier)
+                            //                           .state = false;
+                            //                       ref
+                            //                           .read(
+                            //                               isSecondPdfActive
+                            //                                   .notifier)
+                            //                           .state = true;
+                            //                       ref
+                            //                           .read(isThirdPdfActive
+                            //                               .notifier)
+                            //                           .state = false;
+                            //                       ref
+                            //                           .read(
+                            //                               isFourthPdfActive
+                            //                                   .notifier)
+                            //                           .state = false;
+                            //                     },
+                            //                     canShowTextSelectionMenu:
+                            //                         false,
+                            //                     interactionMode: _isCtrlPressed ||
+                            //                             ref
+                            //                                 .watch(isPanActive
+                            //                                     .notifier)
+                            //                                 .state
+                            //                         ? PdfInteractionMode.pan
+                            //                         : PdfInteractionMode
+                            //                             .selection,
+                            //                     maxZoomLevel: 5000,
+                            //                     currentSearchTextHighlightColor:
+                            //                         Colors.red
+                            //                             .withOpacity(0.5),
+                            //                     otherSearchTextHighlightColor:
+                            //                         Colors.green
+                            //                             .withOpacity(0.5),
+                            //                     onTextSelectionChanged:
+                            //                         (details) {
+                            //                       searchTextController
+                            //                           .text = details
+                            //                               .selectedText ??
+                            //                           '';
+                            //                     },
+                            //                     onZoomLevelChanged:
+                            //                         (details) {},
+                            //                   ),
+                            //                   // if (_isCtrlPressed) ...{
+                            //                   //   Positioned(
+                            //                   //     top: 10,
+                            //                   //     left: 10,
+                            //                   //     child: Container(
+                            //                   //       decoration: BoxDecoration(
+                            //                   //         color: Colors.grey[900],
+                            //                   //         borderRadius:
+                            //                   //             BorderRadius.circular(
+                            //                   //                 150),
+                            //                   //       ),
+                            //                   //       child: Text(
+                            //                   //         'Zoom: ${_scale.toStringAsFixed(2)}',
+                            //                   //         style: const TextStyle(
+                            //                   //             color: Colors.white),
+                            //                   //       ),
+                            //                   //     ),
+                            //                   //   ),
+                            //                   // },
+                            //                   if (_isScrollEvent &&
+                            //                       _isCtrlPressed) ...{
+                            //                     GestureDetector(
+                            //                       onTapDown: (details) {
+                            //                         setState(() {
+                            //                           _isScrollEvent =
+                            //                               false;
+                            //                         });
+                            //                       },
+                            //                       child: Container(
+                            //                           color: Colors
+                            //                               .transparent
+                            //                               .withOpacity(0)),
+                            //                     )
+                            //                   },
+                            //                   if (ref.watch(
+                            //                       isSecondPdfActive)) ...{
+                            //                     Container(
+                            //                       width: 70,
+                            //                       height: 30,
+                            //                       decoration: BoxDecoration(
+                            //                         color: Colors.green,
+                            //                         borderRadius:
+                            //                             BorderRadius
+                            //                                 .circular(150),
+                            //                       ),
+                            //                       margin:
+                            //                           const EdgeInsets.all(
+                            //                               8.0),
+                            //                       child: Padding(
+                            //                         padding: EdgeInsets
+                            //                             .symmetric(
+                            //                                 horizontal: 8.0,
+                            //                                 vertical: 2.0),
+                            //                         child: Center(
+                            //                           child: Text(
+                            //                             "Active",
+                            //                             style: TextStyle(
+                            //                                 color: Colors
+                            //                                     .white,
+                            //                                 fontSize: 15,
+                            //                                 fontWeight:
+                            //                                     FontWeight
+                            //                                         .bold),
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                     )
+                            //                   }
+                            //                 ],
+                            //               ),
+                            //             )))
+                            //   },
+                            //   if (ref.watch(thirdPdfProvider) != null) ...{
+                            //     KeyboardListener(
+                            //         focusNode: FocusNode(),
+                            //         onKeyEvent: (e) {
+                            //           if (e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlLeft ||
+                            //               e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlRight) {
+                            //             setState(() {
+                            //               _isCtrlPressed =
+                            //                   e is KeyDownEvent;
+                            //               _isScrollEvent = e is KeyUpEvent;
+                            //             });
+                            //           }
+                            //         },
+                            //         child: Listener(
+                            //             onPointerSignal: (pointerSignal) {
+                            //               if (pointerSignal
+                            //                       is PointerScrollEvent &&
+                            //                   _isCtrlPressed) {
+                            //                 setState(() {
+                            //                   _isScrollEvent = true;
+                            //                   _scale += pointerSignal
+                            //                               .scrollDelta.dy >
+                            //                           0
+                            //                       ? -0.1
+                            //                       : 0.1;
+                            //                   _scale = _scale.clamp(0.5,
+                            //                       1000.0); // Limit zoom range
+                            //                   // setZoomLevel(_scale * 1.2);
+                            //                   thirdPdfController.zoomLevel =
+                            //                       _scale;
+                            //                 });
+                            //                 // _firstPdfViewerKey.currentContext!.owner
+                            //               }
+                            //             },
+                            //             child: SizedBox(
+                            //               height: height,
+                            //               width: width,
+                            //               child: Stack(children: [
+                            //                 SfPdfViewer.network(
+                            //                   ref
+                            //                       .watch(thirdPdfProvider)!
+                            //                       .pdfUrl
+                            //                       .toString(),
+                            //                   key: _thirdPdfViewerKey,
+                            //                   controller:
+                            //                       thirdPdfController,
+                            //                   onTap: (details) {
+                            //                     ref
+                            //                         .read(isFirstPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                     ref
+                            //                         .read(isSecondPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                     ref
+                            //                         .read(isThirdPdfActive
+                            //                             .notifier)
+                            //                         .state = true;
+                            //                     ref
+                            //                         .read(isFourthPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                   },
+                            //                   canShowTextSelectionMenu:
+                            //                       false,
+                            //                   interactionMode: _isCtrlPressed ||
+                            //                           ref
+                            //                               .watch(isPanActive
+                            //                                   .notifier)
+                            //                               .state
+                            //                       ? PdfInteractionMode.pan
+                            //                       : PdfInteractionMode
+                            //                           .selection,
+                            //                   maxZoomLevel: 5000,
+                            //                   currentSearchTextHighlightColor:
+                            //                       Colors.red
+                            //                           .withOpacity(0.5),
+                            //                   otherSearchTextHighlightColor:
+                            //                       Colors.green
+                            //                           .withOpacity(0.5),
+                            //                   onTextSelectionChanged:
+                            //                       (details) {
+                            //                     searchTextController.text =
+                            //                         details.selectedText ??
+                            //                             '';
+                            //                   },
+                            //                   onZoomLevelChanged:
+                            //                       (details) {},
+                            //                 ),
+                            //                 // if (_isCtrlPressed) ...{
+                            //                 //   Positioned(
+                            //                 //     top: 10,
+                            //                 //     left: 10,
+                            //                 //     child: Container(
+                            //                 //       decoration: BoxDecoration(
+                            //                 //         color: Colors.grey[900],
+                            //                 //         borderRadius:
+                            //                 //             BorderRadius.circular(
+                            //                 //                 150),
+                            //                 //       ),
+                            //                 //       child: Text(
+                            //                 //         'Zoom: ${_scale.toStringAsFixed(2)}',
+                            //                 //         style: const TextStyle(
+                            //                 //             color: Colors.white),
+                            //                 //       ),
+                            //                 //     ),
+                            //                 //   ),
+                            //                 // },
+                            //                 if (_isScrollEvent &&
+                            //                     _isCtrlPressed) ...{
+                            //                   GestureDetector(
+                            //                     onTapDown: (details) {
+                            //                       setState(() {
+                            //                         _isScrollEvent = false;
+                            //                       });
+                            //                     },
+                            //                     child: Container(
+                            //                         color: Colors
+                            //                             .transparent
+                            //                             .withOpacity(0)),
+                            //                   )
+                            //                 },
+                            //                 if (ref.watch(
+                            //                     isThirdPdfActive)) ...{
+                            //                   Container(
+                            //                     width: 70,
+                            //                     height: 30,
+                            //                     decoration: BoxDecoration(
+                            //                       color: Colors.green,
+                            //                       borderRadius:
+                            //                           BorderRadius.circular(
+                            //                               150),
+                            //                     ),
+                            //                     margin:
+                            //                         const EdgeInsets.all(
+                            //                             8.0),
+                            //                     child: Padding(
+                            //                       padding:
+                            //                           EdgeInsets.symmetric(
+                            //                               horizontal: 8.0,
+                            //                               vertical: 2.0),
+                            //                       child: Center(
+                            //                         child: Text(
+                            //                           "Active",
+                            //                           style: TextStyle(
+                            //                               color:
+                            //                                   Colors.white,
+                            //                               fontSize: 15,
+                            //                               fontWeight:
+                            //                                   FontWeight
+                            //                                       .bold),
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   )
+                            //                 }
+                            //               ]),
+                            //             )))
+                            //   },
+                            //   if (ref.watch(fourthPdfProvider) != null) ...{
+                            //     KeyboardListener(
+                            //         focusNode: FocusNode(),
+                            //         onKeyEvent: (e) {
+                            //           if (e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlLeft ||
+                            //               e.logicalKey ==
+                            //                   LogicalKeyboardKey
+                            //                       .controlRight) {
+                            //             setState(() {
+                            //               _isCtrlPressed =
+                            //                   e is KeyDownEvent;
+                            //               _isScrollEvent = e is KeyUpEvent;
+                            //             });
+                            //           }
+                            //         },
+                            //         child: Listener(
+                            //           onPointerSignal: (pointerSignal) {
+                            //             if (pointerSignal
+                            //                     is PointerScrollEvent &&
+                            //                 _isCtrlPressed) {
+                            //               setState(() {
+                            //                 _isScrollEvent = true;
+                            //                 _scale += pointerSignal
+                            //                             .scrollDelta.dy >
+                            //                         0
+                            //                     ? -0.1
+                            //                     : 0.1;
+                            //                 _scale = _scale.clamp(0.5,
+                            //                     1000.0); // Limit zoom range
+                            //                 // setZoomLevel(_scale * 1.2);
+                            //                 fourthPdfController.zoomLevel =
+                            //                     _scale;
+                            //               });
+                            //               // _firstPdfViewerKey.currentContext!.owner
+                            //             }
+                            //           },
+                            //           child: SizedBox(
+                            //             height: height,
+                            //             width: width,
+                            //             child: Stack(
+                            //               children: [
+                            //                 SfPdfViewer.network(
+                            //                   ref
+                            //                       .watch(fourthPdfProvider)!
+                            //                       .pdfUrl
+                            //                       .toString(),
+                            //                   key: _fourthPdfViewerKey,
+                            //                   controller:
+                            //                       fourthPdfController,
+                            //                   onTap: (details) {
+                            //                     ref
+                            //                         .read(isFirstPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                     ref
+                            //                         .read(isSecondPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                     ref
+                            //                         .read(isThirdPdfActive
+                            //                             .notifier)
+                            //                         .state = false;
+                            //                     ref
+                            //                         .read(isFourthPdfActive
+                            //                             .notifier)
+                            //                         .state = true;
+                            //                   },
+                            //                   canShowTextSelectionMenu:
+                            //                       false,
+                            //                   interactionMode: _isCtrlPressed ||
+                            //                           ref
+                            //                               .watch(isPanActive
+                            //                                   .notifier)
+                            //                               .state
+                            //                       ? PdfInteractionMode.pan
+                            //                       : PdfInteractionMode
+                            //                           .selection,
+                            //                   maxZoomLevel: 5000,
+                            //                   currentSearchTextHighlightColor:
+                            //                       Colors.red
+                            //                           .withOpacity(0.5),
+                            //                   otherSearchTextHighlightColor:
+                            //                       Colors.green
+                            //                           .withOpacity(0.5),
+                            //                   onTextSelectionChanged:
+                            //                       (details) {
+                            //                     searchTextController.text =
+                            //                         details.selectedText ??
+                            //                             '';
+                            //                   },
+                            //                   onZoomLevelChanged:
+                            //                       (details) {},
+                            //                 ),
+                            //                 // if (_isCtrlPressed) ...{
+                            //                 //   Positioned(
+                            //                 //     top: 10,
+                            //                 //     left: 10,
+                            //                 //     child: Container(
+                            //                 //       decoration: BoxDecoration(
+                            //                 //         color: Colors.grey[900],
+                            //                 //         borderRadius:
+                            //                 //             BorderRadius.circular(
+                            //                 //                 150),
+                            //                 //       ),
+                            //                 //       child: Text(
+                            //                 //         'Zoom: ${_scale.toStringAsFixed(2)}',
+                            //                 //         style: const TextStyle(
+                            //                 //             color: Colors.white),
+                            //                 //       ),
+                            //                 //     ),
+                            //                 //   ),
+                            //                 // },
+                            //                 if (_isScrollEvent &&
+                            //                     _isCtrlPressed) ...{
+                            //                   GestureDetector(
+                            //                     onTapDown: (details) {
+                            //                       setState(() {
+                            //                         _isScrollEvent = false;
+                            //                       });
+                            //                     },
+                            //                     child: Container(
+                            //                         color: Colors
+                            //                             .transparent
+                            //                             .withOpacity(0)),
+                            //                   )
+                            //                 },
+                            //                 if (ref.watch(
+                            //                     isFourthPdfActive)) ...{
+                            //                   Container(
+                            //                     width: 70,
+                            //                     height: 30,
+                            //                     decoration: BoxDecoration(
+                            //                       color: Colors.green,
+                            //                       borderRadius:
+                            //                           BorderRadius.circular(
+                            //                               150),
+                            //                     ),
+                            //                     margin:
+                            //                         const EdgeInsets.all(
+                            //                             8.0),
+                            //                     child: Padding(
+                            //                       padding:
+                            //                           EdgeInsets.symmetric(
+                            //                               horizontal: 8.0,
+                            //                               vertical: 2.0),
+                            //                       child: Center(
+                            //                         child: Text(
+                            //                           "Active",
+                            //                           style: TextStyle(
+                            //                               color:
+                            //                                   Colors.white,
+                            //                               fontSize: 15,
+                            //                               fontWeight:
+                            //                                   FontWeight
+                            //                                       .bold),
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   )
+                            //                 }
+                            //               ],
+                            //             ),
+                            //           ),
+                            //         ))
+                            //   }
+                            // ],
