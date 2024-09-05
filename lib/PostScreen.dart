@@ -242,7 +242,7 @@ class _PostScreenState extends State<PostScreen> {
                     GestureDetector(
                       onTap: ()
                       {
-                        String url=   "https://wa.me/+91${user_category_string[i].WhatsappNumber}?text=${user_category_string[i].WhatsappMessage}";
+                        String url=   "https://wa.me/+91${user_category_string[i].whatsappNumber}?text=${user_category_string[i].whatsappText}";
                         launchUrl(url);
 
                       },
@@ -298,7 +298,7 @@ class _PostScreenState extends State<PostScreen> {
                            CachedNetworkImage(
                                width: MediaQuery.of(context).size.width,
 
-                               imageUrl:'${Config.Image_Path+'settings/'+user_category_string[i].CategoryImage}',
+                               imageUrl:'${Config.Image_Path+'settings/'+user_category_string[i].categoryImage}',
                                placeholder: (context, url) =>Image.asset(
                                  "assets/images/loader.gif",
                                  width: 80,

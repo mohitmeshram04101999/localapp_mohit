@@ -45,6 +45,7 @@ class User {
   dynamic status;
   String? deviceToken;
   dynamic lastVisitDate;
+  String? groupAccess;
   dynamic totalVisitCount;
   String? totalContactsVisited;
   DateTime? createdDateTime;
@@ -65,6 +66,7 @@ class User {
     this.mobileNumber2,
     this.isActive,
     this.status,
+    this.groupAccess,
     this.deviceToken,
     this.lastVisitDate,
     this.totalVisitCount,
@@ -98,6 +100,7 @@ class User {
     updatedBy: json["UpdatedBy"],
     remarks: json["Remarks"],
     uploading: json["Uploading"],
+    groupAccess: json["GroupAccess"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -121,5 +124,6 @@ class User {
     "UpdatedBy": updatedBy,
     "Remarks": remarks,
     "Uploading": uploading,
+    "GroupAccess": groupAccess,
   };
 }
