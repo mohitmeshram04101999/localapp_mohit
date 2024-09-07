@@ -1086,11 +1086,6 @@ class _HomeScreenState extends State<HomeScreen> {
                    color: Colors.black,
                    borderRadius: BorderRadius.circular(10),
                  ),
-                 child: Icon(
-                   Icons.add,
-                   color: Colors.white,
-                   size: 30,
-                 ),
 
                  // child: Text('${ (widget.catPrivacyType!=CategoryPrivacyType.private&& widget.catPrivacyType!=CategoryPrivacyType.semiPrivate)||profile!.groupAccess!.split(",").contains(widget.CategoryId)}',style: TextStyle(color: Colors.white),),
                ));

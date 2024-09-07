@@ -41,7 +41,7 @@ class ProfileProviderState extends StateNotifier<User?>
         state = data.data;
         if(state!.name==null||state!.mobileNumber1==null)
           {
-            openLogInDialog(context);
+            await openLogInDialog(context);
           }
       }
     else

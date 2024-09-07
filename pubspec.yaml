@@ -65,6 +65,9 @@ dependency_overrides:
   html_editor_enhanced:
   image_picker: 1.0.3
   flutter_riverpod: ^2.3.3
+  geolocator: ^9.0.2
+  mobile_number: ^2.1.1
+  sim_data_plus: ^0.1.4
 
 
 
