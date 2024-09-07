@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/customFeild.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+import 'package:localapp/providers/location%20permission%20provider.dart';
+import 'package:localapp/providers/notificationPermitionProvider.dart';
+import 'package:localapp/providers/phoneNumberPerovider.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -63,11 +66,21 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     });
   }
 
-  int _currentIndexBottom = 0; // Track the current page index
+  int _currentIndexBottom = 0;
+
+  myInit ()async
+  {
+    await ref.read(profileProvider.notifier).getUser(context);
+    await ref.read(notificationPermissionProvider.notifier).getNotification(context);
+    await ref.read(locationPermmissionProvider.notifier).getLocationPermmision(context);
+    await ref.read(phoneNumberProvider.notifier).getSimNumber(context);
+
+  }// Track the current page index
 
   @override
   void initState() {
-    ref.read(profileProvider.notifier).getUser(context);
+
+    myInit();
 
     Timer(shimmerDuration, () {
       if (mounted) {
@@ -149,6 +162,14 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+
+
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //
+      //   },
+      // ),
+
       //Tag From BackGround
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -181,25 +202,34 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //This is for checking any change in profile update;
-                        // Consumer(builder: (a, ref, c) {
-                        //   var profile = ref.watch(profileProvider);
-                        //   if (profile != null) {
-                        //     return Column(
-                        //       children: [
-                        //         Text(profile.name ?? ""),
-                        //         Text(profile.mobileNumber1 ?? ""),
-                        //         Text(profile.groupAccess??""),
-                        //         ElevatedButton(
-                        //             onPressed: () {
-                        //               openLogInDialog(context);
-                        //             },
-                        //             child: const Text("Update")),
-                        //       ],
-                        //     );
-                        //   }
-                        //
-                        //   return const Text("asdf");
-                        // }),
+                        Consumer(builder: (a, ref, c) {
+                          var profile = ref.watch(profileProvider);
+                          var notification = ref.watch(notificationPermissionProvider);
+                          var phineNumber = ref.watch(phoneNumberProvider);
+
+                          if (profile != null) {
+                            return Column(
+                              children: [
+                                Text(profile.name ?? ""),
+                                Text(profile.mobileNumber1 ?? ""),
+                                Text(profile.groupAccess??""),
+                                Text('Notification Permission is $notification'),
+                                Text('p $phineNumber'),
+
+                                ElevatedButton(
+                                    onPressed: () {
+                                      openLogInDialog(context);
+                                    },
+                                    child: const Text("Update")),
+
+
+
+                              ],
+                            );
+                          }
+
+                          return const Text("asdf");
+                        }),
 
                         const SizedBox(height: 120),
                         for (int i = 0;
