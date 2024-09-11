@@ -56,7 +56,6 @@ dependency_overrides:
   flutter_no_internet_widget:
   share_plus:
   connectivity: ^3.0.6
-  device_info_plus:
   platform_device_id:
   file_picker:
   image:
@@ -68,6 +67,8 @@ dependency_overrides:
   geolocator: ^9.0.2
   mobile_number: ^2.1.1
   sim_data_plus: ^0.1.4
+  device_info_plus:
+
 
 
 

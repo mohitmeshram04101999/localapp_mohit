@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localapp/APIs/logInAPi.dart';
@@ -7,19 +8,21 @@ import 'package:localapp/component/logiin%20dailog.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/models/userModel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localapp/providers/phoneNumberPerovider.dart';
 import 'package:logger/logger.dart';
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:geolocator/geolocator.dart';
 
 final profileProvider = StateNotifierProvider<ProfileProviderState,User?>((ref) {
-  return ProfileProviderState(null);
+  return ProfileProviderState(null,ref: ref);
 });
 
 
 
 class ProfileProviderState extends StateNotifier<User?>
 {
-  ProfileProviderState(super.state);
-
+  Ref ref;
+  ProfileProviderState(super.state, {required this.ref});
   final logInApi = LogApis();
   final _log = Logger();
   bool _loading = true;
@@ -33,22 +36,54 @@ class ProfileProviderState extends StateNotifier<User?>
     String? deviceId = await PlatformDeviceId.getDeviceId;
     var resp = await logInApi.getUser(deviceId??"");
 
+
+    Logger().w(jsonDecode(resp.body));
+
     if(resp.statusCode==200)
       {
         var decode = jsonDecode(resp.body);
         GetUserApiResponce data = GetUserApiResponce.fromJson(decode);
         _loading = false;
         state = data.data;
-        if(state!.name==null||state!.mobileNumber1==null)
+
+        if(state==null||state?.name==null||state?.mobileNumber1==null)
           {
             await openLogInDialog(context);
           }
+
       }
     else
       {
         state = null;
         Logger().e("${resp.statusCode}\n${resp.body}");
       }
+
+  }
+
+
+  Future<void> updateLocation(BuildContext context) async
+  {
+
+    Position location  = await  Geolocator.getCurrentPosition();
+    String? PN =ref.read(phoneNumberProvider);
+    if(PN==null||PN.isEmpty)
+      {
+        await ref.read(phoneNumberProvider.notifier).getSimNumber(context);
+        PN = ref.read(phoneNumberProvider);
+      }
+
+
+
+    var st = await logInApi.updateMobNumberAndLocation(postById: state?.deviceId??"",location: location,mobileNumber2:PN);
+    if(st.statusCode==200)
+    {
+      Logger().i("Location Upad Update \n${st.body}");
+      getUser(context);
+    }
+    else
+    {
+      showMessage(context, "Somthing went wrong");
+    }
 
   }
 

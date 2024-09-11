@@ -861,7 +861,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 ),
                               ),
                               ],
-                              Text(("sadfa")),
+
 
                               SizedBox(height: 10.0),
                               showShimmer

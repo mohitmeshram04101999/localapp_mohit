@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -53,18 +52,16 @@ class _AddPost1ScreenState extends State<AddPost1Screen> {
     if (Platform.isIOS) {
       //perm = await permissionPhotos();
     } else if (Platform.isAndroid) {
-      final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
-      final int sdkInt = android.version.sdkInt ?? 0;
-      print('sdkInt${sdkInt}');
-      if(sdkInt>32)
+      // final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
+      // final int sdkInt = android.version.sdkInt ?? 0;
+      // print('sdkInt${sdkInt}');
+      // if(sdkInt>32)
       {
         final PermissionStatus try1 = await Permission.photos.request();
         final PermissionStatus try2 = await Permission.camera.request();
 
-      }
-      else{
-        final PermissionStatus try1 = await Permission.storage.request();
-        final PermissionStatus try2 = await Permission.camera.request();
+        final PermissionStatus try3 = await Permission.storage.request();
+        final PermissionStatus try4 = await Permission.camera.request();
 
       }
 
