@@ -7,17 +7,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/CategoryScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/postPrivetType.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
 import 'package:localapp/models/SubCategory.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
+import 'package:localapp/providers/subSub%20Catoge.dart';
 import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+
 
 import 'package:connectivity/connectivity.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -37,17 +39,17 @@ import 'models/LocalAd.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final String catPrivacyType;
   final String? privacyImage;
   String CategoryId;
-  HomeScreen(this.CategoryId,this.catPrivacyType,{this.privacyImage});
+  HomeScreen(this.CategoryId, this.catPrivacyType, {this.privacyImage});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int selectedIdx = 0;
   int blog_page = 0;
   int total_page = 0;
@@ -57,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String notification_popup = '';
   int selected_category = 0;
   int selected_sub_category = 0;
+  int? sub_sub_category;
   String allow_post = '';
 
   String app_version = '';
@@ -122,16 +125,16 @@ class _HomeScreenState extends State<HomeScreen> {
     if (Platform.isIOS) {
       //perm = await permissionPhotos();
     } else if (Platform.isAndroid) {
-      final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
-      final int sdkInt = android.version.sdkInt ?? 0;
-      print('sdkInt${sdkInt}');
-      if (sdkInt > 32) {
+      // final AndroidDeviceInfo android = await DeviceInfoPlugin().androidInfo;
+      // final int sdkInt = android.version.sdkInt ?? 0;
+      // print('sdkInt${sdkInt}');
+      // if (sdkInt > 32) {
         final PermissionStatus try1 = await Permission.photos.request();
         final PermissionStatus try2 = await Permission.camera.request();
-      } else {
-        final PermissionStatus try1 = await Permission.storage.request();
-        final PermissionStatus try2 = await Permission.camera.request();
-      }
+      // } else {
+        final PermissionStatus try3 = await Permission.storage.request();
+        final PermissionStatus try4 = await Permission.camera.request();
+      // }
     } else {}
     return Future<bool>.value(perm);
   }
@@ -633,6 +636,15 @@ class _HomeScreenState extends State<HomeScreen> {
     logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
   }
 
+  final dropDownInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(
+      color: Colors.black,
+    ),
+  );
+
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -696,7 +708,10 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0.0, // Remove the bottom border
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: (){
+            ref.read(subSubCategoryProvider.notifier).clean();
+            Navigator.of(context).pop();
+          },
         ),
 
         iconTheme:
@@ -829,6 +844,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: WillPopScope(
           onWillPop: () async {
+
+            ref.read(subSubCategoryProvider.notifier).clean();
+
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => CategoryScreen()),
               (route) => false,
@@ -840,6 +858,54 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListView(
               controller: _scrollController,
               children: [
+                //SubSubCategory Drop Down Button
+                Consumer(
+                  builder: (context, ref, child) {
+
+                    if(ref.watch(subSubCategoryProvider).length==0)
+                      {
+                        return const SizedBox();
+                      }
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: DropdownButtonFormField(
+
+
+
+                        value: sub_sub_category,
+
+                        //
+                          decoration: InputDecoration(
+
+                            hintText: 'Sub Sub Category',
+
+
+                            //
+                            enabledBorder: dropDownInputBorder,
+                            //
+                            focusedErrorBorder: dropDownInputBorder,
+                            //
+                            errorBorder: dropDownInputBorder,
+                            //
+                            focusedBorder: dropDownInputBorder,
+                            //
+                            disabledBorder: dropDownInputBorder,
+                            //
+                            border: dropDownInputBorder,
+                          ),
+                          //
+                          onChanged: (d) {
+                          sub_sub_category = d;
+                          },
+                          items: [
+                            for(var item in ref.watch(subSubCategoryProvider))
+                              DropdownMenuItem(child: Text(item.subSubCategoryName??""),value: int.parse(item.subSubCategoryId??'0'),),
+                          ]),
+                    );
+                  },
+                ),
+
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1018,8 +1084,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (load_more == true)
                             return _buildLoadingIndicator();
                         } else {
-                          return BlogListWidget(blog_string[index],
-                              '${selected_category}', '${selected_category}',privecyType: widget.catPrivacyType,privacyImage: widget.privacyImage,);
+                          return BlogListWidget(
+                            blog_string[index],
+                            '${selected_category}',
+                            '${selected_category}',
+                            privecyType: widget.catPrivacyType,
+                            privacyImage: widget.privacyImage,
+                          );
                           // return Card(margin: EdgeInsets.all(10),color: Colors.grey,
                           //     child: Text("${blog_string[index].toJson()["PostByName"]}")
                           // );
@@ -1043,55 +1114,86 @@ class _HomeScreenState extends State<HomeScreen> {
           )),
 
       //Orignal Button
-      floatingActionButton:Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
-
-        var profile = ref.watch(profileProvider);
-
-           return GestureDetector(
-               onTap: () {
-
-                 if( (widget.catPrivacyType!=CategoryPrivacyType.private&& widget.catPrivacyType!=CategoryPrivacyType.semiPrivate)||profile!.groupAccess!.split(",").contains(widget.CategoryId))
-                 {
+      floatingActionButton: Consumer(
+        builder: ( context2,  ref,  child) {
+          var profile = ref.read(profileProvider);
 
 
+          return FloatingActionButton(onPressed: ()
+          {
+            Logger().e('${profile!.groupAccess}');
 
-                   Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) =>
-                               AddPostScreen('${selected_category}')));
-                   Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) =>
-                               AddPostScreen('${selected_category}')));
+            if ((widget.catPrivacyType != CategoryPrivacyType.private &&
+                widget.catPrivacyType !=
+                    CategoryPrivacyType.semiPrivate) ||
+                profile!.groupAccess.toString()
+                    .split(",")
+                    .contains(widget.CategoryId)) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          AddPostScreen('${selected_category}')));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          AddPostScreen('${selected_category}')));
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (c) => AlertDialog(
+                    content: Image.network(widget.privacyImage ?? ""),
+                  ));
 
+              // showMessage(context2, 'Tap');
 
+              return;
+            }
+          },child: Icon(Icons.add),);
 
-                 }
-                 else
-                   {
-                     showDialog(context: context, builder: (c)=>AlertDialog(
-                       content: Image.network(widget.privacyImage??""),
-                     ));
-
-                     return ;
-                   }
-
-               },
-               child: Container(
-                 width: 50,
-                 height: 50,
-                 decoration: BoxDecoration(
-                   color: Colors.black,
-                   borderRadius: BorderRadius.circular(10),
-                 ),
-
-                 // child: Text('${ (widget.catPrivacyType!=CategoryPrivacyType.private&& widget.catPrivacyType!=CategoryPrivacyType.semiPrivate)||profile!.groupAccess!.split(",").contains(widget.CategoryId)}',style: TextStyle(color: Colors.white),),
-               ));
-
-
-      },),
+          // return GestureDetector(
+          //     onTap: () {
+          //
+          //
+          //       if ((widget.catPrivacyType != CategoryPrivacyType.private &&
+          //               widget.catPrivacyType !=
+          //                   CategoryPrivacyType.semiPrivate) ||
+          //           profile!.groupAccess!
+          //               .split(",")
+          //               .contains(widget.CategoryId)) {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) =>
+          //                     AddPostScreen('${selected_category}')));
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) =>
+          //                     AddPostScreen('${selected_category}')));
+          //       } else {
+          //         showDialog(
+          //             context: context,
+          //             builder: (c) => AlertDialog(
+          //                   content: Image.network(widget.privacyImage ?? ""),
+          //                 ));
+          //
+          //         return;
+          //       }
+          //     },
+          //     child: Container(
+          //       width: 50,
+          //       height: 50,
+          //       decoration: BoxDecoration(
+          //         color: Colors.black,
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //
+          //       // child: Text('${ (widget.catPrivacyType!=CategoryPrivacyType.private&& widget.catPrivacyType!=CategoryPrivacyType.semiPrivate)||profile!.groupAccess!.split(",").contains(widget.CategoryId)}',style: TextStyle(color: Colors.white),),
+          //     ));
+        },
+      ),
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndexBottom,
@@ -1187,7 +1289,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   for (int i = 0; i < sub_categorylist_string.length; i++) ...[
                     Container(
                       height: 40,
-                      color: Colors.red,
                       child: Row(
                         children: [
                           InkWell(
@@ -1196,6 +1297,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               setState(() {
                                 selected_sub_category = int.parse(
                                     sub_categorylist_string[i].SubCategoryId);
+
+                                ref.read(subSubCategoryProvider.notifier).lodeCategory(context, selected_sub_category.toString());
                                 category_label = sub_categorylist_string[i]
                                     .SubCategoryName as String;
                               });

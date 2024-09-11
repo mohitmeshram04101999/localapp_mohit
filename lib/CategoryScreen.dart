@@ -2,23 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:localapp/MoreScreen.dart';
-import 'package:localapp/component/customFeild.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+
 import 'package:localapp/providers/location%20permission%20provider.dart';
 import 'package:localapp/providers/notificationPermitionProvider.dart';
 import 'package:localapp/providers/phoneNumberPerovider.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:flutter/material.dart';
 import 'package:localapp/models/UserCategory.dart';
-
 import 'CityScreen.dart';
 import 'HomeScreen.dart';
 import 'JobScreen.dart';
-
 import 'MyPostScreen.dart';
 import 'constants/Config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,10 +67,16 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
   myInit ()async
   {
-    await ref.read(profileProvider.notifier).getUser(context);
     await ref.read(notificationPermissionProvider.notifier).getNotification(context);
     await ref.read(locationPermmissionProvider.notifier).getLocationPermmision(context);
-    await ref.read(phoneNumberProvider.notifier).getSimNumber(context);
+    await ref.read(profileProvider.notifier).getUser(context);
+
+    var user = ref.read(profileProvider);
+    String? num = ref.read(phoneNumberProvider);
+    print("Phone Num $num");
+    
+    ref.read(profileProvider.notifier).updateLocation(context);
+      
 
   }// Track the current page index
 
@@ -170,6 +173,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
       //   },
       // ),
 
+
       //Tag From BackGround
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -201,35 +205,43 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+
+                        //
                         //This is for checking any change in profile update;
-                        Consumer(builder: (a, ref, c) {
-                          var profile = ref.watch(profileProvider);
-                          var notification = ref.watch(notificationPermissionProvider);
-                          var phineNumber = ref.watch(phoneNumberProvider);
-
-                          if (profile != null) {
-                            return Column(
-                              children: [
-                                Text(profile.name ?? ""),
-                                Text(profile.mobileNumber1 ?? ""),
-                                Text(profile.groupAccess??""),
-                                Text('Notification Permission is $notification'),
-                                Text('p $phineNumber'),
-
-                                ElevatedButton(
-                                    onPressed: () {
-                                      openLogInDialog(context);
-                                    },
-                                    child: const Text("Update")),
-
-
-
-                              ],
-                            );
-                          }
-
-                          return const Text("asdf");
-                        }),
+                        // Consumer(builder: (a, ref, c) {
+                        //   var profile = ref.watch(profileProvider);
+                        //   // var notification = ref.watch(notificationPermissionProvider);
+                        //   // var phineNumber = ref.watch(phoneNumberProvider);
+                        //
+                        //   if (profile != null) {
+                        //     return Padding(
+                        //       padding: const EdgeInsets.all(40),
+                        //       child: Card(
+                        //       color: Colors.grey.shade300,
+                        //         child: Column(
+                        //           children: [
+                        //             Text("Text"),
+                        //             Text(profile.name ?? ""),
+                        //             Text(profile.mobileNumber1 ?? ""),
+                        //             Text(profile.groupAccess??""),
+                        //
+                        //
+                        //             ElevatedButton(
+                        //                 onPressed: () {
+                        //                   openLogInDialog(context);
+                        //                 },
+                        //                 child: const Text("Update")),
+                        //
+                        //
+                        //
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }
+                        //
+                        //   return const Text("No Profile Found ");
+                        // }),
 
                         const SizedBox(height: 120),
                         for (int i = 0;
@@ -238,6 +250,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                           //card That Showing That Page
                           GestureDetector(
                             onTap: () {
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

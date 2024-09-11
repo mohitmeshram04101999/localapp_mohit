@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:localapp/constants/Config.dart';
 import 'package:logger/logger.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LogApis{
   final _log = Logger();
@@ -8,9 +11,37 @@ class LogApis{
 
   Future<http.Response> getUser(String deviceId) async
   {
-    String uri = "https://localapp.satyakabir.in/api/get_user";
+    String uri = Config.get_user;
 
     var resp = await http.post(Uri.parse(uri),body: {"PostById":deviceId});
+
+    return resp;
+  }
+
+
+
+  Future<http.Response> updateMobNumberAndLocation({required String postById,String? mobileNumber2,required Position location}) async
+  {
+    String uri = "https://localapp.satyakabir.in/api/update_profile";
+
+    var d = {
+      "PostById":postById,
+      "Latitude":location.latitude.toString(),
+      "Longitude":location.longitude.toString(),
+      "MobileNumber2":mobileNumber2,
+    };
+
+    //
+    var _fd = {};
+    d.forEach((key, value) {
+      if(value!=null)
+        {
+          _fd[key] = value;
+        }
+    });
+
+    //
+    var resp = await http.post(Uri.parse(uri),body: _fd);
 
     return resp;
   }
@@ -29,6 +60,7 @@ class LogApis{
       "PostById":postById,
       "Name":name,
       "MobileNumber1":mobileNumber1,
+
     };
 
     Map _filterData = {};
