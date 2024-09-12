@@ -6,14 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:logger/logger.dart';
 
-openLogInDialog(BuildContext context) async {
+Future<void> openLogInDialog(BuildContext context) async {
 
 
   final style = TextStyle(
     fontWeight: FontWeight.w500,
     color: Colors.grey.shade800,
   );
-  showDialog(
+  await showDialog(
       context: context,
       builder: (context) => WillPopScope(
             onWillPop: () async {

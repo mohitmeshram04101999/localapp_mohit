@@ -1,13 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:localapp/APIs/inselLog%20Method.dart';
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+import 'package:localapp/component/show%20coustomMesage.dart';
+import 'package:localapp/models/insertLogType.dart';
 
 import 'package:localapp/providers/location%20permission%20provider.dart';
 import 'package:localapp/providers/notificationPermitionProvider.dart';
 import 'package:localapp/providers/phoneNumberPerovider.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
+import 'package:logger/logger.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -26,7 +31,7 @@ class CategoryScreen extends ConsumerStatefulWidget {
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends ConsumerState<CategoryScreen> {
+class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBindingObserver{
   int selectedIdx = -1;
   bool showShimmer = true; // Track whether to show shimmer or data
   final Duration shimmerDuration = const Duration(seconds: 2);
@@ -36,13 +41,37 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   List user_category_data = [];
   List<User_Category_list> user_category_string = [];
 
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state)async{
+  //   // TODO: implement didChangeAppLifecycleState
+  //   super.didChangeAppLifecycleState(state);
+  //   if(state==AppLifecycleState.resumed)
+  //     {
+  //       if(ref.read(locationPermmissionProvider.notifier).isDailogOpen){
+  //         Navigator.pop(context);
+  //         await ref.read(locationPermmissionProvider.notifier).getLocationPermmision(context);
+  //       }
+  //     }
+  // }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+
   void selectItem(int index) {
+
     setState(() {
       if (index == 0) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => HomeScreen(
+                    user_category_string[index].whatsappNumber,
                     user_category_string[index].categoryId,
                     user_category_string[index].privacyType)));
       }
@@ -65,23 +94,26 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
   int _currentIndexBottom = 0;
 
-  myInit ()async
-  {
-    await ref.read(notificationPermissionProvider.notifier).getNotification(context);
-    await ref.read(locationPermmissionProvider.notifier).getLocationPermmision(context);
-    await ref.read(profileProvider.notifier).getUser(context);
+  myInit() async {
+    await ref
+        .read(notificationPermissionProvider.notifier)
+        .getNotification(context);
+    await ref
+        .read(locationPermmissionProvider.notifier)
+        .getLocationPermmision(context);
 
-    var user = ref.read(profileProvider);
+
+    await ref.read(profileProvider.notifier).getUser(context);
     String? num = ref.read(phoneNumberProvider);
     print("Phone Num $num");
-    
-    ref.read(profileProvider.notifier).updateLocation(context);
-      
 
-  }// Track the current page index
+    ref.read(profileProvider.notifier).updateLocation(context);
+  } // Track the current page index
 
   @override
   void initState() {
+
+    WidgetsBinding.instance.addObserver(this);
 
     myInit();
 
@@ -127,6 +159,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     );
   }
 
+
   getUserCategory() async {
     showLoaderDialog(context);
 
@@ -135,6 +168,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
 
     http.Response response =
         await http.post(Uri.parse(url), body: {'user_id': deviceId});
+
+    Logger().e('error Point ${response.body}');
 
     logger.i("${url} \n${response.statusCode} \n${jsonDecode(response.body)}");
 
@@ -165,14 +200,11 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-
-
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //
-      //   },
-      // ),
-
+      floatingActionButton:kDebugMode? FloatingActionButton(
+        onPressed: (){
+          showMessage(context, "this is message");
+        },
+      ):null,
 
       //Tag From BackGround
       backgroundColor: Colors.white,
@@ -205,43 +237,38 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         //
                         //This is for checking any change in profile update;
-                        // Consumer(builder: (a, ref, c) {
-                        //   var profile = ref.watch(profileProvider);
-                        //   // var notification = ref.watch(notificationPermissionProvider);
-                        //   // var phineNumber = ref.watch(phoneNumberProvider);
-                        //
-                        //   if (profile != null) {
-                        //     return Padding(
-                        //       padding: const EdgeInsets.all(40),
-                        //       child: Card(
-                        //       color: Colors.grey.shade300,
-                        //         child: Column(
-                        //           children: [
-                        //             Text("Text"),
-                        //             Text(profile.name ?? ""),
-                        //             Text(profile.mobileNumber1 ?? ""),
-                        //             Text(profile.groupAccess??""),
-                        //
-                        //
-                        //             ElevatedButton(
-                        //                 onPressed: () {
-                        //                   openLogInDialog(context);
-                        //                 },
-                        //                 child: const Text("Update")),
-                        //
-                        //
-                        //
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   }
-                        //
-                        //   return const Text("No Profile Found ");
-                        // }),
+                        if (kDebugMode)
+                          Consumer(builder: (a, ref, c) {
+                            var profile = ref.watch(profileProvider);
+                            // var notification = ref.watch(notificationPermissionProvider);
+                            // var phineNumber = ref.watch(phoneNumberProvider);
+
+                            if (profile != null) {
+                              return Padding(
+                                padding: const EdgeInsets.all(40),
+                                child: Card(
+                                  color: Colors.grey.shade300,
+                                  child: Column(
+                                    children: [
+                                      Text("Text"),
+                                      Text(profile.name ?? ""),
+                                      Text(profile.mobileNumber1 ?? ""),
+                                      Text(profile.groupAccess ?? ""),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            openLogInDialog(context);
+                                          },
+                                          child: const Text("Update")),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+
+                            return const Text("No Profile Found ");
+                          }),
 
                         const SizedBox(height: 120),
                         for (int i = 0;
@@ -251,14 +278,22 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                           GestureDetector(
                             onTap: () {
 
+
+                              logger.e('wNuimber (${user_category_string[i].whatsappNumber})');
+
+                              insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: user_category_string[i].categoryId, type: InsertLogType.category);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomeScreen(
-                                          user_category_string[i]
-                                              .categoryId,
-                                          user_category_string[i]
-                                              .privacyType,privacyImage: user_category_string[i].privacyImage,)));
+                                        user_category_string[i].whatsappNumber,
+                                            user_category_string[i].categoryId,
+                                            user_category_string[i].privacyType,
+                                            privacyImage:
+                                                user_category_string[i]
+                                                    .privacyImage,
+                                          )));
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -276,8 +311,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.0),
+                                                  BorderRadius.circular(10.0),
                                             ),
                                             child: Row(
                                               children: [
@@ -287,8 +321,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey[300],
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(8.0),
+                                                        BorderRadius.circular(
+                                                            8.0),
                                                   ),
                                                 ),
                                                 const SizedBox(width: 10.0),
@@ -299,19 +333,16 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                                             .start,
                                                     children: [
                                                       Container(
-                                                        width:
-                                                            double.infinity,
+                                                        width: double.infinity,
                                                         height: 12.0,
-                                                        color: Colors
-                                                            .grey[300],
+                                                        color: Colors.grey[300],
                                                       ),
-                                                      const SizedBox(height: 8.0),
+                                                      const SizedBox(
+                                                          height: 8.0),
                                                       Container(
-                                                        width:
-                                                            double.infinity,
+                                                        width: double.infinity,
                                                         height: 12.0,
-                                                        color: Colors
-                                                            .grey[300],
+                                                        color: Colors.grey[300],
                                                       ),
                                                     ],
                                                   ),
@@ -323,19 +354,17 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                       : Column(
                                           children: [
                                             CachedNetworkImage(
-                                                width:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .width,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
                                                 imageUrl:
                                                     '${Config.Image_Path + 'category/' + user_category_string[i].categoryImage}',
-                                                placeholder:
-                                                    (context, url) =>
-                                                        Image.asset(
-                                                          "assets/images/loader.gif",
-                                                          width: 80,
-                                                          height: 80,
-                                                        ),
+                                                placeholder: (context, url) =>
+                                                    Image.asset(
+                                                      "assets/images/loader.gif",
+                                                      width: 80,
+                                                      height: 80,
+                                                    ),
                                                 errorWidget:
                                                     (context, url, error) =>
                                                         Image.asset(
@@ -387,7 +416,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
         unselectedItemColor: Colors.black,
         showUnselectedLabels: true,
         items: const [
-         BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.campaign),
             label: "What's New",
           ),

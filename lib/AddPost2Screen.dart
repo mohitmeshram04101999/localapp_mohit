@@ -998,18 +998,21 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                           ),
 
 
-                                        const SizedBox(height: 20,),
-
-                                        TextFormField(
-                                          controller: addressController,
-                                          decoration: const InputDecoration(
-                                            hintText: "Address"
-                                          ),
-                                        ),
+                                        // const SizedBox(height: 20,),
 
                                       ],
                                     ),
                                   ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: TextFormField(
+                                    controller: addressController,
+                                    decoration: const InputDecoration(
+                                        hintText: "Address"
+                                    ),
+                                  ),
+                                ),
                               ],
                             )
 

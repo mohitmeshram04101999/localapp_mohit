@@ -30,6 +30,7 @@ class Config
   static String insert_ad_response = Main_Link+"insert_ad_response";
   static String get_subSub_Categoey = Main_Link+"get_subsub_category";
   static String get_user = Main_Link+"get_user";
+  static String insert_log = Main_Link+"app_log";
 
 
 

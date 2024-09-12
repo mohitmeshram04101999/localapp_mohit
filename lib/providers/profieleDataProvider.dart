@@ -48,8 +48,16 @@ class ProfileProviderState extends StateNotifier<User?>
 
         if(state==null||state?.name==null||state?.mobileNumber1==null)
           {
+            _log.e("Waiting");
             await openLogInDialog(context);
+            // updateLocation(context);
+
           }
+
+
+
+
+
 
       }
     else

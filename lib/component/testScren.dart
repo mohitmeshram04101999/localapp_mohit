@@ -29,7 +29,7 @@ class _TestScreenState extends State<TestScreen> {
         },
         controller: pageController,
         children: [
-          HomeScreen("1","2"),
+          // HomeScreen("1","2"),
           CityScreen(),
           MyPostScreen(false),
           MoreScreen()
