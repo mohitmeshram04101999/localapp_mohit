@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:http/http.dart' as http;
+import 'package:localapp/APIs/inselLog%20Method.dart';
 import 'package:localapp/CategoryScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
@@ -12,6 +13,7 @@ import 'package:localapp/constants/postPrivetType.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
 import 'package:localapp/models/SubCategory.dart';
+import 'package:localapp/models/insertLogType.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:localapp/providers/subSub%20Catoge.dart';
 import 'package:logger/logger.dart';
@@ -43,7 +45,8 @@ class HomeScreen extends ConsumerStatefulWidget {
   final String catPrivacyType;
   final String? privacyImage;
   String CategoryId;
-  HomeScreen(this.CategoryId, this.catPrivacyType, {this.privacyImage});
+  final String? whatsAppNumber;
+  HomeScreen(this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -756,6 +759,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               category_label = '';
                               filter_selected = false;
                               selected_sub_category = 0;
+                              sub_sub_category = null;
+                              ref.read(subSubCategoryProvider.notifier).clean();
                             });
                             Future.delayed(Duration(milliseconds: 1), () {
                               getHome();
@@ -813,6 +818,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 category_label = '';
                                 filter_selected = false;
                                 selected_sub_category = 0;
+                                sub_sub_category = null;
+                                ref.read(subSubCategoryProvider.notifier).clean();
                               });
                               Future.delayed(Duration(milliseconds: 1), () {
                                 getHome();
@@ -897,6 +904,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           //
                           onChanged: (d) {
                           sub_sub_category = d;
+                          insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: d.toString(), type: InsertLogType.subSubCategory);
                           },
                           items: [
                             for(var item in ref.watch(subSubCategoryProvider))
@@ -1134,16 +1142,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   MaterialPageRoute(
                       builder: (context) =>
                           AddPostScreen('${selected_category}')));
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          AddPostScreen('${selected_category}')));
             } else {
               showDialog(
                   context: context,
                   builder: (c) => AlertDialog(
-                    content: Image.network(widget.privacyImage ?? ""),
+                    content: InkWell(
+                      onTap: (){
+                        if(widget.whatsAppNumber.toString().isNotEmpty&&widget.whatsAppNumber.toString()!="null")
+                          {
+                            launch('https://wa.me/+91${widget.whatsAppNumber}');
+                          }
+                      },
+                        child: Image.network(
+                            widget.privacyImage ?? "",
+                          // loadingBuilder: (context, child, loadingProgress) {
+                          //     if(loadingProgress==null)
+                          // },
+                        )),
                   ));
 
               // showMessage(context2, 'Tap');
@@ -1294,6 +1309,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
+                              insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: sub_categorylist_string[i].SubCategoryId, type: InsertLogType.subCategory);
                               setState(() {
                                 selected_sub_category = int.parse(
                                     sub_categorylist_string[i].SubCategoryId);

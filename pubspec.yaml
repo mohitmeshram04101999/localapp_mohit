@@ -68,6 +68,7 @@ dependency_overrides:
   mobile_number: ^2.1.1
   sim_data_plus: ^0.1.4
   device_info_plus:
+  app_settings: ^5.1.1
 
 
 
