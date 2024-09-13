@@ -15,6 +15,7 @@ class NotificationPermissionNotifier extends StateNotifier<bool>
   NotificationPermissionNotifier(super.state);
 
   final _fireBaseMessaging = FirebaseMessaging.instance;
+  bool _isDailogOpen = false;
 
 
   Future<void> getNotification(BuildContext context) async
@@ -37,6 +38,7 @@ class NotificationPermissionNotifier extends StateNotifier<bool>
       }
     else
       {
+        _isDailogOpen= true;
         await showDialog(context: context,barrierDismissible: false, builder: (context)=>AlertDialog(
           content: Column(mainAxisSize: MainAxisSize.min,children: [
             Icon(Icons.notifications,size: 40,),
@@ -48,10 +50,31 @@ class NotificationPermissionNotifier extends StateNotifier<bool>
               }, child: const Text('Open Settings'))
           ],),
         ));
+        _isDailogOpen = false;
         await getNotification(context);
       }
 
 
+  }
+
+
+  checkDialog(BuildContext context)async {
+    if(_isDailogOpen)
+      {
+        var b = await _fireBaseMessaging.requestPermission(
+          alert: true,
+          announcement: true,
+          badge: true,
+          carPlay: true,
+          criticalAlert: true,
+          provisional: true,
+          sound: true,
+        );
+        if(b.authorizationStatus==AuthorizationStatus.authorized)
+          {
+            Navigator.pop(context);
+          }
+      }
   }
 
 }

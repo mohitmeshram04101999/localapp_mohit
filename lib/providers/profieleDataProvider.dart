@@ -82,10 +82,12 @@ class ProfileProviderState extends StateNotifier<User?>
 
 
 
+    showMessage(context, "${ref.read(phoneNumberProvider)}");
+
     var st = await logInApi.updateMobNumberAndLocation(postById: state?.deviceId??"",location: location,mobileNumber2:PN);
     if(st.statusCode==200)
     {
-      Logger().i("Location Upad Update \n${st.body}");
+      Logger().i("Location Upad Update\n($PN) \n${st.body}");
       getUser(context);
     }
     else

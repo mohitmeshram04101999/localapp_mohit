@@ -42,18 +42,13 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
   List<User_Category_list> user_category_string = [];
 
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state)async{
-  //   // TODO: implement didChangeAppLifecycleState
-  //   super.didChangeAppLifecycleState(state);
-  //   if(state==AppLifecycleState.resumed)
-  //     {
-  //       if(ref.read(locationPermmissionProvider.notifier).isDailogOpen){
-  //         Navigator.pop(context);
-  //         await ref.read(locationPermmissionProvider.notifier).getLocationPermmision(context);
-  //       }
-  //     }
-  // }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state)async{
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    ref.read(locationPermmissionProvider.notifier).checkDialog(context);
+    ref.read(notificationPermissionProvider.notifier).checkDialog(context);
+  }
 
   @override
   void dispose() {
@@ -101,6 +96,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     await ref
         .read(locationPermmissionProvider.notifier)
         .getLocationPermmision(context);
+
+    await ref.read(phoneNumberProvider.notifier).requestPermission();
 
 
     await ref.read(profileProvider.notifier).getUser(context);
@@ -202,9 +199,11 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     return Scaffold(
       floatingActionButton:kDebugMode? FloatingActionButton(
         onPressed: (){
-          showMessage(context, "this is message");
+         ref.read(profileProvider.notifier).updateLocation(context);
         },
-      ):null,
+      )
+
+          :null,
 
       //Tag From BackGround
       backgroundColor: Colors.white,
