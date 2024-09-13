@@ -17,7 +17,7 @@ class LocationPermissionNotifier extends StateNotifier<bool> {
 LocationPermissionNotifier(super.state);
 
 
-bool isDailogOpen = false;
+bool _isDailogOpen = false;
 
 Future<void> getLocationPermmision(BuildContext context) async
 {
@@ -31,7 +31,7 @@ Future<void> getLocationPermmision(BuildContext context) async
 
   else
     {
-      isDailogOpen = true;
+      _isDailogOpen = true;
       await showDialog(context: context,barrierDismissible: false, builder: (context)=>AlertDialog(
         content: Column(mainAxisSize: MainAxisSize.min,children: [
           Icon(Icons.location_pin,size: 40,),
@@ -43,7 +43,7 @@ Future<void> getLocationPermmision(BuildContext context) async
             }, child: Text('Open Settings'))
         ],),
       ));
-      isDailogOpen = false;
+      _isDailogOpen = false;
       await getLocationPermmision(context);
     }
 
@@ -63,4 +63,20 @@ Future<Position?> getCurruntLocation(BuildContext context) async
     }
   return null;
 }
+
+
+Future<void> checkDialog(BuildContext context)async
+{
+  if(_isDailogOpen)
+    {
+      var d = await Geolocator.requestPermission();
+      if(d==LocationPermission.always||d==LocationPermission.whileInUse)
+      {
+        Navigator.pop(context);
+      }
+
+    }
+
+}
+
 }

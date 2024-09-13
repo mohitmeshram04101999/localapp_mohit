@@ -224,29 +224,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var url = Config.get_home;
     blog_page = 0;
 
-    var _d = {
-      'category_id': '${selected_category}',
-      'subcategory_id': '$selected_sub_category',
-      'blog_page': '${blog_page}',
-      'user_id': '${deviceId}',
-      'city_id': '1'
-    };
-
-    http.Response response = await http.post(Uri.parse(url), body: {
-      'category_id': '${selected_category}',
-      'subcategory_id': '$selected_sub_category',
-      'blog_page': '${blog_page}',
-      'user_id': '${deviceId}',
-      'city_id': '1'
-    }).timeout(Duration(seconds: 20));
-
     var d = {
       'category_id': '${selected_category}',
       'subcategory_id': '$selected_sub_category',
       'blog_page': '${blog_page}',
       'user_id': '${deviceId}',
-      'city_id': '1'
+      'city_id': '1',
+      'subsubcategory_id':'${sub_sub_category??0}'
     };
+
+    http.Response response = await http.post(Uri.parse(url), body:d).timeout(Duration(seconds: 20));
+
+
 
     Logger()
         .e("THis Is new $url\n ${response.statusCode} \n${response.body}\n$d");
@@ -410,7 +399,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'subcategory_id': '$selected_sub_category',
       'blog_page': '${blog_page}',
       'user_id': '${deviceId}',
-      'city_id': '1'
+      'city_id': '1',
+      'subsubcategory_id':'${sub_sub_category??0}'
     });
 
     logger.i(
@@ -876,40 +866,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropdownButtonFormField(
+                      child: SizedBox(
+                        height: 40,
+                        child: DropdownButtonFormField(
 
 
 
-                        value: sub_sub_category,
+                          value: sub_sub_category,
 
-                        //
-                          decoration: InputDecoration(
-
-                            hintText: 'Sub Sub Category',
-
-
-                            //
-                            enabledBorder: dropDownInputBorder,
-                            //
-                            focusedErrorBorder: dropDownInputBorder,
-                            //
-                            errorBorder: dropDownInputBorder,
-                            //
-                            focusedBorder: dropDownInputBorder,
-                            //
-                            disabledBorder: dropDownInputBorder,
-                            //
-                            border: dropDownInputBorder,
-                          ),
                           //
-                          onChanged: (d) {
-                          sub_sub_category = d;
-                          insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: d.toString(), type: InsertLogType.subSubCategory);
-                          },
-                          items: [
-                            for(var item in ref.watch(subSubCategoryProvider))
-                              DropdownMenuItem(child: Text(item.subSubCategoryName??""),value: int.parse(item.subSubCategoryId??'0'),),
-                          ]),
+                            decoration: InputDecoration(
+
+                              hintText: 'Sub Sub Category',
+
+                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+
+                              helperStyle:const  TextStyle(color: Colors.black),
+
+
+                              //
+                              enabledBorder: dropDownInputBorder,
+                              //
+                              focusedErrorBorder: dropDownInputBorder,
+                              //
+                              errorBorder: dropDownInputBorder,
+                              //
+                              focusedBorder: dropDownInputBorder,
+                              //
+                              disabledBorder: dropDownInputBorder,
+                              //
+                              border: dropDownInputBorder,
+                            ),
+                            //
+                            onChanged: (d) {
+                            sub_sub_category = d;
+                            insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: d.toString(), type: InsertLogType.subSubCategory);
+                            },
+                            items: [
+                              for(var item in ref.watch(subSubCategoryProvider))
+                                DropdownMenuItem(child: Text(item.subSubCategoryName??""),value: int.parse(item.subSubCategoryId??'0'),),
+                            ]),
+                      ),
                     );
                   },
                 ),
@@ -1311,9 +1308,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               Navigator.pop(context);
                               insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: sub_categorylist_string[i].SubCategoryId, type: InsertLogType.subCategory);
                               setState(() {
+                                sub_sub_category = null;
                                 selected_sub_category = int.parse(
                                     sub_categorylist_string[i].SubCategoryId);
 
+                                ref.read(subSubCategoryProvider.notifier).clean();
                                 ref.read(subSubCategoryProvider.notifier).lodeCategory(context, selected_sub_category.toString());
                                 category_label = sub_categorylist_string[i]
                                     .SubCategoryName as String;

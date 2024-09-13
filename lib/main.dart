@@ -235,6 +235,7 @@ class _main_appState extends State<main_app> {
 
         theme: ThemeData(
           inputDecorationTheme: InputDecorationTheme(
+            hintStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 14),
             contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: Colors.grey)),
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide(color: Colors.grey)),
