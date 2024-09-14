@@ -93,6 +93,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
               }
           },
           child: Card(
+            // color: Colors.red,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),
             ),
@@ -223,10 +224,10 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ),
                   ),
 
-                  Row(children: [
-                    const Icon(Icons.visibility),
-                    Text('  ${widget.blog.totalClicks??"0"}')
-                  ],),
+                  // Row(children: [
+                  //   const Icon(Icons.visibility),
+                  //   Text('  ${widget.blog.totalClicks??"0"}')
+                  // ],),
 
 
                   showShimmer
@@ -300,12 +301,12 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                   ),
 
 
-                  Row(
-                    children: [
-                      Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.day]??""} ${widget.blog.endDate?.year??""}",
-                        style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 15),),
-                    ],
-                  )
+                  // Row(
+                  //   children: [
+                  //     Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??""} ${widget.blog.endDate?.year??""}",
+                  //       style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 15),),
+                  //   ],
+                  // )
                 ],
               ),
             ),

@@ -1009,7 +1009,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                   child: TextFormField(
                                     controller: addressController,
                                     decoration: const InputDecoration(
-                                        hintText: "Address"
+                                        hintText: "Area"
                                     ),
                                   ),
                                 ),

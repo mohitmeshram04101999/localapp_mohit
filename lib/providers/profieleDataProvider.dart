@@ -2,6 +2,7 @@ import 'dart:convert';
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localapp/APIs/logInAPi.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
@@ -82,8 +83,10 @@ class ProfileProviderState extends StateNotifier<User?>
 
 
 
-    showMessage(context, "${ref.read(phoneNumberProvider)}");
-
+    if(kDebugMode)
+      {
+        showMessage(context, "${ref.read(phoneNumberProvider)}");
+      }
     var st = await logInApi.updateMobNumberAndLocation(postById: state?.deviceId??"",location: location,mobileNumber2:PN);
     if(st.statusCode==200)
     {

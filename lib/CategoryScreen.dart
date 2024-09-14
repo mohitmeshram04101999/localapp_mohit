@@ -289,6 +289,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                                         user_category_string[i].whatsappNumber,
                                             user_category_string[i].categoryId,
                                             user_category_string[i].privacyType,
+                                            subSubCategoryLabel: user_category_string[i].subSubCategoryLabel,
                                             privacyImage:
                                                 user_category_string[i]
                                                     .privacyImage,
@@ -371,8 +372,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                                                           width: 80,
                                                           height: 80,
                                                         )),
-                                            // Text(
-                                            //     "p ${user_category_string[i].privacyType}  ${user_category_string[i].categoryId}")
+                                            if(kDebugMode)
+                                            Text(
+                                                "p ${user_category_string[i].privacyType}  ${user_category_string[i].categoryId}")
                                           ],
                                         ),
                                 ),
