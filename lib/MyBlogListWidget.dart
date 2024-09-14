@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:localapp/component/show%20coustomMesage.dart';
+import 'package:localapp/constants/month.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'BlogDetail.dart';
@@ -194,6 +197,30 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ],
                       ),
                     ),
+
+
+              const SizedBox(height: 8,),
+
+              if(widget.blog.area.toString()!='null'&&widget.blog.toString().isNotEmpty)
+              Row(
+                children: [
+                  const Icon(Icons.location_pin),
+                  const SizedBox(width: 8,),
+                  Text('${widget.blog.area}',style: const TextStyle(fontWeight: FontWeight.w700),)
+                ],
+              ),
+
+
+              const SizedBox(height: 8,),
+              Row(
+                children: [
+                  const Icon(Icons.remove_red_eye),
+                  const SizedBox(width: 8,),
+                  Text('${widget.blog.totalClicks??0}')
+                ],
+              ),
+
+
               showShimmer
                   ? Column(
                       children: [
@@ -260,7 +287,20 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         fontSize: 13,
                       ),
                     ))
-              ]
+              ],
+
+
+
+
+
+              if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
+              Row(
+                children: [
+                  Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
+                    style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 15),),
+                ],
+              )
+
             ],
           ),
         ),

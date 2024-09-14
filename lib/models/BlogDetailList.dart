@@ -25,6 +25,7 @@ class Blog_Detail_list{
   String PostByName='';
   String RejectionComment='';
   String EndDate='';
+  String Area = '';
 
 
   List<Blog_Detail_list> data=[];
@@ -54,7 +55,8 @@ class Blog_Detail_list{
     required this.TotalClicks,
     required this.PostByName,
     required this.RejectionComment,
-    required this.EndDate
+    required this.EndDate,
+    required this.Area,
 
 
   });
@@ -86,6 +88,7 @@ class Blog_Detail_list{
       PostByName: json['PostByName']==null?'': json['PostByName'] as String,
       RejectionComment: json['RejectionComment']==null?'': json['RejectionComment'] as String,
       EndDate: json['EndDate']==null?'': json['EndDate'] as String,
+      Area: json['Area']==null?'': json['Area'].toString(),
 
 
 

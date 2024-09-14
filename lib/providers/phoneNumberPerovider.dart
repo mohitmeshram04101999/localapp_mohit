@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod/riverpod.dart';
@@ -77,7 +78,10 @@ PhoneNumberNotifier(super.state);
             state = sims.first.number;
           }
 
-        showMessage(context, 'sim Card Length is ${sims?.first.number}');
+        if(kDebugMode)
+          {
+            showMessage(context, 'sim Card Length is ${sims?.first.number}');
+          }
         Logger().e("${sims}");
 
       }
@@ -85,7 +89,6 @@ PhoneNumberNotifier(super.state);
       var d2 = await MobileNumber.requestPhonePermission;
 
       var grant = MobileNumber.hasPhonePermission;
-      Logger().e("Diny =");
 
     }
   }

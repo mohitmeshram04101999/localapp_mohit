@@ -82,6 +82,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
   String RejectionComment='';
   String EndDate='';
   String TotalClicks='';
+  String AreaName = '';
   late YoutubePlayerController _controller=YoutubePlayerController(
     initialVideoId: '${videoId}',
     flags: YoutubePlayerFlags(
@@ -212,9 +213,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
     
 
     Map<String, dynamic> data = json.decode(response.body );
-    logger.i("$url\n ${response.statusCode} \n${data}");
+    logger.i("$url\n ${response.statusCode} \n${data})");
     status = data["success"];
     print('status${status}');
+
+
 
 
     if (status == "0") {
@@ -222,6 +225,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         Navigator.of(context).pop();
 
       });
+
+
       categorylist_data = data['data']['category'] as List;
       categorylist_string = categorylist_data.map<Category_list>(
               (json) => Category_list.fromJson(json)).toList();
@@ -239,6 +244,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
       blog_string = blog_data.map<Blog_Detail_list>(
               (json) => Blog_Detail_list.fromJson(json)).toList();
 
+
+
+      Logger().t(' show blog Data\n${data['data']['blog'][0]}');
 
       setState(() {
 
@@ -264,6 +272,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         EndDate=blog_string[0].EndDate==null?'':blog_string[0].EndDate;
         TotalClicks=blog_string[0].TotalClicks==null?'':blog_string[0].TotalClicks;
         TotalClicks=blog_string[0].TotalClicks==null?'':blog_string[0].TotalClicks;
+        AreaName=blog_string[0].Area=="null"?'':blog_string[0].Area;
+
 
         if(VideoLink!='')
           {
@@ -821,47 +831,6 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
 
 
-                              if(PostByName!='')...[
-
-
-                              showShimmer
-                                  ?
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  color: Colors.white,
-                                ),
-                              )
-                                  :  Container(
-                                padding: const EdgeInsets.only(left:15),
-                                child:   Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.person, // Map pin icon
-                                      color: Colors.black, // Optional: Set the color of the icon
-                                      size: 15, // Optional: Set the size of the icon
-                                    ),
-                                    SizedBox(width: 2),
-                                    Container(
-                                      width: 200,
-                                      child:  Text(
-                                        'Post by: ${PostByName}',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    // Add spacing between the icon and text
-                                  ],
-                                ),
-                              ),
-                              ],
-
 
                               SizedBox(height: 10.0),
                               showShimmer
@@ -909,6 +878,77 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
                                 ),
                               ),
+
+
+
+                              if(AreaName!='null'&&AreaName.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20,),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.location_pin),
+                                      Text("$AreaName",style: TextStyle(fontWeight: FontWeight.w700,),),
+                                    ],
+                                  ),
+                                ),
+
+
+                              if(PostByName!='')...[
+
+                                const SizedBox(height: 8,),
+
+
+                              showShimmer
+                                  ?
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  :  Container(
+                                padding: const EdgeInsets.only(left:15),
+                                child:   Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Icon(
+                                    //   Icons.person, // Map pin icon
+                                    //   color: Colors.black, // Optional: Set the color of the icon
+                                    //   size: 15, // Optional: Set the size of the icon
+                                    // ),
+                                    // const SizedBox(width: 2),
+                                    // Text(
+                                    //   'Post by: ',
+                                    //   style: TextStyle(
+                                    //     fontWeight: FontWeight.bold,
+                                    //     fontSize: 14,
+                                    //   ),
+                                    // ),
+                                    const SizedBox(width: 2),
+                                    CircleAvatar(child: Text('${PostByName.toString()[0]}'),backgroundColor: Colors.grey,foregroundColor: Colors.white,),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      '${PostByName}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    // Add spacing between the icon and text
+                                  ],
+                                ),
+                              ),
+
+                               const SizedBox(height: 10,)
+                              ],
+
+
+
+
+
 
 
                               if(ShareText!='')...[
@@ -1131,6 +1171,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ],
                             ),
                           ),
+
 
 
 

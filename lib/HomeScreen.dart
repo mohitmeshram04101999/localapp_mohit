@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter/material.dart';
@@ -44,9 +45,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   final String catPrivacyType;
   final String? privacyImage;
+  final String? subSubCategoryLabel;
   String CategoryId;
   final String? whatsAppNumber;
-  HomeScreen(this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage});
+  HomeScreen(this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage,this.subSubCategoryLabel});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -68,6 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String app_version = '';
   String current_app_version = '4';
   String category_label = '';
+  String subSubCategoryLabel ="";
   bool filter_selected = false;
   String category_name = '';
 
@@ -238,7 +241,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 
     Logger()
-        .e("THis Is new $url\n ${response.statusCode} \n${response.body}\n$d");
+        .e("THis Is new $url\n ${response.statusCode} \n${jsonDecode(response.body)}\n$d");
     // Set timeout to 30 seconds
     Map<String, dynamic> data = json.decode(response.body);
 
@@ -253,8 +256,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
         apun_Ka_Dat = data;
 
+        subSubCategoryLabel = data["data"]['subsubcategory_label'].toString();
+
         //
-        logger.i("categorylist_data\n$categorylist_data");
+        logger.i("categorylist_data\n$data");
         categorylist_string = categorylist_data
             .map<Category_list>((json) => Category_list.fromJson(json))
             .toList();
@@ -637,6 +642,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   );
 
 
+  RangeValues values = RangeValues(15, 15);
 
   @override
   Widget build(BuildContext context) {
@@ -855,6 +861,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView(
               controller: _scrollController,
               children: [
+
+
+
+
                 //SubSubCategory Drop Down Button
                 Consumer(
                   builder: (context, ref, child) {
@@ -870,18 +880,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         height: 40,
                         child: DropdownButtonFormField(
 
-
+                          style: const  TextStyle(color: Colors.black,fontSize: 14),
 
                           value: sub_sub_category,
 
                           //
                             decoration: InputDecoration(
 
-                              hintText: 'Sub Sub Category',
+                              hintText: (widget.subSubCategoryLabel!='null'&&widget.subSubCategoryLabel.toString().isNotEmpty)?widget.subSubCategoryLabel:'Sub Sub Category ',
 
                               contentPadding: EdgeInsets.symmetric(horizontal: 8),
 
-                              helperStyle:const  TextStyle(color: Colors.black),
+                              hintStyle:const  TextStyle(color: Colors.black,fontSize: 14),
+
+
 
 
                               //
@@ -901,6 +913,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             onChanged: (d) {
                             sub_sub_category = d;
                             insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: d.toString(), type: InsertLogType.subSubCategory);
+                            getHome();
                             },
                             items: [
                               for(var item in ref.watch(subSubCategoryProvider))
