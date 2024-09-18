@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 
@@ -27,6 +28,11 @@ class ProfileProviderState extends StateNotifier<User?>
   final logInApi = LogApis();
   final _log = Logger();
   bool _loading = true;
+  bool _sunmitted = false;
+
+
+  bool get submitted => _sunmitted;
+
 
 
   TextEditingController nameController= TextEditingController();
@@ -107,6 +113,7 @@ class ProfileProviderState extends StateNotifier<User?>
 })async
 {
 
+
   _log.e("Update ${phoneNumController.text} ${nameController.text} jhghjg");
 
   if(phoneNumController.text.trim().isEmpty ||nameController.text.trim().isEmpty)
@@ -126,14 +133,35 @@ class ProfileProviderState extends StateNotifier<User?>
     {
 
       getUser(context);
+
+      var fd = state;
+
+      _sunmitted = true;
+      state = null;
+    Timer(Duration(seconds: 2),(){
+      Navigator.pop(context);
       phoneNumController.clear();
       nameController.clear();
-      Navigator.pop(context);
+
+      _sunmitted = false;
+      state = fd;
+    });
+
+
     }
   else
     {
       showMessage(context, "${resp.statusCode}");
     }
 }
+
+
+
+update(){
+    var d = state;
+    state = null;
+    state = d;
+}
+
 
 }

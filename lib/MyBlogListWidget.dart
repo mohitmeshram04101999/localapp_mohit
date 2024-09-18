@@ -201,7 +201,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
 
               const SizedBox(height: 8,),
 
-              if(widget.blog.area.toString()!='null'&&widget.blog.toString().isNotEmpty)
+              if(widget.blog.area.toString()!="null"&&widget.blog.area.toString().length>0)
               Row(
                 children: [
                   const Icon(Icons.location_pin),
@@ -211,14 +211,31 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
               ),
 
 
+
               const SizedBox(height: 8,),
               Row(
                 children: [
-                  const Icon(Icons.remove_red_eye),
-                  const SizedBox(width: 8,),
-                  Text('${widget.blog.totalClicks??0}')
+                  const Icon(Icons.remove_red_eye,size: 16,color: Colors.grey,),
+                  const SizedBox(width: 4,),
+                  Text('Total Views: ${widget.blog.totalClicks??0}',style: TextStyle(color: Colors.grey),)
                 ],
               ),
+
+
+              if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_month,size: 16,color: Colors.grey,),
+                      SizedBox(width: 4,),
+                      Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
+                        style: const TextStyle(color: Colors.grey),),
+                    ],
+                  ),
+                ),
+
+
 
 
               showShimmer
@@ -237,7 +254,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                       ],
                     )
                   : Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
                         children: [
                           Icon(
@@ -277,6 +294,8 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ],
                       ),
                     ),
+
+
               if (widget.blog.rejectionComment != null) ...[
                 Container(
                     padding: const EdgeInsets.all(8),
@@ -293,13 +312,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
 
 
 
-              if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
-              Row(
-                children: [
-                  Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
-                    style: const TextStyle(fontWeight: FontWeight.w700,fontSize: 15),),
-                ],
-              )
+
 
             ],
           ),

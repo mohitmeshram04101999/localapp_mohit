@@ -50,7 +50,7 @@ Future<void> main() async {
 
   bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
   if (!isAllowed) {
-    AwesomeNotifications().requestPermissionToSendNotifications();
+    // AwesomeNotifications().requestPermissionToSendNotifications();
   }
   FirebaseMessaging.instance
       .getInitialMessage()

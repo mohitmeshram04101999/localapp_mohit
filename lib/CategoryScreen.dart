@@ -46,6 +46,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
   void didChangeAppLifecycleState(AppLifecycleState state)async{
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
+    logger.w(state);
     ref.read(locationPermmissionProvider.notifier).checkDialog(context);
     ref.read(notificationPermissionProvider.notifier).checkDialog(context);
   }
@@ -66,6 +67,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
             context,
             MaterialPageRoute(
                 builder: (context) => HomeScreen(
+                    user_category_string[index].whatsappText,
                     user_category_string[index].whatsappNumber,
                     user_category_string[index].categoryId,
                     user_category_string[index].privacyType)));
@@ -286,6 +288,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomeScreen(
+                                        user_category_string[i].whatsappText,
                                         user_category_string[i].whatsappNumber,
                                             user_category_string[i].categoryId,
                                             user_category_string[i].privacyType,
