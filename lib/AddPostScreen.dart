@@ -247,7 +247,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
 
-          backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
         appBar:AppBar(
           backgroundColor: Colors.white, // Change app bar color to white
           elevation: 0.0, // Remove the bottom border

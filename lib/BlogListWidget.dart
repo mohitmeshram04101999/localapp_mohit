@@ -178,6 +178,53 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     },
                   ),
 
+
+                  if (widget.blog.postByName != "")
+                    Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade600,
+                        radius: 14,
+                        child: Text(
+                          widget.blog.postByName![0].toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                          child: Text(
+                            widget.blog.postByName ?? "",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16),
+                          )),
+                    ],
+                  ),
+
+                  const SizedBox(height: 10,),
+                  if(widget.blog.area!=null&&widget.blog.area.toString().isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(0),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.location_pin),
+                          Text(
+                            ' ${widget.blog.area ?? "unknown"}',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
                   showShimmer
                       ? Column(
                     children: [
@@ -207,22 +254,8 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ),
                   ),
 
-                  Container(
-                    padding: const EdgeInsets.all(0),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.location_pin),
-                        Text(
-                          ' ${widget.blog.area ?? "unknown"}',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
+
 
                   // Row(children: [
                   //   const Icon(Icons.visibility),
@@ -268,34 +301,6 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                         const SizedBox(
                           width: 20,
                         ),
-                        if (widget.blog.postByName != "")
-                          Expanded(
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.grey.shade600,
-                                  radius: 14,
-                                  child: Text(
-                                    widget.blog.postByName![0].toUpperCase(),
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                    child: Text(
-                                      widget.blog.postByName ?? "",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16),
-                                    )),
-                              ],
-                            ),
-                          )
                       ],
                     ),
                   ),

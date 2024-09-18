@@ -881,16 +881,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
 
 
-                              if(AreaName!='null'&&AreaName.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20,),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.location_pin),
-                                      Text("$AreaName",style: TextStyle(fontWeight: FontWeight.w700,),),
-                                    ],
-                                  ),
-                                ),
+
 
 
                               if(PostByName!='')...[
@@ -910,7 +901,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 ),
                               )
                                   :  Container(
-                                padding: const EdgeInsets.only(left:15),
+                                padding: const EdgeInsets.only(left:10),
                                 child:   Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -918,7 +909,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                     //   Icons.person, // Map pin icon
                                     //   color: Colors.black, // Optional: Set the color of the icon
                                     //   size: 15, // Optional: Set the size of the icon
-                                    // ),
+                                    // ),b
                                     // const SizedBox(width: 2),
                                     // Text(
                                     //   'Post by: ',
@@ -933,7 +924,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                     Text(
                                       '${PostByName}',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -944,6 +935,19 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
                                const SizedBox(height: 10,)
                               ],
+
+
+                              if(AreaName!='null'&&AreaName.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.location_pin),
+                                      Text("$AreaName",style: TextStyle(fontWeight: FontWeight.w500),),
+                                    ],
+                                  ),
+                                ),
+                              const SizedBox(height: 10,),
 
 
 

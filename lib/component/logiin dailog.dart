@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localapp/component/customFeild.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localapp/constants/Config.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:logger/logger.dart';
 
@@ -29,6 +30,11 @@ Future<void> openLogInDialog(BuildContext context) async {
 
               content: Consumer(
                 builder: (a, ref, c) {
+
+                  logger.t("ashgdfasdfa");
+
+                  ref.watch(profileProvider);
+
                   var profileProviderState =
                       ref.watch(profileProvider.notifier);
 
@@ -103,24 +109,29 @@ Future<void> openLogInDialog(BuildContext context) async {
                       //
                       SizedBox(
                           width: double.maxFinite,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
+                          child: Consumer(
+
+                            builder: (context, ref, child) {
+
+
+                              return ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
                                       MaterialStateProperty.resolveWith(
-                                          (states) => Colors.grey.shade900),
-                                  shape: MaterialStateProperty.resolveWith(
-                                      (states) => RoundedRectangleBorder(
-                                          borderRadius:
+                                              (states) => ref.watch(profileProvider.notifier).submitted?Colors.green:Colors.grey.shade900),
+                                      shape: MaterialStateProperty.resolveWith(
+                                              (states) => RoundedRectangleBorder(
+                                              borderRadius:
                                               BorderRadius.circular(60)))),
-                              onPressed: () {
-
-
-                                ref
-                                    .read(profileProvider.notifier)
-                                    .updateProfile(
+                                  onPressed: () {
+                                    ref
+                                        .read(profileProvider.notifier)
+                                        .updateProfile(
                                         context: context);
-                              },
-                              child: const Text("Submit")))
+                                  },
+                                  child:Text(ref.watch(profileProvider.notifier).submitted?"Submitted Successfully!":"Submit"));
+                            }
+                          ))
                     ],
                   );
                 },

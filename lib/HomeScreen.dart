@@ -46,9 +46,10 @@ class HomeScreen extends ConsumerStatefulWidget {
   final String catPrivacyType;
   final String? privacyImage;
   final String? subSubCategoryLabel;
+  final String? whatsAppText;
   String CategoryId;
   final String? whatsAppNumber;
-  HomeScreen(this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage,this.subSubCategoryLabel});
+  HomeScreen(this.whatsAppText,this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage,this.subSubCategoryLabel});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -73,6 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String subSubCategoryLabel ="";
   bool filter_selected = false;
   String category_name = '';
+  String? whatsAppText;
 
   List categorylist_data = [];
   List<Category_list> categorylist_string = [];
@@ -257,6 +259,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         apun_Ka_Dat = data;
 
         subSubCategoryLabel = data["data"]['subsubcategory_label'].toString();
+        whatsAppText = data["data"]['category'][0]['WhatsappText'].toString();
 
         //
         logger.i("categorylist_data\n$data");
@@ -410,6 +413,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     logger.i(
         "$url \n${response?.statusCode} \n${jsonDecode(response.body ?? "")}");
+
 
     Map<String, dynamic> data = json.decode(response.body);
     status = data["success"];
@@ -1158,9 +1162,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   builder: (c) => AlertDialog(
                     content: InkWell(
                       onTap: (){
+                        logger.t("${widget.whatsAppNumber} (${widget.whatsAppText})");
                         if(widget.whatsAppNumber.toString().isNotEmpty&&widget.whatsAppNumber.toString()!="null")
                           {
-                            launch('https://wa.me/+91${widget.whatsAppNumber}');
+                            launch('https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText??""}');
+                            // launch('https://wa.me/+917747071882?text=hi hello');
                           }
                       },
                         child: Image.network(
