@@ -3,9 +3,9 @@ import 'package:logger/logger.dart';
 class Config
 {
   // static String Main_Link = "https://shubhapp.com/local_app/api/";
-  static String Main_Link = "https://localapp.satyakabir.in/api/";
+  static String Main_Link = "https://mirzapurmetalcraft.in/api/";
   // static String Image_Path = "https://shubhapp.com/local_app/uploads/";
-  static String Image_Path = "https://localapp.satyakabir.in/uploads/";
+  static String Image_Path = "https://mirzapurmetalcraft.in/uploads/";
   static String signup = Main_Link+"signup";
   static String get_home = Main_Link+"get_home";
   static String get_city = Main_Link+"get_city";
@@ -31,6 +31,7 @@ class Config
   static String get_subSub_Categoey = Main_Link+"get_subsub_category";
   static String get_user = Main_Link+"get_user";
   static String insert_log = Main_Link+"app_log";
+  static String update_Profile = Main_Link+"update_profile";
 
 
 

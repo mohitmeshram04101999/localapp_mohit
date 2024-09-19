@@ -129,7 +129,7 @@ Future<void> openLogInDialog(BuildContext context) async {
                                         .updateProfile(
                                         context: context);
                                   },
-                                  child:Text(ref.watch(profileProvider.notifier).submitted?"Submitted Successfully!":"Submit"));
+                                  child:Text(ref.watch(profileProvider.notifier).submitted?"Submitted":"Submit"));
                             }
                           ))
                     ],

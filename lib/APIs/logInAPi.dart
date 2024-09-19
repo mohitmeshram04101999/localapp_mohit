@@ -22,7 +22,7 @@ class LogApis{
 
   Future<http.Response> updateMobNumberAndLocation({required String postById,String? mobileNumber2,required Position location}) async
   {
-    String uri = "https://localapp.satyakabir.in/api/update_profile";
+    String uri = Config.update_Profile;
 
     var d = {
       "PostById":postById,
@@ -54,7 +54,7 @@ class LogApis{
 }) async
   {
 
-    String uri = "https://localapp.satyakabir.in/api/update_profile";
+    String uri = Config.update_Profile;
 
     var _data = {
       "PostById":postById,
