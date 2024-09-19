@@ -132,9 +132,9 @@ class ProfileProviderState extends StateNotifier<User?>
   if(resp.statusCode==200)
     {
 
-      getUser(context);
 
-      var fd = state;
+
+      // var fd = state;
 
       _sunmitted = true;
       state = null;
@@ -144,9 +144,10 @@ class ProfileProviderState extends StateNotifier<User?>
       nameController.clear();
 
       _sunmitted = false;
-      state = fd;
+      // state = fd;
     });
 
+      getUser(context);
 
     }
   else
