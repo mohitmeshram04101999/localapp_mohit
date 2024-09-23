@@ -1,13 +1,22 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localapp/component/customFeild.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/Config.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:logger/logger.dart';
 
 Future<void> openLogInDialog(BuildContext context) async {
+
+
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+  // GlobalKey<FormFieldState> _formKey3 = GlobalKey<FormFieldState>();
+
 
 
   final style = TextStyle(
@@ -42,6 +51,10 @@ Future<void> openLogInDialog(BuildContext context) async {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+                      if(kDebugMode)
+                        IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.close)),
+
                       //
                       Text(
                         "For us to show you relevant information, we need to know you better.",
@@ -53,15 +66,29 @@ Future<void> openLogInDialog(BuildContext context) async {
 
                       //
                       Text(
-                        "Your name",
+                        "Your Name",
                         style: style,
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      CustomField(
-                        hintText: "Type Your Name here",
-                        controller: ref.watch(profileProvider.notifier).nameController,
+                      Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: CustomField(
+                          validator: (s){
+                            if(s!.isEmpty)
+                              {
+                                return "Please Enter Your Name";
+                              }
+                            else if(s.length<2)
+                              {
+                                return "Please Enter At Least 2 Character";
+                              }
+                          },
+                          hintText: "Type Your Name here",
+                          controller: ref.watch(profileProvider.notifier).nameController,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -69,23 +96,35 @@ Future<void> openLogInDialog(BuildContext context) async {
 
                       //
                       Text(
-                        "10 digit Whatsapp Number",
+                        "10 Digit Whatsapp Number",
                         style: style,
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      CustomField(
-                        validator: (s) {
-                          return "sfdfgsdf";
-                        },
-                        inputType: TextInputType.number,
-                        hintText: "10 digit Whatsapp Number",
-                        controller: ref.watch(profileProvider.notifier).phoneNumController,
-                        formatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10),
-                        ],
+                      Form(
+                        key: _formKey2,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: CustomField(
+                          validator: (s) {
+                            if(s!.isEmpty)
+                              {
+                                return "Please Enter Whatsapp Number";
+                              }
+                            else if(s.trim().length<10)
+                              {
+                                return 'Please Enter Valid Mobile Number';
+                              }
+
+                          },
+                          inputType: TextInputType.number,
+                          hintText: "10 Digit Whatsapp Number",
+                          controller: ref.watch(profileProvider.notifier).phoneNumController,
+                          formatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(10),
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -95,7 +134,7 @@ Future<void> openLogInDialog(BuildContext context) async {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          "This Whatsapp number will NOT be visible to other users in the app. it is solely used for creating your profile",
+                          "This Whatsapp number will NOT be visible to other users in the app. It is solely used for creating your profile.",
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               color: Colors.blue.shade300,
@@ -124,10 +163,13 @@ Future<void> openLogInDialog(BuildContext context) async {
                                               borderRadius:
                                               BorderRadius.circular(60)))),
                                   onPressed: () {
-                                    ref
-                                        .read(profileProvider.notifier)
-                                        .updateProfile(
-                                        context: context);
+                                    if(_formKey.currentState!.validate()&&_formKey2.currentState!.validate())
+                                      {
+                                        ref
+                                            .read(profileProvider.notifier)
+                                            .updateProfile(
+                                            context: context);
+                                      }
                                   },
                                   child:Text(ref.watch(profileProvider.notifier).submitted?"Submitted":"Submit"));
                             }

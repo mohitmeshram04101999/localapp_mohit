@@ -884,6 +884,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         height: 40,
                         child: DropdownButtonFormField(
 
+                          icon: sub_sub_category==null?Image.asset(
+                            'assets/images/Dropdownicon.png',
+                            height: 20.0,
+                            width: 20.0,
+                            // adjust height and width according to your image size
+                          ):GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                sub_sub_category = null;
+
+                              });
+                              Future.delayed(Duration(milliseconds: 1), () {
+                                getHome();
+                              });
+                            },
+                            child: Image.asset(
+                              'assets/images/crossicon.png',
+                              height: 20.0,
+                              width: 20.0,
+                              // adjust height and width according to your image size
+                            ),
+                          ),
+
                           style: const  TextStyle(color: Colors.black,fontSize: 14),
 
                           value: sub_sub_category,
@@ -1112,6 +1135,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             '${selected_category}',
                             privecyType: widget.catPrivacyType,
                             privacyImage: widget.privacyImage,
+                            whatsAppNumber: widget.whatsAppNumber,
+                            whatsAppText: widget.whatsAppText,
                           );
                           // return Card(margin: EdgeInsets.all(10),color: Colors.grey,
                           //     child: Text("${blog_string[index].toJson()["PostByName"]}")

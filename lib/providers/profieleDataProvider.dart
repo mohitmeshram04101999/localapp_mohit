@@ -113,17 +113,18 @@ class ProfileProviderState extends StateNotifier<User?>
 })async
 {
 
-
-  _log.e("Update ${phoneNumController.text} ${nameController.text} jhghjg");
+  _log.e("Update ${phoneNumController.text.trim().length} ${nameController.text} jhghjg");
 
   if(phoneNumController.text.trim().isEmpty ||nameController.text.trim().isEmpty)
     {
+      showMessage(context, "Please Enter Your Name And Mobile Number");
       return;
+
     }
-  if(phoneNumController.text.trim().length!=10)
+  else if(phoneNumController.text.length!=10)
     {
-      _log.e("in valid");
-      showMessage(context, "Please Enter valid mobile number");
+      _log.e("Please Enter Valid Mobile Number");
+      showMessage(context, "Please Enter Valid Mobile Number");
       return;
     }
 
