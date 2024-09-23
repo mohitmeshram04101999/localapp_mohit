@@ -19,6 +19,7 @@ class Prefs {
   final post_contact="post_contact";
 
   final post_uploading="post_uploading";
+  final first_instaled = "first_installed";
 
   Future<String> getpost_uploading() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -154,6 +155,20 @@ logout() async{
   Future<bool> setfname(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(fname, value);
+  }
+
+
+
+  Future<bool> checkUserFirstInstalled() async
+  {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(first_instaled)??true;
+  }
+
+  Future<void> setInstallStatus(bool status) async
+  {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(first_instaled, status);
   }
 
 

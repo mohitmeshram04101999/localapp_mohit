@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/month.dart';
+import 'package:localapp/constants/style%20configuration.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'BlogDetail.dart';
@@ -66,6 +68,18 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
 
     // Your widget implementation for displaying a single blog item
     return GestureDetector(
+      
+      onLongPress: (){
+        if(kDebugMode)
+          {
+            showDialog(context: context, builder:(c)=> AlertDialog(
+              content: Text(
+                blogListToJson(widget.blog)
+              ),
+            ));
+          }
+      },
+      
       onTap: () {
         Navigator.push(
           context,
@@ -88,233 +102,236 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
         child: Container(
           margin: EdgeInsets.all(10.0),
           padding: EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              if (widget.blog.videoLink != '') ...[
-                YoutubePlayer(
-                  controller: _controller,
-                  aspectRatio: 16 / 9,
-                ),
-                // Add your video rendering here...
-              ] else ...[
-                if (widget.blog.postDisplayPhoto != '') ...[
-                  showShimmer
-                      ? Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(
-                            width: double.infinity,
-                            height: 380,
-                            color: Colors.white,
+          child: Container(
+            color: kDebugMode?Colors.grey.shade300:null,
+            child: Column(
+              children: [
+                if (widget.blog.videoLink != '') ...[
+                  YoutubePlayer(
+                    controller: _controller,
+                    aspectRatio: 16 / 9,
+                  ),
+                  // Add your video rendering here...
+                ] else ...[
+                  if (widget.blog.postDisplayPhoto != '') ...[
+                    showShimmer
+                        ? Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: double.infinity,
+                              height: 380,
+                              color: Colors.white,
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: Config.Image_Path +
+                                'blog/${widget.blog.postDisplayPhoto ?? ""}',
+                            placeholder: (context, url) => Image.asset(
+                              "assets/images/loader.gif",
+                              width: 80,
+                              height: 80,
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              "assets/images/loader.gif",
+                              width: 80,
+                              height: 80,
+                            ),
                           ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: Config.Image_Path +
-                              'blog/${widget.blog.postDisplayPhoto ?? ""}',
-                          placeholder: (context, url) => Image.asset(
-                            "assets/images/loader.gif",
-                            width: 80,
-                            height: 80,
-                          ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            "assets/images/loader.gif",
-                            width: 80,
-                            height: 80,
-                          ),
-                        ),
-                ],
-              ],
-              SizedBox(height: 20),
-
-
-              if(showShimmer)...[
-                Column(
-                  children: [
-                    SizedBox(height: 20),
-                    Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        width: double.infinity,
-                        height: 50,
-                        color: Colors.white,
-                      ),
-                    )
                   ],
-                )
-              ]
-              else...[
-
-                if(widget.blog.text!=null)
-                  Html(
-                    data: widget.blog.text,
-                    style: {
-                      "body": Style(
-                        padding: EdgeInsets.zero,
-                        margin: const EdgeInsets.all(0),
-                      ),
-                    },
-                  ),
-
-                if(widget.blog.heading!=null)
-                  Html(
-                    data: widget.blog.heading,
-                    style: {
-                      "body": Style(
-                        padding: EdgeInsets.zero,
-                        margin: const EdgeInsets.all(0),
-                      ),
-                    },
-                  )
-              ],
-
-
-              showShimmer
-                  ? Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(
-                            width: double.infinity / 2,
-                            height: 20,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    )
-                  : Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          Text(
-                            "${widget.blog.categoryName}",
-                            style: const TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-              const SizedBox(height: 8,),
-
-              if(widget.blog.area.toString()!="null"&&widget.blog.area.toString().length>0)
-              Row(
-                children: [
-                  const Icon(Icons.location_pin),
-                  const SizedBox(width: 8,),
-                  Text('${widget.blog.area}',style: const TextStyle(fontWeight: FontWeight.w700),)
                 ],
-              ),
+                SizedBox(height: 20),
 
 
-
-              const SizedBox(height: 8,),
-              Row(
-                children: [
-                  const Icon(Icons.remove_red_eye,size: 16,color: Colors.grey,),
-                  const SizedBox(width: 4,),
-                  Text('Total Views: ${widget.blog.totalClicks??0}',style: TextStyle(color: Colors.grey),)
-                ],
-              ),
-
-
-              if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Row(
+                if(showShimmer)...[
+                  Column(
                     children: [
-                      Icon(Icons.calendar_month,size: 16,color: Colors.grey,),
-                      SizedBox(width: 4,),
-                      Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
-                        style: const TextStyle(color: Colors.grey),),
+                      SizedBox(height: 20),
+                      Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          color: Colors.white,
+                        ),
+                      )
                     ],
+                  )
+                ]
+                else...[
+
+                  Html(
+                    data: widget.blog.heading.toString()!='null'&&widget.blog.heading.toString().isNotEmpty?widget.blog.heading.toString():widget.blog.text.toString(),
+                    style: {
+                      "body": Style(
+                        padding: EdgeInsets.zero,
+                        margin: EdgeInsets.all(0),
+                      ),
+                    },
                   ),
+                ],
+
+
+                showShimmer
+                    ? Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: double.infinity / 2,
+                              height: 20,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${widget.blog.categoryName}",
+                              style: const TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+
+                const SizedBox(height: 8,),
+
+                if(widget.blog.area.toString()!="null"&&widget.blog.area.toString().length>0)
+                Row(
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                        // color: Colors.red,
+                        child: Stack(
+                      clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              top: -4,
+                              left: -4,right: 0,
+                                bottom: -4,
+                                child: Icon(Icons.location_pin)),
+                          ],
+                        )),
+                    Text('${widget.blog.area}',style: StyleConfiguration.areaTextStyle,)
+                  ],
                 ),
 
 
 
+                //totalviews
+                const SizedBox(height: 8,),
+                Row(
+                  children: [
+                    const Icon(Icons.remove_red_eye,size: 16,color: Colors.grey,),
+                    const SizedBox(width: 4,),
+                    Text('Total Views: ${widget.blog.totalClicks??0}',style: StyleConfiguration.greySmall,)
+                  ],
+                ),
 
-              showShimmer
-                  ? Column(
+
+                //ExpireDate
+                if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Row(
                       children: [
-                        SizedBox(height: 10),
-                        Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(
-                            width: double.infinity / 3,
-                            height: 20,
-                            color: Colors.white,
-                          ),
-                        )
+                        Icon(Icons.calendar_month,size: 16,color: Colors.grey,),
+                        SizedBox(width: 4,),
+                        Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
+                          style: const TextStyle(color: Colors.grey),),
                       ],
-                    )
-                  : Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.access_time,
-                            color: Colors.grey,
-                            size: 16.0,
-                          ),
-                          SizedBox(width: 5.0),
-                          Text(
-                            widget.blog.timeAgo ?? "",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Spacer(),
-                          if (widget.blog.status == 'Pending Approval') ...[
-                            Image.asset(
-                              'assets/images/PendingApproval.png',
-                              height: 16.0,
-                            )
-                          ] else if (widget.blog.status == 'Expired') ...[
-                            Image.asset(
-                              'assets/images/Expired.png',
-                              height: 16.0,
-                            )
-                          ] else if (widget.blog.status == 'Approved') ...[
-                            Image.asset(
-                              'assets/images/Approved.png',
-                              height: 16.0,
-                            )
-                          ] else if (widget.blog.status == 'Rejected') ...[
-                            Image.asset(
-                              'assets/images/Rejected.png',
-                              height: 16.0,
-                            )
-                          ],
-                        ],
-                      ),
                     ),
+                  ),
 
 
-              if (widget.blog.rejectionComment != null) ...[
-                Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      'Rejection Reason: ${widget.blog.rejectionComment}',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 13,
+
+
+                showShimmer
+                    ? Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: double.infinity / 3,
+                              height: 20,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              color: Colors.grey,
+                              size: 16.0,
+                            ),
+                            SizedBox(width: 5.0),
+                            Text(
+                              widget.blog.timeAgo ?? "",
+                              style: StyleConfiguration.greySmall,
+                            ),
+                            Spacer(),
+                            if (widget.blog.status == 'Pending Approval') ...[
+                              Image.asset(
+                                'assets/images/PendingApproval.png',
+                                height: 16.0,
+                              )
+                            ] else if (widget.blog.status == 'Expired') ...[
+                              Image.asset(
+                                'assets/images/Expired.png',
+                                height: 16.0,
+                              )
+                            ] else if (widget.blog.status == 'Approved') ...[
+                              Image.asset(
+                                'assets/images/Approved.png',
+                                height: 16.0,
+                              )
+                            ] else if (widget.blog.status == 'Rejected') ...[
+                              Image.asset(
+                                'assets/images/Rejected.png',
+                                height: 16.0,
+                              )
+                            ],
+                          ],
+                        ),
                       ),
-                    ))
+
+
+                if (widget.blog.rejectionComment != null&&widget.blog.rejectionComment!.isNotEmpty) ...[
+                  Container(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        'Rejection Reason: ${widget.blog.rejectionComment}',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 13,
+                        ),
+                      ))
+                ],
+
+
+
+
+
+
+
               ],
-
-
-
-
-
-
-
-            ],
+            ),
           ),
         ),
       ),

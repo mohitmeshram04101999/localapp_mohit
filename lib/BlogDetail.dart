@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:localapp/MyPostScreen.dart';
 import 'package:localapp/VideoPlayer.dart';
+import 'package:localapp/constants/style%20configuration.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -455,8 +457,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
                         const SizedBox(height: 5),
                         Container(
-                          color: Colors.white,
-                          padding: const EdgeInsets.all(16.0),
+                          color:kDebugMode?Colors.grey.shade300: Colors.white,
+                          margin: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -809,6 +811,80 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
                                 ),
                               ),
+
+
+                              SizedBox(height: 10),
+                              //Post By Name
+                              showShimmer
+                                  ?
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  :  Container(
+                                padding: const EdgeInsets.only(left:0),
+                                child:   Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(child: Text('${PostByName.toString()[0]}',style: TextStyle(fontSize: 14),),backgroundColor: Colors.grey,foregroundColor: Colors.white,radius: 14,),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${PostByName}',
+                                      style:StyleConfiguration.areaTextStyle,
+                                    ),
+                                    // Add spacing between the icon and text
+                                  ],
+                                ),
+                              ),
+
+
+
+
+                            SizedBox(height: 10,),
+
+
+
+                              if(AreaName!="null"&&AreaName.length>0)
+                                Row(
+                                  children: [
+                                    Container(
+                                        height: 20,
+                                        width: 20,
+                                        // color: Colors.red,
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Positioned(
+                                                top: -4,
+                                                left: -4,right: 0,
+                                                bottom: -4,
+                                                child: Icon(Icons.location_pin)),
+                                          ],
+                                        )),
+                                    Text('${AreaName}',style: StyleConfiguration.areaTextStyle,)
+                                  ],
+                                ),
+
+
+                            //Area
+                            //   if(AreaName!='null'&&AreaName.isNotEmpty)
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(horizontal: 10,),
+                            //       child: Row(
+                            //         children: [
+                            //           Icon(Icons.location_pin),
+                            //           Text("$AreaName",style: TextStyle(fontWeight: FontWeight.w500),),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   const SizedBox(height: 10,),
+
+
                             /*  showShimmer
                                   ?
                               Shimmer.fromColors(
@@ -864,8 +940,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               )
                                   :
                               Container(
-
-                                padding: const EdgeInsets.only(left:10),
+                                color: Colors.red,
+                                padding: const EdgeInsets.only(left:0),
                                 child:  Html(
                                   data:'${HText}',
                                   onLinkTap: (url, _, __, ___) async {
@@ -884,70 +960,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
 
 
-                              if(PostByName!='')...[
-
-                                const SizedBox(height: 8,),
 
 
-                              showShimmer
-                                  ?
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  color: Colors.white,
-                                ),
-                              )
-                                  :  Container(
-                                padding: const EdgeInsets.only(left:10),
-                                child:   Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    // Icon(
-                                    //   Icons.person, // Map pin icon
-                                    //   color: Colors.black, // Optional: Set the color of the icon
-                                    //   size: 15, // Optional: Set the size of the icon
-                                    // ),b
-                                    // const SizedBox(width: 2),
-                                    // Text(
-                                    //   'Post by: ',
-                                    //   style: TextStyle(
-                                    //     fontWeight: FontWeight.bold,
-                                    //     fontSize: 14,
-                                    //   ),
-                                    // ),
-                                    const SizedBox(width: 2),
-                                    CircleAvatar(child: Text('${PostByName.toString()[0]}'),backgroundColor: Colors.grey,foregroundColor: Colors.white,),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      '${PostByName}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    // Add spacing between the icon and text
-                                  ],
-                                ),
-                              ),
-
-                               const SizedBox(height: 10,)
-                              ],
 
 
-                              if(AreaName!='null'&&AreaName.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10,),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.location_pin),
-                                      Text("$AreaName",style: TextStyle(fontWeight: FontWeight.w500),),
-                                    ],
-                                  ),
-                                ),
-                              const SizedBox(height: 10,),
+
 
 
 
@@ -993,25 +1010,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                     ),
 
 
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child:    Row(
-                                        children: [
-                                          Icon(
-                                            Icons.access_time,
-                                            color: Colors.grey,
-                                            size: 16.0,
-                                          ),
-                                          SizedBox(width: 5.0),
-                                          Text(
-                                            '${TimeAgo}',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
 
                                   ],
                                 ),
@@ -1070,6 +1069,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                   ],
                                 ),
                               ]*/
+
+
 
 
 
@@ -1144,7 +1145,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                         Divider(),
                         if(widget.FromMyPost==true)...[
                           Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(16),
                             child:    Row(
                               children: [
 
@@ -1178,12 +1179,33 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
 
 
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child:    Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  color: Colors.grey,
+                                  size: 16.0,
+                                ),
+                                SizedBox(width: 5.0),
+                                Text(
+                                  '${TimeAgo}',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
+
+                          SizedBox(height: 10,),
                           if(EndDate!='01 Jan 1970')...[
 
 
                           Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child:    Row(
                               children: [
 
@@ -1203,10 +1225,13 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                             ),
                           ),
                           ],
-            if(Status=='Approved')...[
+
+                          SizedBox(height: 10,),
+
+                          if(Status=='Approved')...[
 
                     Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child:    Row(
                               children: [
 

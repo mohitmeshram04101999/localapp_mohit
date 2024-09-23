@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:localapp/APIs/inselLog%20Method.dart';
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
-import 'package:localapp/component/show%20coustomMesage.dart';
-import 'package:localapp/models/insertLogType.dart';
 
 import 'package:localapp/providers/location%20permission%20provider.dart';
 import 'package:localapp/providers/notificationPermitionProvider.dart';
@@ -282,7 +279,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
 
                               logger.e('wNuimber (${user_category_string[i].whatsappNumber})');
 
-                              insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: user_category_string[i].categoryId, type: InsertLogType.category);
+                              // insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: user_category_string[i].categoryId, type: InsertLogType.category);
 
                               Navigator.push(
                                   context,

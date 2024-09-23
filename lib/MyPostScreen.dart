@@ -99,13 +99,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
       {
         setState(() {
           isVisibleDiv=true;
-
         });
       }
     else{
       setState(() {
         isVisibleDiv=false;
-
       });
     }
   }

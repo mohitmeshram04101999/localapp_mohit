@@ -22,26 +22,26 @@ class _CustomFieldState extends State<CustomField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      // height: 40,
       child: TextFormField(
+
         controller: widget.controller,
         validator: widget.validator,
 
 
         onChanged: (s){
           setState(() {
-            print("asjkdfk");
           });
         },
         keyboardType:widget.inputType,
         inputFormatters:widget.formatters,
         decoration: InputDecoration(
+
           hintText: widget.hintText,
           contentPadding: const  EdgeInsets.symmetric(horizontal: 8),
           border: OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.grey.shade300,
-
             )
           ),
         ),

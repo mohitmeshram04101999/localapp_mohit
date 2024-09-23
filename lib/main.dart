@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +21,8 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  //
   AwesomeNotifications().initialize(
     // Your app icon
     'resource://drawable/ic_launcher',
@@ -36,6 +37,8 @@ Future<void> main() async {
       )
     ],
   );
+
+  //
   AwesomeNotifications().setListeners(
     onActionReceivedMethod: (receivedAction) async {
 // If the app was terminated, initialize the app
@@ -48,32 +51,44 @@ Future<void> main() async {
     },
   );
 
+  //
   bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
   if (!isAllowed) {
     // AwesomeNotifications().requestPermissionToSendNotifications();
   }
-  FirebaseMessaging.instance
-      .getInitialMessage()
-      .then((RemoteMessage? message) {
+
+  //
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     if (message != null) {
-      Navigator.of( navigatorKey.currentContext!).pop();
+      Navigator.of(navigatorKey.currentContext!).pop();
       showbackgroundNotification(message);
     }
   });
-  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true);
 
+  //
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
+
+
+  //
   FirebaseMessaging.onBackgroundMessage(showbackgroundNotification);
 
+  //
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     await showbackgroundNotification(message);
   });
 
+  //
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     await showbackgroundNotification(message);
   });
+
+  //
   FirebaseMessaging.instance.getToken().then((token) {
     print("tokenxssn: $token");
   });
+
+  //
   FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
@@ -83,11 +98,12 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
+
+  //
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark));
   runApp(const ProviderScope(child: main_app()));
-
 }
 
 @pragma('vm:entry-point')
@@ -141,7 +157,10 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
 }
 
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+//
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 class main_app extends StatefulWidget {
   const main_app({Key? key}) : super(key: key);
 
@@ -152,12 +171,10 @@ class main_app extends StatefulWidget {
 class _main_appState extends State<main_app> {
   Prefs prefs = new Prefs();
 
-
   String? version = '';
   String? storeVersion = '';
   String? storeUrl = '';
   String? packageName = '';
-
 
   @override
   void initState() {
@@ -165,10 +182,7 @@ class _main_appState extends State<main_app> {
     //_initializeNotifications(); // Ensure this is called during startup
 
     super.initState();
-
-
   }
-
 
   late String token;
   getToken() async {
@@ -176,49 +190,36 @@ class _main_appState extends State<main_app> {
     print('fcm_token${token}');
     // prefs.set_fcm_token(token);
 
-    String user_id=await prefs.ismember_id();
+    String user_id = await prefs.ismember_id();
     print('token_home${token}');
     String? deviceId = await PlatformDeviceId.getDeviceId;
 
     print('deviceId${deviceId}');
 
     var url = Config.get_home;
-    http.Response response = await http.post(Uri.parse(url), body: {
-      'user_id':'${deviceId}',
-      "token":token
-    });
+    http.Response response = await http
+        .post(Uri.parse(url), body: {'user_id': '${deviceId}', "token": token});
 
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
       print("New FCM Token: $newToken");
       print('deviceId${deviceId}');
 
       var url = Config.get_home;
-      http.Response response = await http.post(Uri.parse(url), body: {
-        'user_id':'${deviceId}',
-        "token":newToken
-      });
+      http.Response response = await http.post(Uri.parse(url),
+          body: {'user_id': '${deviceId}', "token": newToken});
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
-    return
+    return MaterialApp(
+        title: 'Local App',
+        navigatorKey: navigatorKey, // Set the navigator key
 
-      MaterialApp(
-          title: 'Local App',
-          navigatorKey: navigatorKey, // Set the navigator key
-
-          theme: ThemeData(
-
+        theme: ThemeData(
             primarySwatch: Colors.blue,
-
             inputDecorationTheme: InputDecorationTheme(
-              helperStyle: TextStyle(color: Colors.black)
-            )
-          ),
-          home: SplashScreen()
-      );
+                helperStyle: TextStyle(color: Colors.black))),
+        home: SplashScreen());
   }
-
 }
-

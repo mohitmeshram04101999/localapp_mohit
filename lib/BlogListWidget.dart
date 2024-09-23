@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:localapp/BlogDetail.dart';
 import 'package:localapp/constants/month.dart';
 import 'package:localapp/constants/postPrivetType.dart';
@@ -10,6 +11,9 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'providers/profieleDataProvider.dart';
 
 class BlogListWidget extends StatefulWidget {
   @override
@@ -19,8 +23,10 @@ class BlogListWidget extends StatefulWidget {
   final String selected_sub_category;
   final String privecyType;
   final String? privacyImage;
+  final String? whatsAppNumber;
+  final String? whatsAppText;
 
-  const BlogListWidget(this.blog, this.selected_category, this.selected_sub_category,{required this.privecyType,this.privacyImage});
+  const BlogListWidget(this.blog, this.selected_category, this.selected_sub_category,{this.whatsAppText,this.whatsAppNumber,required this.privecyType,this.privacyImage});
 }
 
 class _BlogListWidgetState extends State<BlogListWidget> {
@@ -67,13 +73,38 @@ class _BlogListWidgetState extends State<BlogListWidget> {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
         return GestureDetector(
+
+
+
+          onLongPress: (){
+            if(kDebugMode)
+            {
+              showDialog(context: context, builder:(c)=> AlertDialog(
+                content: Text(
+                    blogListToJson(widget.blog)
+                ),
+              ));
+            }
+          },
+
           onTap: () {
 
+            var profile = ref.read(profileProvider);
+
             //Privet Dialog
-            if(widget.privecyType==CategoryPrivacyType.private)
+            if(widget.privecyType==CategoryPrivacyType.private && profile!.groupAccess.toString().split(",").contains(widget.selected_category)==false)
             {
               showDialog(context: context, builder: (c)=>AlertDialog(
-                content: Image.network(widget.privacyImage??""),
+                content: GestureDetector(
+                  onTap: (){
+                    logger.t("${widget.whatsAppNumber} (${widget.whatsAppText})");
+                    if(widget.whatsAppNumber.toString().isNotEmpty&&widget.whatsAppNumber.toString()!="null")
+                    {
+                      launch('https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText??""}');
+                      // launch('https://wa.me/+917747071882?text=hi hello');
+                    }
+                  },
+                child: Image.network(widget.privacyImage??"")),
               ));
             }
 
@@ -104,6 +135,10 @@ class _BlogListWidgetState extends State<BlogListWidget> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
+
+                  if(kDebugMode)
+                    Text("${widget.selected_category}"),
+
                   //
                   if (widget.blog.videoLink != '') ...[
                     Stack(
@@ -200,8 +235,9 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16
+                            ),
                           )),
                     ],
                   ),
@@ -216,14 +252,17 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                           Text(
                             ' ${widget.blog.area ?? "unknown"}',
                             style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15
+                                // color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16
                             ),
                           ),
                         ],
                       ),
                     ),
+
+
+
 
                   showShimmer
                       ? Column(
@@ -241,7 +280,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                     ],
                   )
                       : Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 10),
                     child: Row(
                       children: [
                         Text(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:localapp/APIs/Api.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
+import 'package:localapp/constants/Config.dart';
 import 'package:localapp/models/Susteom%20Print.dart';
 import 'package:localapp/models/subsubCategoryModel.dart';
 import 'package:logger/logger.dart';
@@ -31,6 +32,7 @@ class SubSubCategoryNotifier extends StateNotifier<List<SubSubCategory>> {
     if(resp.statusCode==200)
       {
         var decode = jsonDecode(resp.body);
+        logger.t(" sub Sub Cat \n$decode");
         var data = SubSubCategoryResponce.fromJson(decode);
         _loading = false;
         state = data.data??[];

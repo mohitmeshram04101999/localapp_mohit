@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localapp/MyPostScreen.dart';
@@ -61,7 +62,7 @@ class _CustomErrorDialogState extends State<CustomErrorDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
@@ -75,20 +76,20 @@ class _CustomErrorDialogState extends State<CustomErrorDialog> {
                 height: 50,
                 width: 50,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 '${widget.message}.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Okay'),
+                  child: const Text('Okay'),
                 ),
               ),
             ],
@@ -116,7 +117,7 @@ class CustomSuccessDialog extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
@@ -130,8 +131,8 @@ class CustomSuccessDialog extends StatelessWidget {
                 height: 50,
                 width: 50,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Post Uploaded Successfully',
                 style: TextStyle(
                   color: Colors.green,
@@ -139,13 +140,13 @@ class CustomSuccessDialog extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'It will be visible on Local App after approval from Admin.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -157,7 +158,7 @@ class CustomSuccessDialog extends StatelessWidget {
                     //   (route) => false,
                     // );
                   },
-                  child: Text('Go To My Post'),
+                  child: const Text('Go To My Post'),
                 ),
               ),
             ],
@@ -185,7 +186,7 @@ class CustomAlertDialog extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
@@ -199,8 +200,8 @@ class CustomAlertDialog extends StatelessWidget {
                 height: 50,
                 width: 50,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Post upload in progress…',
                 style: TextStyle(
                   color: Colors.green,
@@ -208,7 +209,7 @@ class CustomAlertDialog extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -219,7 +220,7 @@ class CustomAlertDialog extends StatelessWidget {
                           (route) => false,
                     );*/
                   },
-                  child: Text('Okay'),
+                  child: const Text('Okay'),
                 ),
               ),
             ],
@@ -232,7 +233,7 @@ class CustomAlertDialog extends StatelessWidget {
 
 class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
   bool showShimmer = true; // Track whether to show shimmer or data
-  final Duration shimmerDuration = Duration(seconds: 2);
+  final Duration shimmerDuration = const Duration(seconds: 2);
   String DescriptionPlaceholder = '';
   int selectedIdx = 0;
   String status = '';
@@ -273,7 +274,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 1), () {
       get_name();
       getApi();
       getSetupApi();
@@ -326,7 +327,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
         'blog_page': '${blog_page}',
         'PostById': '$deviceId',
         'user_id': '$deviceId'
-      }).timeout(Duration(seconds: 20));
+      }).timeout(const Duration(seconds: 20));
 
       // Set timeout to 30 seconds
       Map<String, dynamic> data = json.decode(response.body);
@@ -347,7 +348,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
           });
         } else {}
       } else {
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 2), () {
           Navigator.of(context).pop();
         });
         print('Request failed with status: ${response.statusCode}.');
@@ -422,6 +423,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
   }
 
   submit_api() async {
+    //
     setState(() {
       isVisibleDiv = true;
       form_visible = false;
@@ -430,26 +432,32 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
       prefs.setpost_uploading('Yes');
     });
 
-    if(addressController.text.trim().isEmpty)
-      {
-        showDialog(context: context, builder: (context) => CustomErrorDialog("Fill all the required information first and then submit.submi"),);
-        return ;
-      }
+    //
+    if (addressController.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => CustomErrorDialog(
+            "Fill all the required information first and then submit.submi"),
+      );
+      return;
+    }
 
     //
     showLoaderDialog(context);
     String? deviceId = await PlatformDeviceId.getDeviceId;
-    // Future.delayed(Duration(seconds: 2), () {
-    //
-    //   //
-    //   Navigator.of(context).pop();
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return CustomAlertDialog();
-    //     },
-    //   );
-    // });
+
+
+    await Future.delayed(Duration(milliseconds: 1000), () {
+      //
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomAlertDialog();
+        },
+      );
+    });
+
     var url_update_upload = Config.update_upload;
     blog_page = 0;
 
@@ -461,7 +469,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
     });
 
     Logger().e(
-        "responce frome post api ${response_upload.statusCode} \n ${response_upload.body}");
+        "responce frome post api1 ${response_upload.statusCode} \n ${response_upload.body}");
 
 // Set timeout to 30 seconds
 
@@ -477,11 +485,11 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
     request.fields['Area'] = '${addressController.text.trim()}';
 
     await LocalDb().savePrevArea(addressController.text.trim());
+
     if (widget.image_1 != '') {
       request.files
           .add(await http.MultipartFile.fromPath('image_1', widget.image_1));
     }
-
 
     for (int i = 0; i < widget.images.length; i++) {
       File imageFile = File(widget.images[i].path);
@@ -513,11 +521,9 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
         prefs.setpost_contact(_textEditingController.text);
         prefs.setpost_uploading('No');
 
-
         showDialog(
           context: context,
           builder: (BuildContext context) {
-
             return CustomSuccessDialog();
           },
         );
@@ -531,7 +537,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
         setState(() {
           isVisibleDiv = false;
         });
-        Future.delayed(Duration(milliseconds: 1), () {
+        Future.delayed(const Duration(milliseconds: 1), () {
           getApi();
         });
       } else {
@@ -577,15 +583,14 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
 
   TextEditingController addressController = TextEditingController();
 
-  Future<void> getArea()async
-  {
+  Future<void> getArea() async {
     String? db = await LocalDb().getPrevArea();
     logger.t(db);
-    addressController.text= db??"";
-    setState(() {
+    addressController.text = db ?? "";
 
-    });
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -596,7 +601,8 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
         backgroundColor: Colors.white, // Change app bar color to white
         elevation: 0.0, // Remove the bottom border
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          // icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (my_post_visible == true) {
               Navigator.of(context).pushAndRemoveUntil(
@@ -604,12 +610,12 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                 (route) => false,
               );
             } else {
-              // Navigator.pop(context);
+              Navigator.pop(context);
             }
           },
         ),
-        iconTheme:
-            IconThemeData(color: Colors.black), // Change icon color to black
+        iconTheme: const IconThemeData(
+            color: Colors.black), // Change icon color to black
         // textTheme: TextTheme(
         //   headline6: TextStyle(color: Colors.black), // Change text color to black
         // ),
@@ -620,7 +626,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
           children: [
             // Add spacing between the image and text
             Text('${app_title}',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                 )),
           ],
@@ -629,23 +635,19 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
           if (form_visible == true) ...[
             GestureDetector(
               onTap: () {
-
-
                 print('selectedOption${selectedOption}');
                 print('_textEditingController${_textEditingController.text}');
 
-                if(addressController.text.trim().isEmpty)
-                  {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomErrorDialog(
-                              "Fill all the required information first and then submit.");
-                        },
-                      );
-                      return ;
-                  }
-
+                if (addressController.text.trim().isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomErrorDialog(
+                          "Fill all the required information first and then submit.");
+                    },
+                  );
+                  return;
+                }
 
                 if (name_con.text == '') {
                   showDialog(
@@ -747,9 +749,9 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.all(10.0),
-                  margin: EdgeInsets.all(10.0),
-                  child: Center(
+                  padding: const EdgeInsets.all(10.0),
+                  margin: const EdgeInsets.all(10.0),
+                  child: const Center(
                     child: Text(
                       'Submit',
                       style: TextStyle(
@@ -788,9 +790,9 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Container(
-                          padding: EdgeInsets.only(left: 20.0),
+                          padding: const EdgeInsets.only(left: 20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment
                                 .start, // Distribute space evenly between images
@@ -818,22 +820,26 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                         ),
 
                         //name
-                        CustomField(
-                          enabled: false,
-                            controller: name_con,
-                            hintText: "Mention your name here"),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          color: kDebugMode ? Colors.grey.shade200 : null,
+                          child: CustomTextField(
+                              enabled: false,
+                              controller: name_con,
+                              hintText: "Mention your name here"),
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
 
                         //Area Fields
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               //
-                              const Text('Enter Area Name',
+                              const Text('Enter Your Area/Location',
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 17)),
                               const SizedBox(
@@ -841,23 +847,21 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               ),
 
                               //
-                              const Text("Mention Your Area Location Heare",
+                              const Text(
+                                  "This will be displayed against your post.",
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 12)),
 
-                              //
-                              TextFormField(
-                                controller: addressController,
-                                decoration:
-                                    const InputDecoration(hintText: "Area"),
-                              ),
+                              CustomTextField(
+                                  controller: addressController,
+                                  hintText: "Area/Location"),
                             ],
                           ),
                         ),
 
                         //
                         const SizedBox(
-                          height: 50,
+                          height: 10,
                         ),
                         Container(
                           padding: const EdgeInsets.only(left: 20.0),
@@ -879,7 +883,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               activeColor:
                                   Colors.black, // Set the active color to black
 
-                              title: Text('On WhatsApp'),
+                              title: const Text('On WhatsApp'),
                               value: selectedOption == 'On WhatsApp',
                               onChanged: (value) {
                                 setState(() {
@@ -895,7 +899,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
                             CheckboxListTile(
-                              title: Text('On Call'),
+                              title: const Text('On Call'),
                               activeColor:
                                   Colors.black, // Set the active color to black
 
@@ -913,7 +917,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
                             CheckboxListTile(
-                              title: Text('On Email'),
+                              title: const Text('On Email'),
                               activeColor:
                                   Colors.black, // Set the active color to black
 
@@ -935,7 +939,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               activeColor:
                                   Colors.black, // Set the active color to black
 
-                              title: Text('On Facebook Messenger'),
+                              title: const Text('On Facebook Messenger'),
                               value: selectedOption == 'On Facebook Messenger',
                               onChanged: (value) {
                                 setState(() {
@@ -966,13 +970,23 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                               : selectedOption == 'On Email'
                                                   ? 'Enter Email Address.'
                                                   : 'Enter facebook user name.',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 17),
                                     ),
 
                                     const SizedBox(
                                       height: 10,
                                     ),
+
+                                    // CustomTextField(controller: _textEditingController, hintText: selectedOption ==
+                                    //     'On WhatsApp'
+                                    //     ? 'WhatsApp number'
+                                    //     : selectedOption == 'On Call'
+                                    //     ? 'Calling number'
+                                    //     : selectedOption == 'On Email'
+                                    //     ? 'Email Address'
+                                    //     : 'Facebook user name'),
+
                                     TextField(
                                       controller: _textEditingController,
                                       maxLength: selectedOption == 'On WhatsApp'
@@ -987,6 +1001,9 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                               ? TextInputType.text
                                               : TextInputType.phone,
                                       decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 8),
                                         counterText: "",
                                         hintText: selectedOption ==
                                                 'On WhatsApp'
@@ -996,7 +1013,9 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                                 : selectedOption == 'On Email'
                                                     ? 'Email Address'
                                                     : 'Facebook user name',
-                                        border: InputBorder.none,
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                       ),
                                     ),
                                     if (selectedOption ==
@@ -1008,13 +1027,13 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                           text: TextSpan(
                                             text:
                                                 'Having trouble finding your Facebook user id, let us know we will help you. ',
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text:
                                                     'click here to contact us.',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.blue),
                                                 recognizer:
                                                     TapGestureRecognizer()
@@ -1049,7 +1068,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                               Visibility(
                                   visible: isVisibleDiv,
                                   child: Card(
-                                    margin: EdgeInsets.all(
+                                    margin: const EdgeInsets.all(
                                         15.0), // Margin of 10 pixels around the container
                                     child: Image.asset(
                                       'assets/images/PostUploadInProgress.gif',
@@ -1059,7 +1078,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                                     ),
                                   )),
                               ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: blog_string.length +
                                     1, // +1 for the loading indicator
@@ -1126,7 +1145,7 @@ class _AddPost2ScreenState extends ConsumerState<AddPost2Screen> {
                   Colors.blue, // Set the selected item color to white
               unselectedItemColor: Colors.black,
               showUnselectedLabels: true,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.campaign),
                   label: "What's New",
