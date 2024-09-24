@@ -366,6 +366,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   )
               )
           ),
+
+
       floatingActionButton:GestureDetector(onTap: (){
 
         Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddPost1Screen('${widget.CategoryId}','${_storeText(desc_con.text)}')));
@@ -375,7 +377,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             width: 70,
             height: 70,
             decoration: BoxDecoration(
-              color: Colors.white,
+              // color: Colors.red,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Image.asset(

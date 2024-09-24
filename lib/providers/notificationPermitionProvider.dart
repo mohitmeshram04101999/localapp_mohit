@@ -22,137 +22,84 @@ class NotificationPermissionNotifier extends StateNotifier<bool> {
   //
   //
   Future<void> getNotification(BuildContext context) async {
-    logger.t("Statuas");
-    NotificationSettings permissionStatus =
-        await _fireBaseMessaging.getNotificationSettings();
-    bool firstInstall = await Prefs().checkUserFirstInstalled();
-
-    logger.t("${permissionStatus.authorizationStatus}  $firstInstall");
 
 
+
+    bool? firstInstall = await Prefs().checkUserFirstInstalled();
+
+    logger.i("$firstInstall");
 
 
     if(firstInstall)
       {
-        state = await  AwesomeNotifications().requestPermissionToSendNotifications();
+        await AwesomeNotifications().requestPermissionToSendNotifications();
         Prefs().setInstallStatus(false);
-        getNotification(context);
-        return ;
-      }
-
-
-
-
-
-    var b = await _fireBaseMessaging.requestPermission(
-      alert: true,
-      announcement: true,
-      badge: true,
-      carPlay: true,
-      criticalAlert: true,
-      provisional: true,
-      sound: true,
-    );
-
-
-    // if()
-    //   {
-    //
-    //   }
-
-
-    if (permissionStatus.authorizationStatus == AuthorizationStatus.denied) {
-      _isDailogOpen = true;
-      await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.notifications,
-                      size: 40,
-                    ),
-                    Text(
-                      "Please provide Notifications Permission to continue.",
-                      textAlign: TextAlign.center,
-                    ),
-                    if (permissionStatus.authorizationStatus ==
-                        AuthorizationStatus.denied)
-                      ElevatedButton(
-                          onPressed: () async {
-                            AppSettings.openAppSettings(
-                                type: AppSettingsType.notification);
-                            Logger().e("Permission Asked");
-                          },
-                          child: const Text('Open Settings'))
-                  ],
-                ),
-              ));
-      _isDailogOpen = false;
-      await getNotification(context);
-    } else if (permissionStatus.authorizationStatus ==
-        AuthorizationStatus.notDetermined) {
-      var b = await _fireBaseMessaging.requestPermission(
-        alert: true,
-        announcement: true,
-        badge: true,
-        carPlay: true,
-        criticalAlert: true,
-        provisional: true,
-        sound: true,
-      );
-
-      Logger().e("Permission ${b.authorizationStatus}");
-
-      if (b.authorizationStatus == AuthorizationStatus.authorized) {
-        state = true;
-      } else {
-        _isDailogOpen = true;
-        await showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => AlertDialog(
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.notifications,
-                        size: 40,
-                      ),
-                      Text(
-                        "Plese provide Notification permission  provide ${b.authorizationStatus == AuthorizationStatus.denied ? 'Frome Settings' : ''}",
-                        textAlign: TextAlign.center,
-                      ),
-                      if (b.authorizationStatus == AuthorizationStatus.denied)
-                        ElevatedButton(
-                            onPressed: () async {
-                              AppSettings.openAppSettings(
-                                  type: AppSettingsType.notification);
-                              Logger().e("Permission Asked");
-                            },
-                            child: const Text('Open Settings'))
-                    ],
-                  ),
-                ));
-        _isDailogOpen = false;
         await getNotification(context);
+        return ;
+
+
       }
-    }
+
+    var notificationSettings = await _fireBaseMessaging.getNotificationSettings();
+
+    if(notificationSettings.authorizationStatus==AuthorizationStatus.denied)
+      {
+        _isDailogOpen = true;
+            await showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => WillPopScope(
+                  onWillPop: ()async{
+                    var st = await _fireBaseMessaging.getNotificationSettings();
+                    if(st.authorizationStatus==AuthorizationStatus.notDetermined||st.authorizationStatus==AuthorizationStatus.denied)
+                      {
+                        return false;
+                      }
+                    else if(st.authorizationStatus==AuthorizationStatus.authorized){
+                      return true;
+                    }
+                    return false;
+                  },
+                  child: AlertDialog(
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.notifications,
+                              size: 40,
+                            ),
+                            Text(
+                              "Please provide Notifications Permission to continue.",
+                              textAlign: TextAlign.center,
+                            ),
+                            if (notificationSettings.authorizationStatus ==
+                                AuthorizationStatus.denied)
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    AppSettings.openAppSettings(
+                                        type: AppSettingsType.notification);
+                                    Logger().e("Permission Asked");
+                                  },
+                                  child: const Text('Open Settings'))
+                          ],
+                        ),
+                      ),
+                ));
+            _isDailogOpen = false;
+            await getNotification(context);
+      }
+    else if(notificationSettings.authorizationStatus==AuthorizationStatus.notDetermined)
+      {
+        await AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+
+
   }
 
   checkDialog(BuildContext context) async {
     if (_isDailogOpen) {
-      var b = await _fireBaseMessaging.requestPermission(
-        alert: true,
-        announcement: true,
-        badge: true,
-        carPlay: true,
-        criticalAlert: true,
-        provisional: true,
-        sound: true,
-      );
+      var b = await _fireBaseMessaging.getNotificationSettings();
+
       if (b.authorizationStatus == AuthorizationStatus.authorized) {
         Navigator.pop(context);
       }
