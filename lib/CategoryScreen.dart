@@ -198,7 +198,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     return Scaffold(
       floatingActionButton:kDebugMode? FloatingActionButton(
         onPressed: (){
-         ref.read(profileProvider.notifier).updateLocation(context);
+          ref.read(notificationPermissionProvider.notifier).getNotification(context);
         },
       )
 
