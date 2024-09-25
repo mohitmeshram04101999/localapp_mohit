@@ -22,6 +22,8 @@ import 'MyPostScreen.dart';
 import 'constants/Config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:awesome_notifications/awesome_notifications.dart';
+
 
 class CategoryScreen extends ConsumerStatefulWidget {
   @override
@@ -198,7 +200,21 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     return Scaffold(
       floatingActionButton:kDebugMode? FloatingActionButton(
         onPressed: (){
-          ref.read(notificationPermissionProvider.notifier).getNotification(context);
+          // ref.read(notificationPermissionProvider.notifier).getNotification(context);
+
+         Timer(Duration(seconds: 3),(){
+           AwesomeNotifications().createNotification(content: NotificationContent(
+             id: 10,
+             channelKey: "basic_channel",
+             title:"data['title']",
+             body: "data['body']",
+             criticalAlert: true,
+             wakeUpScreen: true,
+
+
+           ));
+         });
+
         },
       )
 

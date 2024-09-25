@@ -831,7 +831,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 child:   Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    CircleAvatar(child: Text('${PostByName.toString()[0]}',style: TextStyle(fontSize: 14),),backgroundColor: Colors.grey,foregroundColor: Colors.white,radius: 14,),
+                                    Container(
+                                        // color: kDebugMode?Colors.green:null,
+                                        child: CircleAvatar(child: Text('${PostByName.toString()[0]}',style: TextStyle(fontSize: 14),),backgroundColor: Colors.grey,foregroundColor: Colors.white,radius: 14,)),
                                     const SizedBox(width: 4),
                                     Text(
                                       '${PostByName}',
@@ -853,19 +855,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                 Row(
                                   children: [
                                     Container(
-                                        height: 20,
+
                                         width: 20,
-                                        // color: Colors.red,
-                                        child: Stack(
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            Positioned(
-                                                top: -4,
-                                                left: -4,right: 0,
-                                                bottom: -4,
-                                                child: Icon(Icons.location_pin)),
-                                          ],
-                                        )),
+                                        margin: EdgeInsets.only(right: 3,left: 3),
+                                        // color: kDebugMode?Colors.green:null,
+                                        child: Icon(Icons.location_pin)),
                                     Text('${AreaName}',style: StyleConfiguration.areaTextStyle,)
                                   ],
                                 ),
