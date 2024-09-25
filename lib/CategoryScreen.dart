@@ -1,36 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
-
+import 'package:localapp/models/UserCategory.dart';
 import 'package:localapp/providers/location%20permission%20provider.dart';
 import 'package:localapp/providers/notificationPermitionProvider.dart';
 import 'package:localapp/providers/phoneNumberPerovider.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:logger/logger.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:platform_device_id/platform_device_id.dart';
-import 'package:flutter/material.dart';
-import 'package:localapp/models/UserCategory.dart';
+import 'package:shimmer/shimmer.dart';
+
 import 'CityScreen.dart';
 import 'HomeScreen.dart';
 import 'JobScreen.dart';
 import 'MyPostScreen.dart';
 import 'constants/Config.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:awesome_notifications/awesome_notifications.dart';
-
 
 class CategoryScreen extends ConsumerStatefulWidget {
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBindingObserver{
+class _CategoryScreenState extends ConsumerState<CategoryScreen>
+    with WidgetsBindingObserver {
   int selectedIdx = -1;
   bool showShimmer = true; // Track whether to show shimmer or data
   final Duration shimmerDuration = const Duration(seconds: 2);
@@ -40,9 +41,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
   List user_category_data = [];
   List<User_Category_list> user_category_string = [];
 
-
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state)async{
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
     logger.w(state);
@@ -57,9 +57,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     super.dispose();
   }
 
-
   void selectItem(int index) {
-
     setState(() {
       if (index == 0) {
         Navigator.push(
@@ -100,7 +98,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
 
     await ref.read(phoneNumberProvider.notifier).requestPermission();
 
-
     await ref.read(profileProvider.notifier).getUser(context);
     String? num = ref.read(phoneNumberProvider);
     print("Phone Num $num");
@@ -110,7 +107,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
 
   @override
   void initState() {
-
     WidgetsBinding.instance.addObserver(this);
 
     myInit();
@@ -157,7 +153,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     );
   }
 
-
   getUserCategory() async {
     showLoaderDialog(context);
 
@@ -198,27 +193,25 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      floatingActionButton:kDebugMode? FloatingActionButton(
-        onPressed: (){
-          // ref.read(notificationPermissionProvider.notifier).getNotification(context);
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: () {
+                // ref.read(notificationPermissionProvider.notifier).getNotification(context);
 
-         Timer(Duration(seconds: 3),(){
-           AwesomeNotifications().createNotification(content: NotificationContent(
-             id: 10,
-             channelKey: "basic_channel",
-             title:"data['title']",
-             body: "data['body']",
-             criticalAlert: true,
-             wakeUpScreen: true,
-
-
-           ));
-         });
-
-        },
-      )
-
-          :null,
+                Timer(Duration(seconds: 3), () {
+                  AwesomeNotifications().createNotification(
+                      content: NotificationContent(
+                    id: 10,
+                    channelKey: "basic_channel",
+                    title: "data['title']",
+                    body: "data['body']",
+                    criticalAlert: true,
+                    wakeUpScreen: true,
+                  ));
+                });
+              },
+            )
+          : null,
 
       //Tag From BackGround
       backgroundColor: Colors.white,
@@ -291,9 +284,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                           //card That Showing That Page
                           GestureDetector(
                             onTap: () {
-
-
-                              logger.e('wNuimber (${user_category_string[i].whatsappNumber})');
+                              logger.e(
+                                  'wNuimber (${user_category_string[i].whatsappNumber})');
 
                               // insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: user_category_string[i].categoryId, type: InsertLogType.category);
 
@@ -301,11 +293,15 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomeScreen(
-                                        user_category_string[i].whatsappText,
-                                        user_category_string[i].whatsappNumber,
+                                            user_category_string[i]
+                                                .whatsappText,
+                                            user_category_string[i]
+                                                .whatsappNumber,
                                             user_category_string[i].categoryId,
                                             user_category_string[i].privacyType,
-                                            subSubCategoryLabel: user_category_string[i].subSubCategoryLabel,
+                                            subSubCategoryLabel:
+                                                user_category_string[i]
+                                                    .subSubCategoryLabel,
                                             privacyImage:
                                                 user_category_string[i]
                                                     .privacyImage,
@@ -388,9 +384,9 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> with WidgetsBin
                                                           width: 80,
                                                           height: 80,
                                                         )),
-                                            if(kDebugMode)
-                                            Text(
-                                                "p ${user_category_string[i].privacyType}  ${user_category_string[i].categoryId}")
+                                            if (kDebugMode)
+                                              Text(
+                                                  "p ${user_category_string[i].privacyType}  ${user_category_string[i].categoryId}")
                                           ],
                                         ),
                                 ),

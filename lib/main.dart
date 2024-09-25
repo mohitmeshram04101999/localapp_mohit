@@ -1,24 +1,23 @@
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/SplashScreen.dart';
+import 'package:localapp/constants/prefs_file.dart';
 import 'package:localapp/noticication%20function.dart';
-import 'package:logger/logger.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:platform_device_id/platform_device_id.dart';
+
 import 'BlogDetail.dart';
 import 'constants/Config.dart';
-import 'constants/prefs_file.dart';
-import 'package:image/image.dart' as img;
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +25,7 @@ Future<void> main() async {
 
   //
   AwesomeNotifications().initialize(
+    debug: true,
     // Your app icon
     'resource://drawable/ic_launcher',
     [
@@ -39,41 +39,36 @@ Future<void> main() async {
       )
     ],
   );
-
-  //
+  ReceivedAction? initialAction =
+      await AwesomeNotifications().getInitialNotificationAction();
   AwesomeNotifications().setListeners(
     onActionReceivedMethod: tapHandler,
   );
 
-  //
   bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
   if (!isAllowed) {
     // AwesomeNotifications().requestPermissionToSendNotifications();
   }
-
-  //
   FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     if (message != null) {
       Navigator.of(navigatorKey.currentContext!).pop();
-      Logger().w('message from getInitialMessage');
-      // showbackgroundNotification(message);
+      showbackgroundNotification(message);
     }
   });
-
-  //
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
 
-
-  //
   FirebaseMessaging.onBackgroundMessage(showbackgroundNotification);
 
-  //
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    logger.f("onMessage: ${message.data}");
 
-    Logger().w("from onMessageOpenedApp ");
+    await showbackgroundNotification(message);
+  });
 
-    // await showbackgroundNotification(message);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    logger.f("onMessage: ${message.data}");
+    await showbackgroundNotification(message);
   });
 
   //
@@ -83,8 +78,6 @@ Future<void> main() async {
   FirebaseMessaging.instance.getToken().then((token) {
     print("tokenxssn: $token");
   });
-
-  //
   FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
@@ -94,18 +87,19 @@ Future<void> main() async {
     provisional: false,
     sound: true,
   );
-
-  //
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark));
-  runApp(const ProviderScope(child: main_app()));
+  runApp(ProviderScope(
+      child: main_app(
+    initialAction: initialAction,
+  )));
 }
 
 @pragma('vm:entry-point')
 Future<void> showbackgroundNotification(RemoteMessage message) async {
-  logger.w("from back Ground Rece ver");
-  logger.i('data from message ${message.data}');
+  logger.f("onMessage: ${message.data}");
+
   if (message.data.isNotEmpty) {
     final blogId = message.data['blog_id'];
     if (blogId != null && blogId.isNotEmpty) {
@@ -139,6 +133,12 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
       print('Error downloading image: $e');
     }
   }
+  //convert message.data to Map<String, String?>? type from Map<String, dynamic>
+  Map<String, String?>? data = message.data.map((key, value) {
+    return MapEntry(key, value as String?);
+  });
+  logger.f("onMessage: ${data}");
+
 // Handle the creation of the notification UI
   AwesomeNotifications().createNotification(
     content: NotificationContent(
@@ -146,6 +146,7 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
       channelKey: 'basic_channel',
       title: message.data['title'],
       body: message.data['body'],
+      payload: data,
       bigPicture: bigPicturePath != null ? 'file://$bigPicturePath' : null,
       notificationLayout: bigPicturePath != null
           ? NotificationLayout.BigPicture
@@ -154,13 +155,12 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
   );
 }
 
-
-//
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 class main_app extends StatefulWidget {
-  const main_app({Key? key}) : super(key: key);
+  ReceivedAction? initialAction;
+  main_app({Key? key, required this.initialAction}) : super(key: key);
 
   @override
   _main_appState createState() => _main_appState();
@@ -177,8 +177,30 @@ class _main_appState extends State<main_app> {
   @override
   void initState() {
     getToken();
-    //_initializeNotifications(); // Ensure this is called during startup
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.initialAction != null &&
+          widget.initialAction?.payload != null &&
+          navigatorKey.currentContext != null) {
+        Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+            builder: (context) => BlogDetailScreen(
+                widget.initialAction!.payload!["blog_id"]!,
+                "Notification",
+                "",
+                false),
+          ),
+        );
+      }
+    });
+    //_initializeNotifications(); // Ensure this is called during startup
+    // if (widget.initialAction != null &&
+    //     widget.initialAction!.payload?['blog_id'] != null) {
+    // Future.delayed(Duration(seconds: 0), () {
+
+    // });
+    // }
     super.initState();
   }
 
@@ -213,7 +235,6 @@ class _main_appState extends State<main_app> {
     return MaterialApp(
         title: 'Local App',
         navigatorKey: navigatorKey, // Set the navigator key
-
         theme: ThemeData(
             primarySwatch: Colors.blue,
             inputDecorationTheme: InputDecorationTheme(

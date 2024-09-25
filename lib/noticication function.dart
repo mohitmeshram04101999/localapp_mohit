@@ -1,15 +1,15 @@
+import 'dart:io';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:localapp/BlogDetail.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/Config.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:http/http.dart' as http;
 import 'package:localapp/main.dart';
-import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 // this will handle notification when App is open
 void onMessageHandler(RemoteMessage message) async {
@@ -101,8 +101,6 @@ Future<void> onBackGroundMessage(RemoteMessage message) async {
     }
   }
 
-
-
   logger.w("payLoad Is $payload");
 // Handle the creation of the notification UI
   AwesomeNotifications().createNotification(
@@ -134,6 +132,7 @@ Future<void> tapHandler(ReceivedAction receivedAction) async {
   }
 
   if (receivedAction.actionType == ActionType.Default) {
+    logger.i("Default Action ${receivedAction.payload}");
     if (data?["blog_id"] != null && navigatorKey.currentContext != null) {
       Navigator.push(
           navigatorKey.currentContext!,
