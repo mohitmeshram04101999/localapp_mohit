@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:localapp/BlogDetail.dart';
 import 'package:localapp/constants/month.dart';
 import 'package:localapp/constants/postPrivetType.dart';
+import 'package:localapp/constants/style%20configuration.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'constants/Config.dart';
@@ -216,49 +217,31 @@ class _BlogListWidgetState extends State<BlogListWidget> {
 
                   if (widget.blog.postByName != "")
                     Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.grey.shade600,
-                        radius: 14,
-                        child: Text(
-                          widget.blog.postByName![0].toUpperCase(),
-                          style: const TextStyle(
-                              fontSize: 12, color: Colors.white),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          // color: kDebugMode?Colors.green:null,
+                            child: CircleAvatar(child: Text('${widget.blog.postByName.toString()[0]}',style: TextStyle(fontSize: 14),),backgroundColor: Colors.grey,foregroundColor: Colors.white,radius: 14,)),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${widget.blog.postByName}',
+                          style:StyleConfiguration.areaTextStyle,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                          child: Text(
-                            widget.blog.postByName ?? "",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16
-                            ),
-                          )),
-                    ],
-                  ),
+                        // Add spacing between the icon and text
+                      ],
+                    ),
 
                   const SizedBox(height: 10,),
                   if(widget.blog.area!=null&&widget.blog.area.toString().isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.all(0),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.location_pin),
-                          Text(
-                            ' ${widget.blog.area ?? "unknown"}',
-                            style: const TextStyle(
-                                // color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16
-                            ),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                            width: 20,
+                            margin: EdgeInsets.only(right: 3,left: 3),
+                            // color: kDebugMode?Colors.green:null,
+                            child: Icon(Icons.location_pin)),
+                        Text('${widget.blog.area}',style: StyleConfiguration.areaTextStyle,)
+                      ],
                     ),
 
 

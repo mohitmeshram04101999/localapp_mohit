@@ -7,6 +7,8 @@ import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/SplashScreen.dart';
+import 'package:localapp/noticication%20function.dart';
+import 'package:logger/logger.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:path_provider/path_provider.dart';
 import 'BlogDetail.dart';
@@ -40,15 +42,7 @@ Future<void> main() async {
 
   //
   AwesomeNotifications().setListeners(
-    onActionReceivedMethod: (receivedAction) async {
-// If the app was terminated, initialize the app
-      if (receivedAction.actionType == ActionType.SilentAction ||
-          receivedAction.actionType == ActionType.SilentBackgroundAction) {
-// Do something in the background
-      } else {
-// Handle the click and navigate to the blog detail page
-      }
-    },
+    onActionReceivedMethod: tapHandler,
   );
 
   //
@@ -61,7 +55,8 @@ Future<void> main() async {
   FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     if (message != null) {
       Navigator.of(navigatorKey.currentContext!).pop();
-      showbackgroundNotification(message);
+      Logger().w('message from getInitialMessage');
+      // showbackgroundNotification(message);
     }
   });
 
@@ -75,13 +70,14 @@ Future<void> main() async {
 
   //
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    await showbackgroundNotification(message);
+
+    Logger().w("from onMessageOpenedApp ");
+
+    // await showbackgroundNotification(message);
   });
 
   //
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    await showbackgroundNotification(message);
-  });
+  FirebaseMessaging.onMessage.listen(onMessageHandler);
 
   //
   FirebaseMessaging.instance.getToken().then((token) {
@@ -108,6 +104,8 @@ Future<void> main() async {
 
 @pragma('vm:entry-point')
 Future<void> showbackgroundNotification(RemoteMessage message) async {
+  logger.w("from back Ground Rece ver");
+  logger.i('data from message ${message.data}');
   if (message.data.isNotEmpty) {
     final blogId = message.data['blog_id'];
     if (blogId != null && blogId.isNotEmpty) {
