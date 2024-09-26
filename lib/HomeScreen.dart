@@ -1,15 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/APIs/inselLog%20Method.dart';
 import 'package:localapp/CategoryScreen.dart';
-import 'package:localapp/component/logiin%20dailog.dart';
-import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/postPrivetType.dart';
 import 'package:localapp/models/BlogList.dart';
 import 'package:localapp/models/Category.dart';
@@ -18,29 +18,19 @@ import 'package:localapp/models/insertLogType.dart';
 import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:localapp/providers/subSub%20Catoge.dart';
 import 'package:logger/logger.dart';
-import 'dart:convert';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
-
-import 'package:connectivity/connectivity.dart';
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'AddPostScreen.dart';
-import 'BlogDetail.dart';
 import 'BlogListWidget.dart';
 import 'CityScreen.dart';
-import 'InternetConnectivity.dart';
 import 'InternetLostScreen.dart';
 import 'MoreScreen.dart';
 import 'MyPostScreen.dart';
-import 'PostScreen.dart';
 import 'constants/Config.dart';
 import 'models/City.dart';
 import 'models/LocalAd.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final String catPrivacyType;
@@ -49,7 +39,9 @@ class HomeScreen extends ConsumerStatefulWidget {
   final String? whatsAppText;
   String CategoryId;
   final String? whatsAppNumber;
-  HomeScreen(this.whatsAppText,this.whatsAppNumber,this.CategoryId, this.catPrivacyType, {this.privacyImage,this.subSubCategoryLabel});
+  HomeScreen(this.whatsAppText, this.whatsAppNumber, this.CategoryId,
+      this.catPrivacyType,
+      {this.privacyImage, this.subSubCategoryLabel});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -71,7 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String app_version = '';
   String current_app_version = '4';
   String category_label = '';
-  String subSubCategoryLabel ="";
+  String subSubCategoryLabel = "";
   bool filter_selected = false;
   String category_name = '';
   String? whatsAppText;
@@ -104,8 +96,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     // permissionPhotoOrStorage();
 
-    Future.delayed(Duration(milliseconds: 1), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
+        logger.f('int_selected_category${widget.CategoryId}');
         print('int_selected_category${widget.CategoryId}');
         selected_category = int.parse(widget.CategoryId);
       });
@@ -137,11 +130,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       // final int sdkInt = android.version.sdkInt ?? 0;
       // print('sdkInt${sdkInt}');
       // if (sdkInt > 32) {
-        final PermissionStatus try1 = await Permission.photos.request();
-        final PermissionStatus try2 = await Permission.camera.request();
+      final PermissionStatus try1 = await Permission.photos.request();
+      final PermissionStatus try2 = await Permission.camera.request();
       // } else {
-        final PermissionStatus try3 = await Permission.storage.request();
-        final PermissionStatus try4 = await Permission.camera.request();
+      final PermissionStatus try3 = await Permission.storage.request();
+      final PermissionStatus try4 = await Permission.camera.request();
       // }
     } else {}
     return Future<bool>.value(perm);
@@ -235,15 +228,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'blog_page': '${blog_page}',
       'user_id': '${deviceId}',
       'city_id': '1',
-      'subsubcategory_id':'${sub_sub_category??0}'
+      'subsubcategory_id': '${sub_sub_category ?? 0}'
     };
 
-    http.Response response = await http.post(Uri.parse(url), body:d).timeout(Duration(seconds: 20));
+    http.Response response =
+        await http.post(Uri.parse(url), body: d).timeout(Duration(seconds: 20));
 
-
-
-    Logger()
-        .e("THis Is new $url\n ${response.statusCode} \n${jsonDecode(response.body)}\n$d");
+    Logger().e(
+        "THis Is new $url\n ${response.statusCode} \n${jsonDecode(response.body)}\n$d");
     // Set timeout to 30 seconds
     Map<String, dynamic> data = json.decode(response.body);
 
@@ -408,12 +400,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       'blog_page': '${blog_page}',
       'user_id': '${deviceId}',
       'city_id': '1',
-      'subsubcategory_id':'${sub_sub_category??0}'
+      'subsubcategory_id': '${sub_sub_category ?? 0}'
     });
 
     logger.i(
         "$url \n${response?.statusCode} \n${jsonDecode(response.body ?? "")}");
-
 
     Map<String, dynamic> data = json.decode(response.body);
     status = data["success"];
@@ -645,7 +636,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ),
   );
 
-
   RangeValues values = RangeValues(15, 15);
 
   @override
@@ -711,7 +701,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         elevation: 0.0, // Remove the bottom border
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: (){
+          onPressed: () {
             ref.read(subSubCategoryProvider.notifier).clean();
             Navigator.of(context).pop();
           },
@@ -819,7 +809,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 filter_selected = false;
                                 selected_sub_category = 0;
                                 sub_sub_category = null;
-                                ref.read(subSubCategoryProvider.notifier).clean();
+                                ref
+                                    .read(subSubCategoryProvider.notifier)
+                                    .clean();
                               });
                               Future.delayed(Duration(milliseconds: 1), () {
                                 getHome();
@@ -851,7 +843,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
       body: WillPopScope(
           onWillPop: () async {
-
             ref.read(subSubCategoryProvider.notifier).clean();
 
             Navigator.of(context).pushAndRemoveUntil(
@@ -865,63 +856,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView(
               controller: _scrollController,
               children: [
-
-
-
-
                 //SubSubCategory Drop Down Button
                 Consumer(
                   builder: (context, ref, child) {
-
-                    if(ref.watch(subSubCategoryProvider).length==0)
-                      {
-                        return const SizedBox();
-                      }
+                    if (ref.watch(subSubCategoryProvider).length == 0) {
+                      return const SizedBox();
+                    }
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: SizedBox(
                         height: 40,
                         child: DropdownButtonFormField(
+                            icon: sub_sub_category == null
+                                ? Image.asset(
+                                    'assets/images/Dropdownicon.png',
+                                    height: 20.0,
+                                    width: 20.0,
+                                    // adjust height and width according to your image size
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        sub_sub_category = null;
+                                      });
+                                      Future.delayed(Duration(milliseconds: 1),
+                                          () {
+                                        getHome();
+                                      });
+                                    },
+                                    child: Image.asset(
+                                      'assets/images/crossicon.png',
+                                      height: 20.0,
+                                      width: 20.0,
+                                      // adjust height and width according to your image size
+                                    ),
+                                  ),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 14),
+                            value: sub_sub_category,
 
-                          icon: sub_sub_category==null?Image.asset(
-                            'assets/images/Dropdownicon.png',
-                            height: 20.0,
-                            width: 20.0,
-                            // adjust height and width according to your image size
-                          ):GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                sub_sub_category = null;
-
-                              });
-                              Future.delayed(Duration(milliseconds: 1), () {
-                                getHome();
-                              });
-                            },
-                            child: Image.asset(
-                              'assets/images/crossicon.png',
-                              height: 20.0,
-                              width: 20.0,
-                              // adjust height and width according to your image size
-                            ),
-                          ),
-
-                          style: const  TextStyle(color: Colors.black,fontSize: 14),
-
-                          value: sub_sub_category,
-
-                          //
+                            //
                             decoration: InputDecoration(
+                              hintText: (widget.subSubCategoryLabel != 'null' &&
+                                      widget.subSubCategoryLabel
+                                          .toString()
+                                          .isNotEmpty)
+                                  ? widget.subSubCategoryLabel
+                                  : 'Sub Sub Category ',
 
-                              hintText: (widget.subSubCategoryLabel!='null'&&widget.subSubCategoryLabel.toString().isNotEmpty)?widget.subSubCategoryLabel:'Sub Sub Category ',
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 8),
 
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-
-                              hintStyle:const  TextStyle(color: Colors.black,fontSize: 14),
-
-
-
+                              hintStyle: const TextStyle(
+                                  color: Colors.black, fontSize: 14),
 
                               //
                               enabledBorder: dropDownInputBorder,
@@ -938,13 +926,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             //
                             onChanged: (d) {
-                            sub_sub_category = d;
-                            insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: d.toString(), type: InsertLogType.subSubCategory);
-                            getHome();
+                              sub_sub_category = d;
+                              insertLog(context,
+                                  deviceId:
+                                      ref.read(profileProvider)?.deviceId ?? "",
+                                  id: d.toString(),
+                                  type: InsertLogType.subSubCategory);
+                              getHome();
                             },
                             items: [
-                              for(var item in ref.watch(subSubCategoryProvider))
-                                DropdownMenuItem(child: Text(item.subSubCategoryName??""),value: int.parse(item.subSubCategoryId??'0'),),
+                              for (var item
+                                  in ref.watch(subSubCategoryProvider))
+                                DropdownMenuItem(
+                                  child: Text(item.subSubCategoryName ?? ""),
+                                  value:
+                                      int.parse(item.subSubCategoryId ?? '0'),
+                                ),
                             ]),
                       ),
                     );
@@ -1162,51 +1159,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
       //Orignal Button
       floatingActionButton: Consumer(
-        builder: ( context2,  ref,  child) {
+        builder: (context2, ref, child) {
           var profile = ref.read(profileProvider);
 
+          return FloatingActionButton(
+            onPressed: () {
+              Logger().e('${profile!.groupAccess}');
 
-          return FloatingActionButton(onPressed: ()
-          {
-            Logger().e('${profile!.groupAccess}');
+              if ((widget.catPrivacyType != CategoryPrivacyType.private &&
+                      widget.catPrivacyType !=
+                          CategoryPrivacyType.semiPrivate) ||
+                  profile!.groupAccess
+                      .toString()
+                      .split(",")
+                      .contains(widget.CategoryId)) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            AddPostScreen('${selected_category}')));
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (c) => AlertDialog(
+                          content: InkWell(
+                              onTap: () {
+                                logger.t(
+                                    "${widget.whatsAppNumber} (${widget.whatsAppText})");
+                                if (widget.whatsAppNumber
+                                        .toString()
+                                        .isNotEmpty &&
+                                    widget.whatsAppNumber.toString() !=
+                                        "null") {
+                                  launch(
+                                      'https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText ?? ""}');
+                                  // launch('https://wa.me/+917747071882?text=hi hello');
+                                }
+                              },
+                              child: Image.network(
+                                widget.privacyImage ?? "",
+                                // loadingBuilder: (context, child, loadingProgress) {
+                                //     if(loadingProgress==null)
+                                // },
+                              )),
+                        ));
 
-            if ((widget.catPrivacyType != CategoryPrivacyType.private &&
-                widget.catPrivacyType !=
-                    CategoryPrivacyType.semiPrivate) ||
-                profile!.groupAccess.toString()
-                    .split(",")
-                    .contains(widget.CategoryId)) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          AddPostScreen('${selected_category}')));
-            } else {
-              showDialog(
-                  context: context,
-                  builder: (c) => AlertDialog(
-                    content: InkWell(
-                      onTap: (){
-                        logger.t("${widget.whatsAppNumber} (${widget.whatsAppText})");
-                        if(widget.whatsAppNumber.toString().isNotEmpty&&widget.whatsAppNumber.toString()!="null")
-                          {
-                            launch('https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText??""}');
-                            // launch('https://wa.me/+917747071882?text=hi hello');
-                          }
-                      },
-                        child: Image.network(
-                            widget.privacyImage ?? "",
-                          // loadingBuilder: (context, child, loadingProgress) {
-                          //     if(loadingProgress==null)
-                          // },
-                        )),
-                  ));
+                // showMessage(context2, 'Tap');
 
-              // showMessage(context2, 'Tap');
-
-              return;
-            }
-          },child: Icon(Icons.add),);
+                return;
+              }
+            },
+            child: Icon(Icons.add),
+          );
 
           // return GestureDetector(
           //     onTap: () {
@@ -1350,14 +1354,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
-                              insertLog(context, deviceId: ref.read(profileProvider)?.deviceId??"", id: sub_categorylist_string[i].SubCategoryId, type: InsertLogType.subCategory);
+                              insertLog(context,
+                                  deviceId:
+                                      ref.read(profileProvider)?.deviceId ?? "",
+                                  id: sub_categorylist_string[i].SubCategoryId,
+                                  type: InsertLogType.subCategory);
                               setState(() {
                                 sub_sub_category = null;
                                 selected_sub_category = int.parse(
                                     sub_categorylist_string[i].SubCategoryId);
 
-                                ref.read(subSubCategoryProvider.notifier).clean();
-                                ref.read(subSubCategoryProvider.notifier).lodeCategory(context, selected_sub_category.toString());
+                                ref
+                                    .read(subSubCategoryProvider.notifier)
+                                    .clean();
+                                ref
+                                    .read(subSubCategoryProvider.notifier)
+                                    .lodeCategory(context,
+                                        selected_sub_category.toString());
                                 category_label = sub_categorylist_string[i]
                                     .SubCategoryName as String;
                               });

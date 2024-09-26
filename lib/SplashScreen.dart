@@ -1,14 +1,12 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:localapp/CategoryScreen.dart';
-import 'package:localapp/component/testScren.dart';
-
-import 'HomeScreen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  ReceivedAction? initialAction;
+  SplashScreen({Key? key, this.initialAction}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -38,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
       print('User declined or has not accepted permission');
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -46,22 +45,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> init() async {
     await Future.delayed(const Duration(seconds: 2));
-      // Home().launch(context,isNewTask: true);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CategoryScreen(),
-            // builder: (context) => TestScreen(),
-          ));
+    // Home().launch(context,isNewTask: true);
 
-
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              CategoryScreen(initialAction: widget.initialAction),
+          // builder: (context) => TestScreen(),
+        ));
   }
 
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +72,6 @@ class _SplashScreenState extends State<SplashScreen> {
             const Image(
               image: AssetImage('assets/images/splash_screen.gif'),
             ),
-
           ],
         ),
       ),

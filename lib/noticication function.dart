@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:localapp/BlogDetail.dart';
+import 'package:localapp/HomeScreen.dart';
 import 'package:localapp/component/show%20coustomMesage.dart';
 import 'package:localapp/constants/Config.dart';
+import 'package:localapp/constants/postPrivetType.dart';
 import 'package:localapp/main.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -123,7 +125,7 @@ Future<void> tapHandler(ReceivedAction receivedAction) async {
   logger.i(
       "Tap On Notification\n(${receivedAction.actionType})\n ${receivedAction.payload}");
 
-  var data = receivedAction.payload;
+  Map<String, String?>? data = receivedAction.payload;
   await WidgetsFlutterBinding.ensureInitialized();
 
   if (navigatorKey.currentContext != null && kDebugMode) {
@@ -134,11 +136,21 @@ Future<void> tapHandler(ReceivedAction receivedAction) async {
   if (receivedAction.actionType == ActionType.Default) {
     logger.i("Default Action ${receivedAction.payload}");
     if (data?["blog_id"] != null && navigatorKey.currentContext != null) {
-      Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (c) =>
-                  BlogDetailScreen(data?["blog_id"] ?? "", "", "", false)));
+      if (data?['type_id'] == 'Category') {
+        logger.f(int.parse(data!['blog_id']!));
+
+        Navigator.push(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(
+                builder: (c) => HomeScreen(
+                    "", "", data['blog_id']!, CategoryPrivacyType.public)));
+      } else {
+        Navigator.push(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(
+                builder: (c) =>
+                    BlogDetailScreen(data?["blog_id"] ?? "", "", "", false)));
+      }
     }
   }
 }

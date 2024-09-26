@@ -14,7 +14,6 @@ import 'package:localapp/noticication%20function.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
-import 'BlogDetail.dart';
 import 'constants/Config.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -100,24 +99,24 @@ Future<void> main() async {
 Future<void> showbackgroundNotification(RemoteMessage message) async {
   logger.f("onMessage: ${message.data}");
 
-  if (message.data.isNotEmpty) {
-    final blogId = message.data['blog_id'];
-    if (blogId != null && blogId.isNotEmpty) {
-      if (navigatorKey.currentContext != null) {
-        Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-            builder: (context) => BlogDetailScreen(
-              blogId,
-              'Notification',
-              '', // Pass other parameters as needed
-              false,
-            ),
-          ),
-        );
-      }
-    }
-  }
+  // if (message.data.isNotEmpty) {
+  //   final blogId = message.data['blog_id'];
+  //   if (blogId != null && blogId.isNotEmpty) {
+  //     if (navigatorKey.currentContext != null) {
+  //       Navigator.push(
+  //         navigatorKey.currentContext!,
+  //         MaterialPageRoute(
+  //           builder: (context) => BlogDetailScreen(
+  //             blogId,
+  //             'Notification',
+  //             '', // Pass other parameters as needed
+  //             false,
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
   String? imageUrl = message.data['image_url'];
 
   String? bigPicturePath;
@@ -178,22 +177,7 @@ class _main_appState extends State<main_app> {
   void initState() {
     getToken();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.initialAction != null &&
-          widget.initialAction?.payload != null &&
-          navigatorKey.currentContext != null) {
-        Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-            builder: (context) => BlogDetailScreen(
-                widget.initialAction!.payload!["blog_id"]!,
-                "Notification",
-                "",
-                false),
-          ),
-        );
-      }
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     //_initializeNotifications(); // Ensure this is called during startup
     // if (widget.initialAction != null &&
     //     widget.initialAction!.payload?['blog_id'] != null) {
@@ -239,6 +223,8 @@ class _main_appState extends State<main_app> {
             primarySwatch: Colors.blue,
             inputDecorationTheme: InputDecorationTheme(
                 helperStyle: TextStyle(color: Colors.black))),
-        home: SplashScreen());
+        home: SplashScreen(
+          initialAction: widget.initialAction,
+        ));
   }
 }

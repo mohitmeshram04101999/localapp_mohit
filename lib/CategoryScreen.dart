@@ -8,8 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:localapp/BlogDetail.dart';
 import 'package:localapp/MoreScreen.dart';
 import 'package:localapp/component/logiin%20dailog.dart';
+import 'package:localapp/constants/postPrivetType.dart';
+import 'package:localapp/main.dart';
 import 'package:localapp/models/UserCategory.dart';
 import 'package:localapp/providers/location%20permission%20provider.dart';
 import 'package:localapp/providers/notificationPermitionProvider.dart';
@@ -26,6 +29,8 @@ import 'MyPostScreen.dart';
 import 'constants/Config.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
+  ReceivedAction? initialAction;
+  CategoryScreen({Key? key, this.initialAction}) : super(key: key);
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
@@ -108,7 +113,34 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-
+    if (widget.initialAction != null &&
+        widget.initialAction?.payload != null &&
+        navigatorKey.currentContext != null) {
+      if (widget.initialAction!.payload!['type_id'] == "Category") {
+        logger.f("initialAction: ${widget.initialAction?.payload}");
+        Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                    '',
+                    '',
+                    widget.initialAction!.payload!["blog_id"]!,
+                    CategoryPrivacyType.public,
+                  )),
+        );
+      } else {
+        Navigator.push(
+          navigatorKey.currentContext!,
+          MaterialPageRoute(
+            builder: (context) => BlogDetailScreen(
+                widget.initialAction!.payload!["blog_id"]!,
+                "Notification",
+                "",
+                false),
+          ),
+        );
+      }
+    }
     myInit();
 
     Timer(shimmerDuration, () {
