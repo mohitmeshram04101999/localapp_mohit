@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
-import 'package:localapp/component/show%20coustomMesage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:localapp/constants/month.dart';
 import 'package:localapp/constants/style%20configuration.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter/material.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 import 'BlogDetail.dart';
 import 'constants/Config.dart';
 import 'models/BlogList.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 class MyBlogListWidget extends StatefulWidget {
   @override
@@ -68,18 +68,15 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
 
     // Your widget implementation for displaying a single blog item
     return GestureDetector(
-      
-      onLongPress: (){
-        if(kDebugMode)
-          {
-            showDialog(context: context, builder:(c)=> AlertDialog(
-              content: Text(
-                blogListToJson(widget.blog)
-              ),
-            ));
-          }
+      onLongPress: () {
+        if (kDebugMode) {
+          showDialog(
+              context: context,
+              builder: (c) => AlertDialog(
+                    content: Text(blogListToJson(widget.blog)),
+                  ));
+        }
       },
-      
       onTap: () {
         Navigator.push(
           context,
@@ -103,7 +100,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
           margin: EdgeInsets.all(10.0),
           padding: EdgeInsets.all(12.0),
           child: Container(
-            color: kDebugMode?Colors.grey.shade300:null,
+            color: kDebugMode ? Colors.grey.shade300 : null,
             child: Column(
               children: [
                 if (widget.blog.videoLink != '') ...[
@@ -142,8 +139,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                 ],
                 SizedBox(height: 20),
 
-
-                if(showShimmer)...[
+                if (showShimmer) ...[
                   Column(
                     children: [
                       SizedBox(height: 20),
@@ -158,11 +154,12 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                       )
                     ],
                   )
-                ]
-                else...[
-
+                ] else ...[
                   Html(
-                    data: widget.blog.heading.toString()!='null'&&widget.blog.heading.toString().isNotEmpty?widget.blog.heading.toString():widget.blog.text.toString(),
+                    data: widget.blog.heading.toString() != 'null' &&
+                            widget.blog.heading.toString().isNotEmpty
+                        ? widget.blog.heading.toString()
+                        : widget.blog.text.toString(),
                     style: {
                       "body": Style(
                         padding: EdgeInsets.zero,
@@ -171,7 +168,6 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                     },
                   ),
                 ],
-
 
                 showShimmer
                     ? Column(
@@ -202,59 +198,79 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ),
                       ),
 
-
-                const SizedBox(height: 8,),
-
-                if(widget.blog.area.toString()!="null"&&widget.blog.area.toString().length>0)
-                Row(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: 20,
-                        // color: Colors.red,
-                        child: Stack(
-                      clipBehavior: Clip.none,
-                          children: [
-                            Positioned(
-                              top: -4,
-                              left: -4,right: 0,
-                                bottom: -4,
-                                child: Icon(Icons.location_pin)),
-                          ],
-                        )),
-                    Text('${widget.blog.area}',style: StyleConfiguration.areaTextStyle,)
-                  ],
+                const SizedBox(
+                  height: 8,
                 ),
 
-
+                if (widget.blog.area.toString() != "null" &&
+                    widget.blog.area.toString().length > 0)
+                  Row(
+                    children: [
+                      Container(
+                          height: 20,
+                          width: 20,
+                          // color: Colors.red,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                  top: -4,
+                                  left: -4,
+                                  right: 0,
+                                  bottom: -4,
+                                  child: Icon(Icons.location_pin)),
+                            ],
+                          )),
+                      Text(
+                        '${widget.blog.area}',
+                        style: StyleConfiguration.areaTextStyle,
+                      )
+                    ],
+                  ),
 
                 //totalviews
-                const SizedBox(height: 8,),
+                const SizedBox(
+                  height: 8,
+                ),
                 Row(
                   children: [
-                    const Icon(Icons.remove_red_eye,size: 16,color: Colors.grey,),
-                    const SizedBox(width: 4,),
-                    Text('Total Views: ${widget.blog.totalClicks??0}',style: StyleConfiguration.greySmall,)
+                    const Icon(
+                      Icons.remove_red_eye,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      'Total Views: ${widget.blog.totalClicks ?? 0}',
+                      style: StyleConfiguration.greySmall,
+                    )
                   ],
                 ),
 
-
                 //ExpireDate
-                if(widget.blog.endDate.toString()!='null'&&widget.blog.endDate.toString().isNotEmpty)
+                if (widget.blog.endDate.toString() != 'null' &&
+                    widget.blog.endDate.toString().isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Row(
                       children: [
-                        Icon(Icons.calendar_month,size: 16,color: Colors.grey,),
-                        SizedBox(width: 4,),
-                        Text("Expire on: ${widget.blog.endDate?.day??""}, ${month[widget.blog.endDate?.month]??"null"} ${widget.blog.endDate?.year??""}",
-                          style: const TextStyle(color: Colors.grey),),
+                        Icon(
+                          Icons.calendar_month,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          "Expire on: ${widget.blog.endDate?.day ?? ""}, ${month[widget.blog.endDate?.month] ?? "null"} ${widget.blog.endDate?.year ?? ""}",
+                          style: const TextStyle(color: Colors.grey),
+                        ),
                       ],
                     ),
                   ),
-
-
-
 
                 showShimmer
                     ? Column(
@@ -311,8 +327,8 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ),
                       ),
 
-
-                if (widget.blog.rejectionComment != null&&widget.blog.rejectionComment!.isNotEmpty) ...[
+                if (widget.blog.rejectionComment != null &&
+                    widget.blog.rejectionComment!.isNotEmpty) ...[
                   Container(
                       padding: const EdgeInsets.all(8),
                       child: Text(
@@ -323,13 +339,6 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ),
                       ))
                 ],
-
-
-
-
-
-
-
               ],
             ),
           ),

@@ -38,7 +38,7 @@ class BlogDetailScreen extends StatefulWidget {
 
 class _BlogDetailScreenState extends State<BlogDetailScreen> {
   bool showShimmer = true; // Track whether to show shimmer or data
-  final Duration shimmerDuration = Duration(seconds: 2);
+  final Duration shimmerDuration = const Duration(seconds: 2);
 
   int selectedIdx = 0;
   String status = '';
@@ -86,7 +86,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
   String AreaName = '';
   late YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: '${videoId}',
-    flags: YoutubePlayerFlags(
+    flags: const YoutubePlayerFlags(
       autoPlay: false,
     ),
   );
@@ -102,7 +102,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 1), () {
       GetBlogData();
     });
     Timer(shimmerDuration, () {
@@ -209,7 +209,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
     print('status${status}');
 
     if (status == "0") {
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         Navigator.of(context).pop();
       });
 
@@ -292,14 +292,14 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           videoId = YoutubePlayer.convertUrlToId("${VideoLink}")!;
           _controller = YoutubePlayerController(
             initialVideoId: '${videoId}',
-            flags: YoutubePlayerFlags(
+            flags: const YoutubePlayerFlags(
               autoPlay: false,
             ),
           );
         }
       });
     } else {
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         Navigator.of(context).pop();
       });
     }
@@ -312,17 +312,17 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           false, // Prevent user from dismissing dialog by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Post?'),
+          title: const Text('Delete Post?'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure you want to delete this post?'),
+                const Text('Are you sure you want to delete this post?'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Yes'),
+              child: const Text('Yes'),
               onPressed: () {
                 // Call delete_post() or perform deletion logic here
                 Navigator.of(context).pop(); // Close the dialog
@@ -330,7 +330,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               },
             ),
             TextButton(
-              child: Text('No'),
+              child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -399,11 +399,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           backgroundColor: Colors.white, // Change app bar color to white
           elevation: 0.0, // Remove the bottom border
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          iconTheme:
-              IconThemeData(color: Colors.black), // Change icon color to black
+          iconTheme: const IconThemeData(
+              color: Colors.black), // Change icon color to black
           // textTheme: TextTheme(
           //   headline6: TextStyle(color: Colors.black), // Change text color to black
           // ),
@@ -412,7 +412,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           title: Row(
             children: [
               Text('${CategoryName}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   )),
             ],
@@ -420,7 +420,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
           actions: [
             if (widget.FromMyPost == true) ...[
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                   _showDeleteConfirmationDialog(context);
                 },
@@ -570,7 +570,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           ),
                                   ],
                                   if (PostImage1 != '') ...[
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     showShimmer
                                         ? Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,
@@ -621,7 +621,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           ),
                                   ],
                                   if (PostImage2 != '') ...[
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     showShimmer
                                         ? Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,
@@ -673,7 +673,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           )
                                   ],
                                   if (PostImage3 != '') ...[
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     showShimmer
                                         ? Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,
@@ -725,7 +725,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           )
                                   ],
                                   if (PostImage4 != '') ...[
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     showShimmer
                                         ? Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,
@@ -777,7 +777,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           )
                                   ],
                                   if (PostImage5 != '') ...[
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     showShimmer
                                         ? Shimmer.fromColors(
                                             baseColor: Colors.grey[300]!,
@@ -831,7 +831,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ),
                             ),
 
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             //Post By Name
                             showShimmer
                                 ? Shimmer.fromColors(
@@ -850,19 +850,26 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                            // color: kDebugMode?Colors.green:null,
-                                            child: CircleAvatar(
-                                          child: Text(
-                                            '${PostByName.toString()[0]}',
-                                            style: TextStyle(fontSize: 14),
+                                          width: 24,
+                                          height: 22,
+                                          margin:
+                                              const EdgeInsets.only(left: 0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            shape: BoxShape.circle,
                                           ),
-                                          backgroundColor: Colors.grey,
-                                          foregroundColor: Colors.white,
-                                          radius: 14,
-                                        )),
+                                          child: Center(
+                                            child: Text(
+                                              PostByName.substring(0, 1),
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(width: 4),
                                         Text(
-                                          '${PostByName}',
+                                          PostByName,
                                           style:
                                               StyleConfiguration.areaTextStyle,
                                         ),
@@ -871,7 +878,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                     ),
                                   ),
 
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
 
@@ -879,13 +886,18 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               Row(
                                 children: [
                                   Container(
-                                      width: 20,
-                                      margin:
-                                          EdgeInsets.only(right: 3, left: 3),
-                                      // color: kDebugMode?Colors.green:null,
-                                      child: Icon(Icons.location_pin)),
+                                      width: 24,
+                                      height: 22,
+                                      margin: const EdgeInsets.only(
+                                          left: 0, bottom: 2),
+                                      decoration: BoxDecoration(
+                                        // color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                          child: Icon(Icons.location_pin))),
                                   Text(
-                                    '${AreaName}',
+                                    AreaName,
                                     style: StyleConfiguration.areaTextStyle,
                                   )
                                 ],
@@ -924,7 +936,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ),
                               */
 
-                            SizedBox(height: 10.0),
+                            const SizedBox(height: 10.0),
                             showShimmer
                                 ? Shimmer.fromColors(
                                     baseColor: Colors.grey[300]!,
@@ -938,9 +950,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                               baseColor: Colors.grey[300]!,
                                               highlightColor: Colors.grey[100]!,
                                               child: Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10.0,
-                                                    horizontal: 20.0),
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 20.0),
                                                 width: double.infinity,
                                                 height: 20.0,
                                                 decoration: BoxDecoration(
@@ -983,7 +996,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                       // Add your button click logic here
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 10.0, horizontal: 16.0),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -993,11 +1006,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           .black, // Set the background color to black
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 25.0),
                                       child: Text(
                                         '${ShareText}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 11.0,
                                           color: Colors.white,
                                         ),
@@ -1067,7 +1080,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                       if (local_ad_string.length > 0) ...[
                         Container(
                           color: Colors.white,
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1112,7 +1125,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                           ),
                         ),
                       ],
-                      Divider(),
+                      const Divider(),
                       if (widget.FromMyPost == true) ...[
                         Container(
                           padding: const EdgeInsets.all(16),
@@ -1146,22 +1159,22 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.access_time,
                                 color: Colors.grey,
                                 size: 16.0,
                               ),
-                              SizedBox(width: 5.0),
+                              const SizedBox(width: 5.0),
                               Text(
                                 '${TimeAgo}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         if (EndDate != '01 Jan 1970') ...[
@@ -1169,15 +1182,15 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.calendar_month,
                                   color: Colors.grey,
                                   size: 16.0,
                                 ),
-                                SizedBox(width: 5.0),
+                                const SizedBox(width: 5.0),
                                 Text(
                                   'Expires On : ${EndDate}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -1185,7 +1198,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                             ),
                           ),
                         ],
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         if (Status == 'Approved') ...[
@@ -1193,15 +1206,15 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.remove_red_eye,
                                   color: Colors.grey,
                                   size: 16.0,
                                 ),
-                                SizedBox(width: 5.0),
+                                const SizedBox(width: 5.0),
                                 Text(
                                   'Total Views:${TotalClicks}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -1214,7 +1227,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               padding: const EdgeInsets.all(8),
                               child: Text(
                                 'Rejection Reason: ${RejectionComment}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 13,
                                 ),

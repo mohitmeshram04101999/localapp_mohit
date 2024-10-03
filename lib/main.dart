@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:localapp/SplashScreen.dart';
 import 'package:localapp/constants/prefs_file.dart';
 import 'package:localapp/noticication%20function.dart';
+import 'package:localapp/providers/profieleDataProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
@@ -141,7 +142,7 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
 // Handle the creation of the notification UI
   AwesomeNotifications().createNotification(
     content: NotificationContent(
-      id: 10,
+      id: DateTime.now().millisecondsSinceEpoch,
       channelKey: 'basic_channel',
       title: message.data['title'],
       body: message.data['body'],
@@ -157,7 +158,7 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-class main_app extends StatefulWidget {
+class main_app extends ConsumerStatefulWidget {
   ReceivedAction? initialAction;
   main_app({Key? key, required this.initialAction}) : super(key: key);
 
@@ -165,7 +166,7 @@ class main_app extends StatefulWidget {
   _main_appState createState() => _main_appState();
 }
 
-class _main_appState extends State<main_app> {
+class _main_appState extends ConsumerState<main_app> {
   Prefs prefs = new Prefs();
 
   String? version = '';
@@ -176,7 +177,7 @@ class _main_appState extends State<main_app> {
   @override
   void initState() {
     getToken();
-
+    ref.read(profileProvider.notifier).updateLocation(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     //_initializeNotifications(); // Ensure this is called during startup
     // if (widget.initialAction != null &&
