@@ -43,7 +43,7 @@ void onMessageHandler(RemoteMessage message) async {
 
   AwesomeNotifications().createNotification(
       content: NotificationContent(
-    id: 10,
+    id: int.parse(data['NotificationId']),
     channelKey: "basic_channel",
     payload: payload,
     title: data['title'],

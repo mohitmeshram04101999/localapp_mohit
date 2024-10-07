@@ -63,7 +63,7 @@ Future<void> main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     logger.f("onMessage: ${message.data}");
 
-    await showbackgroundNotification(message);
+    // await showbackgroundNotification(message);
   });
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -72,7 +72,7 @@ Future<void> main() async {
   });
 
   //
-  FirebaseMessaging.onMessage.listen(onMessageHandler);
+  // FirebaseMessaging.onMessage.listen(onMessageHandler);
 
   //
   FirebaseMessaging.instance.getToken().then((token) {
@@ -90,10 +90,11 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark));
-  runApp(ProviderScope(
+  runApp(UncontrolledProviderScope(
+      container: ProviderContainer(),
       child: main_app(
-    initialAction: initialAction,
-  )));
+        initialAction: initialAction,
+      )));
 }
 
 @pragma('vm:entry-point')
@@ -142,7 +143,7 @@ Future<void> showbackgroundNotification(RemoteMessage message) async {
 // Handle the creation of the notification UI
   AwesomeNotifications().createNotification(
     content: NotificationContent(
-      id: DateTime.now().millisecondsSinceEpoch,
+      id: int.parse(message.data['NotificationId']),
       channelKey: 'basic_channel',
       title: message.data['title'],
       body: message.data['body'],
