@@ -115,6 +115,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
     WidgetsBinding.instance.addObserver(this);
     if (widget.initialAction != null &&
         widget.initialAction?.payload != null &&
+        widget.initialAction!.payload!["blog_id"] !=null&&
         navigatorKey.currentContext != null) {
       if (widget.initialAction!.payload!['type_id'] == "Category") {
         logger.f("initialAction: ${widget.initialAction?.payload}");

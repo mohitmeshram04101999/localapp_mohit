@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:localapp/BlogDetail.dart';
 import 'package:localapp/constants/postPrivetType.dart';
 import 'package:localapp/constants/style%20configuration.dart';
+import 'package:logger/logger.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -116,11 +117,16 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                             child: Image.network(widget.privacyImage ?? "")),
                       ));
             } else {
+              
+              
+              Logger().i("Open Post ${widget.blog.blogPostId}\n${widget.selected_category}\n${widget.selected_sub_category}");
+              
+              
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlogDetailScreen(
-                    widget.blog.blogPostId ?? "",
+                    widget.blog.blogPostId ?? "1",
                     widget.selected_category,
                     widget.selected_sub_category,
                     false,
@@ -208,68 +214,80 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                             )
                           ],
                         )
-                      : Html(
-                          data: widget.blog.heading,
-                          style: {
-                            "body": Style(
-                              padding: EdgeInsets.zero,
-                              margin: const EdgeInsets.all(0),
-                            ),
-                          },
-                        ),
+                      : Container(
+                    margin: EdgeInsets.only(top: 10),
+                    color: kDebugMode? Colors.red.withOpacity(.3):null,
+                        child: Html(
+                            data: widget.blog.heading,
+                            style: {
+                              "body": Style(
+                                padding: EdgeInsets.zero,
+                                margin: const EdgeInsets.all(0),
+                              ),
+                            },
+                          ),
+                      ),
 
                   if (widget.blog.postByName != "")
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 24,
-                          height: 22,
-                          margin: const EdgeInsets.only(left: 0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              widget.blog.postByName.toString()[0],
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${widget.blog.postByName}',
-                          style: StyleConfiguration.areaTextStyle,
-                        ),
-                        // Add spacing between the icon and text
-                      ],
-                    ),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  if (widget.blog.area != null &&
-                      widget.blog.area.toString().isNotEmpty)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      color: kDebugMode? Colors.red:null,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
                             width: 24,
                             height: 22,
-                            margin: const EdgeInsets.only(left: 0, bottom: 2),
+                            margin: const EdgeInsets.only(left: 0),
                             decoration: BoxDecoration(
-                              // color: Colors.grey,
+                              color: Colors.grey,
                               shape: BoxShape.circle,
                             ),
-                            child: Center(child: Icon(Icons.location_pin))),
-                        Text(
-                          '${widget.blog.area}',
-                          overflow: TextOverflow.ellipsis,
-                          style: StyleConfiguration.areaTextStyle,
-                        )
-                      ],
+                            child: Center(
+                              child: Text(
+                                widget.blog.postByName.toString()[0],
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${widget.blog.postByName}',
+                            style: StyleConfiguration.areaTextStyle,
+                          ),
+                          // Add spacing between the icon and text
+                        ],
+                      ),
+                    ),
+
+
+                  if (widget.blog.area != null &&
+                      widget.blog.area.toString().isNotEmpty)
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      color: kDebugMode? Colors.red.withOpacity(.5):null,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              width: 24,
+                              height: 22,
+                              margin: const EdgeInsets.only(left: 0, bottom: 2),
+                              decoration: BoxDecoration(
+                                // color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(child: Icon(Icons.location_pin))),
+                          Expanded(
+                            child: Text(
+                              '${widget.blog.area}',
+                              overflow: TextOverflow.ellipsis,
+                              style: StyleConfiguration.areaTextStyle,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
 
                   showShimmer

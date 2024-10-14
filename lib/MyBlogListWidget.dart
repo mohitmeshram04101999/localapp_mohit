@@ -185,6 +185,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ],
                       )
                     : Container(
+                  color: kDebugMode? Colors.red:null,
                         padding: const EdgeInsets.all(8),
                         child: Row(
                           children: [
@@ -197,35 +198,35 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                           ],
                         ),
                       ),
-
-                const SizedBox(
-                  height: 8,
-                ),
+ 
 
                 if (widget.blog.area.toString() != "null" &&
                     widget.blog.area.toString().length > 0)
-                  Row(
-                    children: [
-                      Container(
-                          height: 20,
-                          width: 20,
-                          // color: Colors.red,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                  top: -4,
-                                  left: -4,
-                                  right: 0,
-                                  bottom: -4,
-                                  child: Icon(Icons.location_pin)),
-                            ],
-                          )),
-                      Text(
-                        '${widget.blog.area}',
-                        style: StyleConfiguration.areaTextStyle,
-                      )
-                    ],
+                  Container(
+                    color: kDebugMode? Colors.red.withOpacity(.5):null,
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 20,
+                            width: 20,
+                            // color: Colors.red,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                    top: -4,
+                                    left: -4,
+                                    right: 0,
+                                    bottom: -4,
+                                    child: Icon(Icons.location_pin)),
+                              ],
+                            )),
+                        Text(
+                          '${widget.blog.area}',
+                          style: StyleConfiguration.areaTextStyle,
+                        )
+                      ],
+                    ),
                   ),
 
                 //totalviews
@@ -264,9 +265,11 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          "Expire on: ${widget.blog.endDate?.day ?? ""}, ${month[widget.blog.endDate?.month] ?? "null"} ${widget.blog.endDate?.year ?? ""}",
-                          style: const TextStyle(color: Colors.grey),
+                        Expanded(
+                          child: Text(
+                            "Expires on: ${widget.blog.endDate?.day ?? ""} ${month[widget.blog.endDate?.month] ?? "null"} ${widget.blog.endDate?.year ?? ""}",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
                         ),
                       ],
                     ),
@@ -327,8 +330,8 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ),
                       ),
 
-                if (widget.blog.rejectionComment != null &&
-                    widget.blog.rejectionComment!.isNotEmpty) ...[
+                if (widget.blog.rejectionComment != null &&widget.blog.rejectionComment.toString().isNotEmpty&&
+                    widget.blog.rejectionComment=='Rejected') ...[
                   Container(
                       padding: const EdgeInsets.all(8),
                       child: Text(

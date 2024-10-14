@@ -576,7 +576,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                             baseColor: Colors.grey[300]!,
                                             highlightColor: Colors.grey[100]!,
                                             child: Container(
-                                              width: double.maxFinite,
+                                              width: 300,
                                               height: 80,
                                               color: Colors.white,
                                             ),
@@ -627,7 +627,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                             baseColor: Colors.grey[300]!,
                                             highlightColor: Colors.grey[100]!,
                                             child: Container(
-                                              width: double.infinity,
+                                              // width: double.infinity,
+                                              width: 300,
                                               height: 80,
                                               color: Colors.white,
                                             ),
@@ -831,7 +832,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 10),
+
                             //Post By Name
                             showShimmer
                                 ? Shimmer.fromColors(
@@ -843,8 +844,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                       color: Colors.white,
                                     ),
                                   )
-                                : Container(
+                                : (PostByName.toString()!="null"&&PostByName.toString()!="")?Container(
+                              color: kDebugMode? Colors.red:null,
                                     padding: const EdgeInsets.only(left: 0),
+                                    margin: const EdgeInsets.only(top: 10),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -860,7 +863,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              PostByName.substring(0, 1),
+                                              PostByName[0],
                                               style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.white),
@@ -876,31 +879,35 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         // Add spacing between the icon and text
                                       ],
                                     ),
-                                  ),
+                                  ):SizedBox(),
 
-                            const SizedBox(
-                              height: 10,
-                            ),
 
                             if (AreaName != "null" && AreaName.length > 0)
-                              Row(
-                                children: [
-                                  Container(
-                                      width: 24,
-                                      height: 22,
-                                      margin: const EdgeInsets.only(
-                                          left: 0, bottom: 2),
-                                      decoration: BoxDecoration(
-                                        // color: Colors.grey,
-                                        shape: BoxShape.circle,
+                              Container(
+                                color: kDebugMode? Colors.red:null,
+                                margin: EdgeInsets.only(top: 10),
+                                child: Row(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        width: 24,
+                                        height: 22,
+                                        margin: const EdgeInsets.only(
+                                            left: 0, bottom: 2),
+                                        decoration: BoxDecoration(
+                                          // color: Colors.grey,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Center(
+                                            child: Icon(Icons.location_pin))),
+                                    Expanded(
+                                      child: Text(
+                                        AreaName,
+                                        style: StyleConfiguration.areaTextStyle,
                                       ),
-                                      child: Center(
-                                          child: Icon(Icons.location_pin))),
-                                  Text(
-                                    AreaName,
-                                    style: StyleConfiguration.areaTextStyle,
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
 
                             //Area
@@ -936,7 +943,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                               ),
                               */
 
-                            const SizedBox(height: 10.0),
+                            // const SizedBox(height: 10.0),
                             showShimmer
                                 ? Shimmer.fromColors(
                                     baseColor: Colors.grey[300]!,
@@ -968,7 +975,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                         )),
                                   )
                                 : Container(
-                                    // color: Colors.red,
+                                    color: kDebugMode? Colors.red.withOpacity(.3):null,
+                              margin: EdgeInsets.only(top: 0),
                                     padding: const EdgeInsets.only(left: 0),
                                     child: Html(
                                       data: '${HText}',
@@ -1222,7 +1230,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                             ),
                           ),
                         ],
-                        if (RejectionComment != '') ...[
+                        if (RejectionComment != ''&&Status=="Rejected") ...[
                           Container(
                               padding: const EdgeInsets.all(8),
                               child: Text(

@@ -24,21 +24,21 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   //
-  AwesomeNotifications().initialize(
-    debug: true,
-    // Your app icon
-    'resource://drawable/ic_launcher',
-    [
-      NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: 'Basic notifications',
-        channelDescription: 'Notification channel for basic tests',
-        defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.white,
-        importance: NotificationImportance.High,
-      )
-    ],
-  );
+    AwesomeNotifications().initialize(
+      debug: true,
+      // Your app icon
+      'resource://drawable/ic_launcher',
+      [
+        NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.High,
+        )
+      ],
+    );
   ReceivedAction? initialAction =
       await AwesomeNotifications().getInitialNotificationAction();
   AwesomeNotifications().setListeners(

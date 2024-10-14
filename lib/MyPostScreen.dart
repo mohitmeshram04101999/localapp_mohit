@@ -107,6 +107,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
       });
     }
   }
+
   Future<void> _initConnectivity() async {
     ConnectivityResult result = await Connectivity().checkConnectivity();
     _updateConnectionStatus(result);
@@ -124,6 +125,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
       );
     }
   }
+
+
   void _scrollListener() {
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
@@ -141,6 +144,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
       }
     }
   }
+
+
   Future<void> checkInternetConnectivity() async {
     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
