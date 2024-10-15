@@ -185,7 +185,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ],
                       )
                     : Container(
-                  color: kDebugMode? Colors.red:null,
+                        color: kDebugMode ? Colors.red : null,
                         padding: const EdgeInsets.all(8),
                         child: Row(
                           children: [
@@ -198,12 +198,11 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                           ],
                         ),
                       ),
- 
 
                 if (widget.blog.area.toString() != "null" &&
                     widget.blog.area.toString().length > 0)
                   Container(
-                    color: kDebugMode? Colors.red.withOpacity(.5):null,
+                    color: kDebugMode ? Colors.red.withOpacity(.5) : null,
                     child: Row(
                       children: [
                         Container(
@@ -233,22 +232,24 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                 const SizedBox(
                   height: 8,
                 ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.remove_red_eye,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      'Total Views: ${widget.blog.totalClicks ?? 0}',
-                      style: StyleConfiguration.greySmall,
-                    )
-                  ],
-                ),
+                widget.blog.status == 'Pending Approval'
+                    ? SizedBox.shrink()
+                    : Row(
+                        children: [
+                          const Icon(
+                            Icons.remove_red_eye,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            'Total Views: ${widget.blog.totalClicks ?? 0}',
+                            style: StyleConfiguration.greySmall,
+                          )
+                        ],
+                      ),
 
                 //ExpireDate
                 if (widget.blog.endDate.toString() != 'null' &&
@@ -330,8 +331,9 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                         ),
                       ),
 
-                if (widget.blog.rejectionComment != null &&widget.blog.rejectionComment.toString().isNotEmpty&&
-                    widget.blog.rejectionComment=='Rejected') ...[
+                if (widget.blog.rejectionComment != null &&
+                    widget.blog.rejectionComment.toString().isNotEmpty &&
+                    widget.blog.rejectionComment == 'Rejected') ...[
                   Container(
                       padding: const EdgeInsets.all(8),
                       child: Text(

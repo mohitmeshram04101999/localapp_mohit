@@ -51,7 +51,6 @@ Future<void> main() async {
   }
   FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
     if (message != null) {
-      Navigator.of(navigatorKey.currentContext!).pop();
       showbackgroundNotification(message);
     }
   });

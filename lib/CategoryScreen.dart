@@ -113,35 +113,38 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    if (widget.initialAction != null &&
-        widget.initialAction?.payload != null &&
-        widget.initialAction!.payload!["blog_id"] !=null&&
-        navigatorKey.currentContext != null) {
-      if (widget.initialAction!.payload!['type_id'] == "Category") {
-        logger.f("initialAction: ${widget.initialAction?.payload}");
-        Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                    '',
-                    '',
-                    widget.initialAction!.payload!["blog_id"]!,
-                    CategoryPrivacyType.public,
-                  )),
-        );
-      } else {
-        Navigator.push(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(
-            builder: (context) => BlogDetailScreen(
-                widget.initialAction!.payload!["blog_id"]!,
-                "Notification",
-                "",
-                false),
-          ),
-        );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.initialAction != null &&
+          widget.initialAction?.payload != null &&
+          widget.initialAction!.payload!["blog_id"] != null &&
+          widget.initialAction!.payload!["blog_id"] != '' &&
+          navigatorKey.currentContext != null) {
+        if (widget.initialAction!.payload!['type_id'] == "Category") {
+          logger.f("initialAction: ${widget.initialAction?.payload}");
+          Navigator.push(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                      '',
+                      '',
+                      widget.initialAction!.payload!["blog_id"] ?? "",
+                      CategoryPrivacyType.public,
+                    )),
+          );
+        } else {
+          Navigator.push(
+            navigatorKey.currentContext!,
+            MaterialPageRoute(
+              builder: (context) => BlogDetailScreen(
+                  widget.initialAction!.payload!["blog_id"] ?? "",
+                  "",
+                  "",
+                  false),
+            ),
+          );
+        }
       }
-    }
+    });
     myInit();
 
     Timer(shimmerDuration, () {

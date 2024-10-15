@@ -135,7 +135,9 @@ Future<void> tapHandler(ReceivedAction receivedAction) async {
 
   if (receivedAction.actionType == ActionType.Default) {
     logger.i("Default Action ${receivedAction.payload}");
-    if (data?["blog_id"] != null && navigatorKey.currentContext != null) {
+    if (data?['blog_id'] != '' &&
+        data?['blog_id'] != null &&
+        navigatorKey.currentContext != null) {
       if (data?['type_id'] == 'Category') {
         logger.f(int.parse(data!['blog_id']!));
 
@@ -145,6 +147,10 @@ Future<void> tapHandler(ReceivedAction receivedAction) async {
                 builder: (c) => HomeScreen(
                     "", "", data['blog_id']!, CategoryPrivacyType.public)));
       } else {
+        if (kDebugMode) {
+          showMessage(
+              navigatorKey.currentContext!, "Blog Id ${data?["blog_id"]}");
+        }
         Navigator.push(
             navigatorKey.currentContext!,
             MaterialPageRoute(
