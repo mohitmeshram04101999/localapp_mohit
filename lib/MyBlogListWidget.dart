@@ -232,7 +232,8 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
                 const SizedBox(
                   height: 8,
                 ),
-                widget.blog.status == 'Pending Approval'
+                widget.blog.status == 'Pending Approval' ||
+                        widget.blog.status == 'Rejected'
                     ? SizedBox.shrink()
                     : Row(
                         children: [
