@@ -333,7 +333,7 @@ class _MyBlogListWidgetState extends State<MyBlogListWidget> {
 
                 if (widget.blog.rejectionComment != null &&
                     widget.blog.rejectionComment.toString().isNotEmpty &&
-                    widget.blog.rejectionComment == 'Rejected') ...[
+                    widget.blog.status == 'Rejected') ...[
                   Container(
                       padding: const EdgeInsets.all(8),
                       child: Text(
