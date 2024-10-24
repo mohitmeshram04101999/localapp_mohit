@@ -28,14 +28,18 @@ Future<void> getLocationPermmision(BuildContext context) async
       state==true;
       return ;
     }
-
+  else if(d==LocationPermission.denied)
+    {
+     getLocationPermmision(context);
+     return;
+    }
   else
     {
       _isDailogOpen = true;
       await showDialog(context: context,barrierDismissible: false, builder: (context)=>AlertDialog(
         content: Column(mainAxisSize: MainAxisSize.min,children: [
           Icon(Icons.location_pin,size: 40,),
-          Text("Plese provide location permission  provide ${d==LocationPermission.deniedForever?'Frome Settings':''}",textAlign: TextAlign.center,),
+          Text("Plese provide Location permission  provide ${d==LocationPermission.deniedForever?'from settings':''}",textAlign: TextAlign.center,),
           if(d==LocationPermission.deniedForever)
             ElevatedButton(onPressed: ()async{
               Navigator.pop(context);
