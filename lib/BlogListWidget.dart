@@ -245,7 +245,7 @@ class _BlogListWidgetState extends State<BlogListWidget> {
                             ),
                             child: Center(
                               child: Text(
-                                widget.blog.postByName.toString()[0],
+                                widget.blog.postByName.toString().trim()[0],
                                 style: const TextStyle(
                                     fontSize: 12, color: Colors.white),
                               ),

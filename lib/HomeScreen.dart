@@ -61,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String allow_post = '';
 
   String app_version = '';
-  String current_app_version = '4';
+  String current_app_version = '18';
   String category_label = '';
   String subSubCategoryLabel = "";
   bool filter_selected = false;

@@ -46,6 +46,8 @@ class ProfileProviderState extends StateNotifier<User?> {
 
       if (state == null ||
           state?.name == null ||
+          state?.name==""||
+          state?.mobileNumber1==""||
           state?.mobileNumber1 == null) {
         _log.e("Waiting");
         await openLogInDialog(context);

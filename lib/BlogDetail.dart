@@ -989,6 +989,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                                       },
                                     ),
                                   ),
+                            
+
 
                             if (ShareText != '') ...[
                               Row(

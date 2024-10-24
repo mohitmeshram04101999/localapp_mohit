@@ -232,19 +232,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen>
       floatingActionButton: kDebugMode
           ? FloatingActionButton(
               onPressed: () {
-                // ref.read(notificationPermissionProvider.notifier).getNotification(context);
-
-                Timer(Duration(seconds: 3), () {
-                  AwesomeNotifications().createNotification(
-                      content: NotificationContent(
-                    id: 10,
-                    channelKey: "basic_channel",
-                    title: "data['title']",
-                    body: "data['body']",
-                    criticalAlert: true,
-                    wakeUpScreen: true,
-                  ));
-                });
+                ref.read(profileProvider.notifier).getUser(context);
               },
             )
           : null,
