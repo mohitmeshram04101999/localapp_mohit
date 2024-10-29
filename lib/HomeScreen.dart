@@ -1161,56 +1161,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       floatingActionButton: Consumer(
         builder: (context2, ref, child) {
           var profile = ref.read(profileProvider);
+          if (allow_post == 'Y') {
+            return FloatingActionButton(
+              onPressed: () {
+                Logger().e('${profile!.groupAccess}');
 
-          return FloatingActionButton(
-            onPressed: () {
-              Logger().e('${profile!.groupAccess}');
+                if ((widget.catPrivacyType != CategoryPrivacyType.private &&
+                        widget.catPrivacyType !=
+                            CategoryPrivacyType.semiPrivate) ||
+                    profile!.groupAccess
+                        .toString()
+                        .split(",")
+                        .contains(widget.CategoryId)) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              AddPostScreen('${selected_category}')));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (c) => AlertDialog(
+                            content: InkWell(
+                                onTap: () {
+                                  logger.t(
+                                      "${widget.whatsAppNumber} (${widget.whatsAppText})");
+                                  if (widget.whatsAppNumber
+                                          .toString()
+                                          .isNotEmpty &&
+                                      widget.whatsAppNumber.toString() !=
+                                          "null") {
+                                    launch(
+                                        'https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText ?? ""}');
+                                    // launch('https://wa.me/+917747071882?text=hi hello');
+                                  }
+                                },
+                                child: Image.network(
+                                  widget.privacyImage ?? "",
+                                  // loadingBuilder: (context, child, loadingProgress) {
+                                  //     if(loadingProgress==null)
+                                  // },
+                                )),
+                          ));
 
-              if ((widget.catPrivacyType != CategoryPrivacyType.private &&
-                      widget.catPrivacyType !=
-                          CategoryPrivacyType.semiPrivate) ||
-                  profile!.groupAccess
-                      .toString()
-                      .split(",")
-                      .contains(widget.CategoryId)) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddPostScreen('${selected_category}')));
-              } else {
-                showDialog(
-                    context: context,
-                    builder: (c) => AlertDialog(
-                          content: InkWell(
-                              onTap: () {
-                                logger.t(
-                                    "${widget.whatsAppNumber} (${widget.whatsAppText})");
-                                if (widget.whatsAppNumber
-                                        .toString()
-                                        .isNotEmpty &&
-                                    widget.whatsAppNumber.toString() !=
-                                        "null") {
-                                  launch(
-                                      'https://wa.me/+91${widget.whatsAppNumber}?text=${widget.whatsAppText ?? ""}');
-                                  // launch('https://wa.me/+917747071882?text=hi hello');
-                                }
-                              },
-                              child: Image.network(
-                                widget.privacyImage ?? "",
-                                // loadingBuilder: (context, child, loadingProgress) {
-                                //     if(loadingProgress==null)
-                                // },
-                              )),
-                        ));
+                  // showMessage(context2, 'Tap');
 
-                // showMessage(context2, 'Tap');
-
-                return;
-              }
-            },
-            child: Icon(Icons.add),
-          );
+                  return;
+                }
+              },
+              child: Icon(Icons.add),
+            );
+          } else {
+            return Container();
+          }
 
           // return GestureDetector(
           //     onTap: () {
