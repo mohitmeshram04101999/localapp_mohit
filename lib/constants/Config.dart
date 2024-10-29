@@ -1,10 +1,10 @@
 import 'package:logger/logger.dart';
 
 class Config {
-  // static String Main_Link = "https://shubhapp.com/local_app/api/";
-  static String Main_Link = "https://mirzapurmetalcraft.in/api/";
-  // static String Image_Path = "https://shubhapp.com/local_app/uploads/";
-  static String Image_Path = "https://mirzapurmetalcraft.in/uploads/";
+  static String Main_Link = "https://shubhapp.com/local_app/api/";
+  // static String Main_Link = "https://mirzapurmetalcraft.in/api/";
+  static String Image_Path = "https://shubhapp.com/local_app/uploads/";
+  // static String Image_Path = "https://mirzapurmetalcraft.in/uploads/";
   static String signup = Main_Link + "signup";
   static String get_home = Main_Link + "get_home";
   static String get_city = Main_Link + "get_city";
